@@ -5,7 +5,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.widget.Toast;
 
 public class ChooseGameActivity extends FragmentActivity {
 
@@ -15,7 +14,8 @@ public class ChooseGameActivity extends FragmentActivity {
     public static final int INDEX_MAIN = 0;
     public static final int INDEX_RACE = 1;
     public static final int INDEX_TANKS = 2;
-    public static final int INDEX_TETIS = 3;
+    public static final int INDEX_TETRIS = 3;
+    public static final int INDEX_SETTINGS = 4;
 
     public static final String FONT = "fonts/ka1.ttf";
 
@@ -42,7 +42,7 @@ public class ChooseGameActivity extends FragmentActivity {
 
         @Override
         public int getCount() {
-            return 4;
+            return 5;
         }
 
         @Override
@@ -54,8 +54,10 @@ public class ChooseGameActivity extends FragmentActivity {
                     return new ChooseGameRaceFragment();
                 case INDEX_TANKS:
                     return new ChooseGameTanksFragment();
-                case INDEX_TETIS:
-                    return new ChooseGameTetisFragment();
+                case INDEX_TETRIS:
+                    return new ChooseGameTetrisFragment();
+                case INDEX_SETTINGS:
+                    return new ChooseGameSettingsFragment();
                 default:
                     return null;
             }

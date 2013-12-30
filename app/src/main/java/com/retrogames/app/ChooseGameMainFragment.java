@@ -42,7 +42,7 @@ public class ChooseGameMainFragment extends Fragment {
             list.add(games[i]);
         }
 
-        GamesArrayAdapter adapter = new GamesArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, list);
+        GamesArrayAdapter adapter = new GamesArrayAdapter(getActivity(), list);
 
         // dodawanie listenera
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -58,8 +58,12 @@ public class ChooseGameMainFragment extends Fragment {
                     case ChooseGameActivity.INDEX_TANKS-1:
                         ((ChooseGameActivity)getActivity()).getViewPager().setCurrentItem(ChooseGameActivity.INDEX_TANKS);
                         break;
-                    case ChooseGameActivity.INDEX_TETIS-1:
-                        ((ChooseGameActivity)getActivity()).getViewPager().setCurrentItem(ChooseGameActivity.INDEX_TETIS);
+                    case ChooseGameActivity.INDEX_TETRIS -1:
+                        ((ChooseGameActivity)getActivity()).getViewPager().setCurrentItem(ChooseGameActivity.INDEX_TETRIS);
+                        break;
+                    case ChooseGameActivity.INDEX_SETTINGS-1:
+                        ((ChooseGameActivity)getActivity()).getViewPager().setCurrentItem(ChooseGameActivity.INDEX_SETTINGS);
+                        break;
                 }
             }
         });

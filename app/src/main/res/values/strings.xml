@@ -2,9 +2,9 @@
 <resources>
 
     <string name="app_name">Retro Games</string>
-    <string name="action_tetris">Tetris</string>
-    <string name="action_main">Main</string>
-    <string name="action_tanks">Tanks</string>
-    <string name="action_race">Races</string>
+    <string name="game_tetris">TETRIS</string>
+    <string name="game_tanks">TANKS</string>
+    <string name="game_race">RACE</string>
+    <string name="game_settings">SETTINGS</string>
 
 </resources>

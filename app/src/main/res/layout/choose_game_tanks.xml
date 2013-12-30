@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/choose_game_tanks_texView"
-        android:text="TANKS"
+        android:text="@string/game_tanks"
         style="@style/TextViewStyle"/>
 
 </LinearLayout>

@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/choose_game_race_texView"
-        android:text="RACE"
+        android:text="@string/game_race"
         style="@style/TextViewStyle"/>
 
 </LinearLayout>

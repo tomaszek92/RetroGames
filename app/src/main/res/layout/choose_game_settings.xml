@@ -8,8 +8,8 @@
     android:background="@drawable/splash">
 
     <TextView
-        android:id="@+id/choose_game_tetris_texView"
-        android:text="@string/game_tetris"
+        android:id="@+id/choose_game_settings_texView"
+        android:text="@string/game_settings"
         style="@style/TextViewStyle"/>
 
 </LinearLayout>

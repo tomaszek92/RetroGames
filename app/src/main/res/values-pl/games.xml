@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="games">
-        <item>RACE</item>
-        <item>TANKS</item>
+        <item>WYSCIG</item>
+        <item>CZOLGI</item>
         <item>TETRIS</item>
-        <item>SETTINGS</item>
+        <item>USTAWIENIA</item>
     </string-array>
 </resources>

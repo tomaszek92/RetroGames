@@ -2,9 +2,9 @@
 <resources>
 
     <string name="app_name">Retro Games</string>
-    <string name="action_tetris">Tetris</string>
-    <string name="action_main">Główny</string>
-    <string name="action_tanks">Czołgi</string>
-    <string name="action_race">Wyścigi</string>
+    <string name="game_tetris">TETRIS</string>
+    <string name="game_tanks">CZOLGI</string>
+    <string name="game_race">WYSCIG</string>
+    <string name="game_settings">USTAWIENIA</string>
 
 </resources>
