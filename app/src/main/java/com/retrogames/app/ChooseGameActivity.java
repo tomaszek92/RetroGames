@@ -30,16 +30,20 @@ public class ChooseGameActivity extends FragmentActivity {
 
         @Override
         public int getCount() {
-            return 2;
+            return 4;
         }
 
         @Override
         public android.support.v4.app.Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new ChooseGameFragment();
+                    return new ChooseGameMainFragment();
                 case 1:
-                    return new TetrisFragment();
+                    return new ChooseGameTetisFragment();
+                case 2:
+                    return new ChooseGameRaceFragment();
+                case 3:
+                    return new ChooseGameTanksFragment();
                 default:
                     return null;
             }

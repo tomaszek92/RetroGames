@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 /**
  * Created by Tomasz on 30.12.13.
  */
-public class TetrisFragment extends Fragment {
+public class ChooseGameRaceFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -18,6 +18,6 @@ public class TetrisFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.choose_game_tetris, container, false);
+        return inflater.inflate(R.layout.choose_game_race, container, false);
     }
 }
