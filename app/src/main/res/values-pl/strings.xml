@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Retro Games</string>
+    <string name="action_tetris">Tetris</string>
+    <string name="action_main">Główny</string>
+    <string name="action_tanks">Czołgi</string>
+    <string name="action_race">Wyścigi</string>
+
+</resources>
