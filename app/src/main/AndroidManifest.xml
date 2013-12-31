@@ -16,6 +16,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ChooseGameActivity"/>
+        <activity android:name=".tetris.TetrisActivity"/>
     </application>
 
 </manifest>
