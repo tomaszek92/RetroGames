@@ -12,17 +12,14 @@ public class TetrisThread extends Thread {
 
     private SurfaceHolder surfaceHolder;
     private TetrisSurfaceView view;
-    private boolean run = false;
     private Canvas canvas = null;
+    private boolean run = false;
 
     private int canvasWidth = 200;
     private int canvasHeight = 400;
-    private static final int SPEED = 2;
 
-    private float bubbleX;
-    private float bubbleY;
-    private float headingX;
-    private float headingY;
+    private float positionX;
+    private float positionY;
 
     public TetrisThread(SurfaceHolder surfaceHolder, TetrisSurfaceView view) {
         this.surfaceHolder = surfaceHolder;
@@ -35,17 +32,16 @@ public class TetrisThread extends Thread {
 
     public void doStart() {
         synchronized (surfaceHolder) {
-            bubbleX = canvasWidth / 2;
-            bubbleY = canvasHeight / 2;
-            headingX = (float) (-1 + (Math.random() * 2));
-            headingY = (float) (-1 + (Math.random() * 2));
+            if (canvas != null) {
+                positionX = canvasWidth / 2;
+                positionY = canvasHeight / 2;
+            }
         }
     }
 
     @Override
     public void run() {
         while (run) {
-            //Canvas c = null;
             try {
                 canvas = surfaceHolder.lockCanvas(null);
                 synchronized (surfaceHolder) {
@@ -69,17 +65,15 @@ public class TetrisThread extends Thread {
     }
 
     private void doDraw() {
-        //bubbleX = bubbleX + (headingX * SPEED);
-        //bubbleY = bubbleY + (headingY * SPEED);
         canvas.restore();
         canvas.drawColor(Color.BLACK);
         Paint paint = new Paint();
         paint.setARGB(100, 255, 255, 255);
-        canvas.drawCircle(bubbleX, bubbleY, 50, paint);
+        canvas.drawCircle(positionX, positionY, 50, paint);
     }
 
     public void move(float x, float y) {
-        bubbleX = x;
-        bubbleY = y;
+        positionX = x;
+        positionY = y;
     }
 }

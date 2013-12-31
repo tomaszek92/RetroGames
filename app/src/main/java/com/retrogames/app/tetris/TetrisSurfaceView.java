@@ -8,37 +8,22 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import java.util.logging.Handler;
-
 /**
  * Created by Tomasz on 31.12.13.
  */
 public class TetrisSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
 
     private TetrisThread thread;
-    private SurfaceHolder sh;
-    private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
+    private SurfaceHolder surfaceHolder;
     public TetrisSurfaceView(Context context) {
         super(context);
-        sh = getHolder();
-        sh.addCallback(this);
-        paint.setColor(Color.BLUE);
-        paint.setStyle(Paint.Style.FILL);
+        surfaceHolder = getHolder();
+        surfaceHolder.addCallback(this);
         setFocusable(true);
-    }
-
-    public TetrisThread getThread() {
-        return thread;
     }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        Canvas canvas = sh.lockCanvas();
-        canvas.drawColor(Color.BLACK);
-        canvas.drawCircle(100, 200, 50, paint);
-        sh.unlockCanvasAndPost(canvas);
-
         thread = new TetrisThread(getHolder(), this);
         thread.setRunning(true);
         thread.start();
@@ -51,11 +36,15 @@ public class TetrisSurfaceView extends SurfaceView implements SurfaceHolder.Call
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        try {
-            thread.join();
-            thread.setRunning(false);
-        }
-        catch (InterruptedException e) {
+        boolean retry = true;
+        thread.setRunning(false);
+        while (retry) {
+            try {
+                thread.join();
+                retry = false;
+            }
+            catch (InterruptedException e) {
+            }
         }
     }
 
@@ -63,12 +52,12 @@ public class TetrisSurfaceView extends SurfaceView implements SurfaceHolder.Call
     private float mY;
     private static final float TOUCH_TOLERANCE = 4;
 
-    private void touch_start(float x, float y) {
+    private void touchStart(float x, float y) {
         mX = x;
         mY = y;
     }
 
-    private void touch_move(float x, float y) {
+    private void touchMove(float x, float y) {
         float dx = Math.abs(x - mX);
         float dy = Math.abs(y - mY);
         if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
@@ -76,9 +65,6 @@ public class TetrisSurfaceView extends SurfaceView implements SurfaceHolder.Call
             mY = y;
         }
         thread.move(mX, mY);
-    }
-    private void touch_up() {
-
     }
 
     @Override
@@ -88,12 +74,12 @@ public class TetrisSurfaceView extends SurfaceView implements SurfaceHolder.Call
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                touch_start(touchX, touchY);
+                touchStart(touchX, touchY);
                 break;
 
             case MotionEvent.ACTION_MOVE:
                 if (thread != null) {
-                    touch_move(touchX, touchY);
+                    touchMove(touchX, touchY);
                 }
                 break;
 
@@ -103,6 +89,7 @@ public class TetrisSurfaceView extends SurfaceView implements SurfaceHolder.Call
             default:
                 return false;
             }
+
         return true;
     }
 }

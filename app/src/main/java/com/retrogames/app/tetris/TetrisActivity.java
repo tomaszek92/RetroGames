@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Toast;
 
 /**
  * Created by Tomasz on 31.12.13.
