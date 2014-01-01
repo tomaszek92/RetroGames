@@ -102,18 +102,18 @@ public class TetrisFigure {
 
         else if (shape == TetrisShapes.LETTER_L_SMALL) {
             grid = new TetrisSingleGrid[2][2];
-            grid[0][0] = new TetrisSingleGrid(false, color, 4, 0);
-            grid[0][1] = new TetrisSingleGrid(false, color, 5, 0);
-            grid[1][0] = new TetrisSingleGrid(true, color, 4, 1);
+            grid[0][0] = new TetrisSingleGrid(true, color, 4, 0);
+            grid[0][1] = new TetrisSingleGrid(true, color, 5, 0);
+            grid[1][0] = new TetrisSingleGrid(false, color, 4, 1);
             grid[1][1] = new TetrisSingleGrid(true, color, 5, 1);
         }
 
         else if (shape == TetrisShapes.LETTER_L_SMALL_R) {
             grid = new TetrisSingleGrid[2][2];
-            grid[0][0] = new TetrisSingleGrid(true, color, 4, 0);
+            grid[0][0] = new TetrisSingleGrid(false, color, 4, 0);
             grid[0][1] = new TetrisSingleGrid(true, color, 5, 0);
-            grid[1][0] = new TetrisSingleGrid(false, color, 4, 1);
-            grid[1][1] = new TetrisSingleGrid(false, color, 5, 1);
+            grid[1][0] = new TetrisSingleGrid(true, color, 4, 1);
+            grid[1][1] = new TetrisSingleGrid(true, color, 5, 1);
         }
 
         else {
@@ -149,6 +149,7 @@ public class TetrisFigure {
         }
     }
 
+    // TODO: napisac obracanie figur
     public void turn() {
 
     }

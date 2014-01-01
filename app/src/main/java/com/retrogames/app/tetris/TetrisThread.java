@@ -20,10 +20,14 @@ public class TetrisThread extends Thread {
     private int canvasHeight = 400;
 
     // marginesy do rysowania tła
-    private static int MARGIN_TOP = 100;
-    private static int MARGIN_BOTTOM = 10;
-    private static int MARGIN_LEFT = 10;
-    private static int MARGIN_RIGHT = 10;
+    private static final int MARGIN_TOP = 100;
+    private static final int MARGIN_BOTTOM = 10;
+    private static final int MARGIN_LEFT = 10;
+    private static final int MARGIN_RIGHT = 10;
+
+    private static final int STROKE_WIDTH = 5;
+    private static final int LINE_COLOR = Color.WHITE;
+    private static final int BACKGROUND_COLOR = Color.DKGRAY;
 
     private float positionX;
     private float positionY;
@@ -35,13 +39,6 @@ public class TetrisThread extends Thread {
 
     public void setRunning(boolean run) {
         this.run = run;
-    }
-
-    public void doStart() {
-        synchronized (surfaceHolder) {
-            positionX = canvasWidth / 2;
-            positionY = canvasHeight / 2;
-        }
     }
 
     @Override
@@ -65,29 +62,29 @@ public class TetrisThread extends Thread {
         synchronized (surfaceHolder) {
             canvasWidth = width;
             canvasHeight = height;
-            doStart();
+            int size = (int)((canvasWidth - MARGIN_RIGHT - MARGIN_LEFT - STROKE_WIDTH * 2) / TetrisPanel.GRID_WIDTH);
+            TetrisSingleGrid.SIZE = size;
         }
     }
 
+    private TetrisShapes shape = TetrisShapes.randomShape();
+    private TetrisColors color = TetrisColors.randomColor();
+    private TetrisFigure figure = new TetrisFigure(color, shape);
+
     private void doDraw() {
-        clearCanvas();
         drawBackground();
 
-        TetrisFigure tetrisFigure = new TetrisFigure(TetrisColors.randomColor(), TetrisShapes.BOX_1X1);
-
-        tetrisFigure.drawFigure(canvas);
-
-    }
-
-    private void clearCanvas() {
-        canvas.restore();
-        canvas.drawColor(Color.GREEN);
+        figure.drawFigure(canvas);
     }
 
     private void drawBackground() {
+        // wypełnianie tłą
+        canvas.drawColor(BACKGROUND_COLOR);
+
+        // rysowanie linii
         Paint paint = new Paint();
-        paint.setStrokeWidth(5);
-        paint.setColor(Color.WHITE);
+        paint.setStrokeWidth(STROKE_WIDTH);
+        paint.setColor(LINE_COLOR);
         canvas.drawLine(MARGIN_LEFT, MARGIN_TOP, MARGIN_LEFT, canvasHeight - MARGIN_BOTTOM, paint);
         canvas.drawLine(MARGIN_LEFT, canvasHeight - MARGIN_BOTTOM, canvasWidth - MARGIN_RIGHT, canvasHeight - MARGIN_BOTTOM, paint);
         canvas.drawLine(canvasWidth - MARGIN_RIGHT, canvasHeight - MARGIN_BOTTOM, canvasWidth - MARGIN_RIGHT, MARGIN_TOP, paint);

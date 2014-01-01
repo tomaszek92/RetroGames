@@ -44,18 +44,19 @@ public enum TetrisColors {
     }
 
     public Paint getPaint() {
+        Paint paint = new Paint();
         if (this == GREEN) {
-            return new Paint(Color.GREEN);
+            paint.setColor(Color.GREEN);
         }
         else if (this == YELLOW) {
-            return new Paint(Color.YELLOW);
+            paint.setColor(Color.YELLOW);
         }
         else  if (this == RED) {
-            return new Paint(Color.RED);
+            paint.setColor(Color.RED);
         }
         else if (this == BLUE) {
-            return new Paint(Color.BLUE);
+            paint.setColor(Color.BLUE);
         }
-        return new Paint(Color.GREEN);
+        return paint;
     }
 }
