@@ -62,7 +62,7 @@ public class TetrisThread extends Thread {
         synchronized (surfaceHolder) {
             canvasWidth = width;
             canvasHeight = height;
-            int size = (int)((canvasWidth - MARGIN_RIGHT - MARGIN_LEFT - STROKE_WIDTH * 2) / TetrisPanel.GRID_WIDTH);
+            int size = (int)((canvasWidth - MARGIN_RIGHT - MARGIN_LEFT - STROKE_WIDTH * 2) / TetrisGrid.GRID_WIDTH);
             TetrisSingleGrid.SIZE = size;
         }
     }

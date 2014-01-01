@@ -13,6 +13,8 @@ public class TetrisSingleGrid {
     private boolean occupied;
     private TetrisColors color;
     private Rect rect;
+    private static final int MARGIN = 5;
+    private static final int COLOR_MARGIN = Color.BLACK;
     public static int SIZE = 30;
 
     // współrzędne w siatce gry
@@ -48,8 +50,11 @@ public class TetrisSingleGrid {
         return this.rect;
     }
 
-    // TODO: poprawic rysowanie pojedynczego klocka
     public void drawSingleGrid(Canvas canvas) {
-        canvas.drawRect(rect, color.getPaint());
+        Paint paint = new Paint();
+        paint.setColor(COLOR_MARGIN);
+        canvas.drawRect(rect, paint);
+        Rect rectNew = new Rect(rect.left + MARGIN, rect.top + MARGIN, rect.right - MARGIN, rect.bottom - MARGIN);
+        canvas.drawRect(rectNew, color.getPaint());
     }
 }

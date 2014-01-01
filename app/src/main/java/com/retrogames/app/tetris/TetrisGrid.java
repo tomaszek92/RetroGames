@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by Tomasz on 01.01.14.
  */
-public class TetrisPanel {
+public class TetrisGrid {
 
     private TetrisSingleGrid[][] gameGrid;
     private List<TetrisFigure> gameFigures;
@@ -15,7 +15,7 @@ public class TetrisPanel {
     public static int GRID_WIDTH = 10;
     public static int GRID_HEIGHT = 17;
 
-    public TetrisPanel() {
+    public TetrisGrid() {
         gameGrid = new TetrisSingleGrid[GRID_WIDTH][GRID_HEIGHT];
         gameFigures = new LinkedList<TetrisFigure>();
     }
