@@ -1,7 +1,6 @@
 package com.retrogames.app.tetris;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Rect;
 
 /**
@@ -10,13 +9,18 @@ import android.graphics.Rect;
 public class TetrisSingleGrid {
 
     private boolean occupied;
-    private TetrisColor color;
+    private TetrisColors color;
     private Rect rect;
+    private static int SIZE = 10;
 
-    public TetrisSingleGrid(boolean occupied, TetrisColor color, Rect rect) {
+    // współrzędne w siatce gry
+    private int x;
+    private int y;
+
+    public TetrisSingleGrid(boolean occupied, TetrisColors color, int x, int y) {
         this.occupied = occupied;
         this.color = color;
-        this.rect = rect;
+        this.rect = new Rect(x * SIZE, y * SIZE, SIZE, SIZE);
     }
 
     public void setOccupied(boolean occupied) {
@@ -26,10 +30,10 @@ public class TetrisSingleGrid {
         return this.occupied;
     }
 
-    public void setColor(TetrisColor color) {
+    public void setColor(TetrisColors color) {
         this.color = color;
     }
-    public TetrisColor getColor() {
+    public TetrisColors getColor() {
         return this.color;
     }
 
@@ -40,7 +44,14 @@ public class TetrisSingleGrid {
         return this.rect;
     }
 
-    public void draw(Canvas canvas) {
+    public static void setSIZE(int size) {
+        SIZE = size;
+    }
+    public static int getSIZE() {
+        return SIZE;
+    }
+
+    public void drawSingleGrid(Canvas canvas) {
         canvas.drawRect(rect, color.getPaint());
     }
 }

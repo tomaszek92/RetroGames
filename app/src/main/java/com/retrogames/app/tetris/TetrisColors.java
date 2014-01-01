@@ -8,7 +8,7 @@ import java.util.Random;
 /**
  * Created by Tomasz on 31.12.13.
  */
-public enum TetrisColor {
+public enum TetrisColors {
     GREEN(1),
     YELLOW(2),
     RED(3),
@@ -16,7 +16,7 @@ public enum TetrisColor {
 
     private int type;
 
-    private TetrisColor(int type) {
+    private TetrisColors(int type) {
         this.type = type;
     }
 
@@ -24,23 +24,23 @@ public enum TetrisColor {
         return type;
     }
 
-    public static TetrisColor randomColor() {
+    public static TetrisColors randomColor() {
         Random random = new Random();
         int rand = random.nextInt(4);
 
         if (rand == 0) {
-            return TetrisColor.GREEN;
+            return TetrisColors.GREEN;
         }
         else if (rand == 1) {
-            return TetrisColor.YELLOW;
+            return TetrisColors.YELLOW;
         }
         else if (rand == 2) {
-            return TetrisColor.RED;
+            return TetrisColors.RED;
         }
         else if (rand == 3) {
-            return  TetrisColor.BLUE;
+            return  TetrisColors.BLUE;
         }
-        return TetrisColor.GREEN;
+        return TetrisColors.GREEN;
     }
 
     public Paint getPaint() {
