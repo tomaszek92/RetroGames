@@ -18,6 +18,7 @@ public class TetrisSingleGrid {
     private int x;
     private int y;
 
+    // parametry do rysowania klocka
     private static final int MARGIN = 5;
     private static final int COLOR_MARGIN = Color.BLACK;
     public static int SIZE = 30;
@@ -25,9 +26,9 @@ public class TetrisSingleGrid {
     public TetrisSingleGrid(boolean occupied, TetrisColors color, int x, int y) {
         this.occupied = occupied;
         this.color = color;
-        this.rect = new Rect(x * SIZE, y * SIZE, x * SIZE + SIZE, y * SIZE + SIZE);
         this.x = x;
         this.y = y;
+        setNewRectByXY();
     }
 
     public void setOccupied(boolean occupied) {
@@ -51,6 +52,26 @@ public class TetrisSingleGrid {
         return this.rect;
     }
 
+    public void setX(int x) {
+        this.x = x;
+    }
+    public int getX() {
+        return this.x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+    public int getY() {
+        return this.y;
+    }
+
+    // ustawianie kwadratu na podstawie współrzędnych x y
+    public void setNewRectByXY() {
+        this.rect = new Rect(x * SIZE, y * SIZE, x * SIZE + SIZE, y * SIZE + SIZE);
+    }
+
+    // rysowanie pojedyńczego klocka
     public void drawSingleGrid(Canvas canvas) {
         Paint paint = new Paint();
         paint.setColor(COLOR_MARGIN);

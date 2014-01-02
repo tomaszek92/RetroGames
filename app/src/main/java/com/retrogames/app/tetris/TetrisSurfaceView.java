@@ -15,6 +15,11 @@ public class TetrisSurfaceView extends SurfaceView implements SurfaceHolder.Call
 
     private TetrisThread thread;
     private SurfaceHolder surfaceHolder;
+    private float mX;
+    private float mY;
+    private static final float TOUCH_TOLERANCE = 10;
+
+
     public TetrisSurfaceView(Context context) {
         super(context);
         surfaceHolder = getHolder();
@@ -59,10 +64,6 @@ public class TetrisSurfaceView extends SurfaceView implements SurfaceHolder.Call
             }
         }
     }
-
-    private float mX;
-    private float mY;
-    private static final float TOUCH_TOLERANCE = 4;
 
     private void touchStart(float x, float y) {
         mX = x;

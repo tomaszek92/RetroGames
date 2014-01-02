@@ -19,18 +19,12 @@ public class TetrisThread extends Thread {
     private int canvasWidth = 200;
     private int canvasHeight = 400;
 
-    // marginesy do rysowania tła
-    public static final int MARGIN_TOP = 100;
-    public static final int MARGIN_BOTTOM = 10;
-    public static final int MARGIN_LEFT = 10;
-    public static final int MARGIN_RIGHT = 10;
 
-    public static final int STROKE_WIDTH = 5;
-    public static final int LINE_COLOR = Color.WHITE;
-    public static final int BACKGROUND_COLOR = Color.DKGRAY;
 
     private float positionX;
     private float positionY;
+
+    private TetrisGrid tetrisGrid = new TetrisGrid();
 
     public TetrisThread(SurfaceHolder surfaceHolder, TetrisSurfaceView view) {
         this.surfaceHolder = surfaceHolder;
@@ -64,35 +58,57 @@ public class TetrisThread extends Thread {
         synchronized (surfaceHolder) {
             canvasWidth = width;
             canvasHeight = height;
-            int size = (int)((canvasWidth - MARGIN_RIGHT - MARGIN_LEFT - STROKE_WIDTH * 2) / TetrisGrid.GRID_WIDTH);
+
+            TetrisGrid.GRID_BEGIN = TetrisGrid.MARGIN_TOP + TetrisGrid.STROKE_WIDTH;
+            TetrisGrid.GRID_CENTER = height / 2;
+
+            int size = (int)((canvasWidth - TetrisGrid.MARGIN_RIGHT - TetrisGrid.MARGIN_LEFT - TetrisGrid.STROKE_WIDTH * 2) / TetrisGrid.GRID_WIDTH);
             TetrisSingleGrid.SIZE = size;
+
+            figure = new TetrisFigure(color, shape);
+            tetrisGrid.addFigure(figure);
         }
     }
 
     private TetrisShapes shape = TetrisShapes.randomShape();
     private TetrisColors color = TetrisColors.randomColor();
-    private TetrisFigure figure = new TetrisFigure(color, shape);
+    private TetrisFigure figure;
 
     private void doDraw() {
         if (canvas != null) {
-        drawBackground();
-
-        figure.drawFigure(canvas);
+            drawBackground();
+            tetrisGrid.draw(canvas);
         }
     }
 
     private void drawBackground() {
-        // wypełnianie tłą
-        canvas.drawColor(BACKGROUND_COLOR);
+        // wypełnianie tła
+        canvas.drawColor(TetrisGrid.BACKGROUND_COLOR);
 
         // rysowanie linii
         Paint paint = new Paint();
-        paint.setStrokeWidth(STROKE_WIDTH);
-        paint.setColor(LINE_COLOR);
-        canvas.drawLine(MARGIN_LEFT, MARGIN_TOP, MARGIN_LEFT, canvasHeight - MARGIN_BOTTOM, paint);
-        canvas.drawLine(MARGIN_LEFT, canvasHeight - MARGIN_BOTTOM, canvasWidth - MARGIN_RIGHT, canvasHeight - MARGIN_BOTTOM, paint);
-        canvas.drawLine(canvasWidth - MARGIN_RIGHT, canvasHeight - MARGIN_BOTTOM, canvasWidth - MARGIN_RIGHT, MARGIN_TOP, paint);
-        canvas.drawLine(canvasWidth - MARGIN_RIGHT, MARGIN_TOP, MARGIN_LEFT, MARGIN_TOP, paint);
+        paint.setStrokeWidth(TetrisGrid.STROKE_WIDTH);
+        paint.setColor(TetrisGrid.LINE_COLOR);
+        canvas.drawLine(TetrisGrid.MARGIN_LEFT,
+                TetrisGrid.MARGIN_TOP,
+                TetrisGrid.MARGIN_LEFT,
+                canvasHeight - TetrisGrid.MARGIN_BOTTOM,
+                paint);
+        canvas.drawLine(TetrisGrid.MARGIN_LEFT,
+                canvasHeight - TetrisGrid.MARGIN_BOTTOM,
+                canvasWidth - TetrisGrid.MARGIN_RIGHT,
+                canvasHeight - TetrisGrid.MARGIN_BOTTOM,
+                paint);
+        canvas.drawLine(canvasWidth - TetrisGrid.MARGIN_RIGHT,
+                canvasHeight - TetrisGrid.MARGIN_BOTTOM,
+                canvasWidth - TetrisGrid.MARGIN_RIGHT,
+                TetrisGrid.MARGIN_TOP,
+                paint);
+        canvas.drawLine(canvasWidth - TetrisGrid.MARGIN_RIGHT,
+                TetrisGrid.MARGIN_TOP,
+                TetrisGrid.MARGIN_LEFT,
+                TetrisGrid.MARGIN_TOP,
+                paint);
     }
 
     public void move(float x, float y) {
