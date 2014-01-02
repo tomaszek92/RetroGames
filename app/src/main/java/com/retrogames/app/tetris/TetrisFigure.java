@@ -23,6 +23,7 @@ public class TetrisFigure {
         makeGrid();
     }
 
+    // tworzenie siatki figury, w zależności od typu figury
     private void makeGrid() {
         TetrisColors color = TetrisColors.randomColor();
 
@@ -138,6 +139,7 @@ public class TetrisFigure {
         return  this.grid;
     }
 
+    // rysowanie figury
     public void drawFigure(Canvas canvas) {
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {

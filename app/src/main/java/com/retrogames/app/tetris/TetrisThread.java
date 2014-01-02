@@ -12,19 +12,13 @@ public class TetrisThread extends Thread {
 
     private SurfaceHolder surfaceHolder;
     private TetrisSurfaceView view;
+    private TetrisGrid tetrisGrid;
     private Canvas canvas = null;
     private boolean run = false;
 
     // rozmiary ekranu
-    private int canvasWidth = 200;
-    private int canvasHeight = 400;
-
-
-
-    private float positionX;
-    private float positionY;
-
-    private TetrisGrid tetrisGrid = new TetrisGrid();
+    private int canvasWidth;
+    private int canvasHeight;
 
     public TetrisThread(SurfaceHolder surfaceHolder, TetrisSurfaceView view) {
         this.surfaceHolder = surfaceHolder;
@@ -59,19 +53,18 @@ public class TetrisThread extends Thread {
             canvasWidth = width;
             canvasHeight = height;
 
-            TetrisGrid.GRID_BEGIN = TetrisGrid.MARGIN_TOP + TetrisGrid.STROKE_WIDTH;
-            TetrisGrid.GRID_CENTER = height / 2;
+            tetrisGrid = new TetrisGrid(canvasHeight, canvasWidth);
 
-            int size = (int)((canvasWidth - TetrisGrid.MARGIN_RIGHT - TetrisGrid.MARGIN_LEFT - TetrisGrid.STROKE_WIDTH * 2) / TetrisGrid.GRID_WIDTH);
-            TetrisSingleGrid.SIZE = size;
+            int size1 = (int)((canvasWidth - 2 * TetrisGrid.MARGIN_LEFT - TetrisGrid.STROKE_WIDTH * 2) / TetrisGrid.GRID_WIDTH);
+            TetrisSingleGrid.SIZE = size1;
+            TetrisGrid.MARGIN_TOP = canvasHeight - 2 * TetrisGrid.STROKE_WIDTH - TetrisGrid.MARGIN_BOTTOM - TetrisGrid.GRID_HEIGHT * TetrisSingleGrid.SIZE;
+            TetrisGrid.MARGIN_RIGHT = 2 * TetrisGrid.STROKE_WIDTH + TetrisGrid.MARGIN_LEFT + TetrisGrid.GRID_WIDTH * TetrisSingleGrid.SIZE;
 
-            figure = new TetrisFigure(color, shape);
+            figure = new TetrisFigure(TetrisColors.randomColor(), TetrisShapes.randomShape());
             tetrisGrid.addFigure(figure);
         }
     }
 
-    private TetrisShapes shape = TetrisShapes.randomShape();
-    private TetrisColors color = TetrisColors.randomColor();
     private TetrisFigure figure;
 
     private void doDraw() {
@@ -89,6 +82,7 @@ public class TetrisThread extends Thread {
         Paint paint = new Paint();
         paint.setStrokeWidth(TetrisGrid.STROKE_WIDTH);
         paint.setColor(TetrisGrid.LINE_COLOR);
+
         canvas.drawLine(TetrisGrid.MARGIN_LEFT,
                 TetrisGrid.MARGIN_TOP,
                 TetrisGrid.MARGIN_LEFT,
@@ -96,23 +90,30 @@ public class TetrisThread extends Thread {
                 paint);
         canvas.drawLine(TetrisGrid.MARGIN_LEFT,
                 canvasHeight - TetrisGrid.MARGIN_BOTTOM,
-                canvasWidth - TetrisGrid.MARGIN_RIGHT,
+                TetrisGrid.MARGIN_RIGHT,
                 canvasHeight - TetrisGrid.MARGIN_BOTTOM,
                 paint);
-        canvas.drawLine(canvasWidth - TetrisGrid.MARGIN_RIGHT,
+        canvas.drawLine(TetrisGrid.MARGIN_RIGHT,
                 canvasHeight - TetrisGrid.MARGIN_BOTTOM,
-                canvasWidth - TetrisGrid.MARGIN_RIGHT,
+                TetrisGrid.MARGIN_RIGHT,
                 TetrisGrid.MARGIN_TOP,
                 paint);
-        canvas.drawLine(canvasWidth - TetrisGrid.MARGIN_RIGHT,
+        canvas.drawLine(TetrisGrid.MARGIN_RIGHT,
                 TetrisGrid.MARGIN_TOP,
                 TetrisGrid.MARGIN_LEFT,
                 TetrisGrid.MARGIN_TOP,
                 paint);
     }
 
+    // TODO: poprawić, aby nie wychodziło poza ekran
     public void move(float x, float y) {
-        positionX = x;
-        positionY = y;
+        TetrisSingleGrid[][] grids = figure.getGrid();
+        for (int i = 0; i < grids.length; i++) {
+            for (int j = 0; j < grids[i].length; j++) {
+                grids[i][j].setX(TetrisGrid.xCoordinateToGrid(x + TetrisSingleGrid.SIZE * j));
+                grids[i][j].setY(TetrisGrid.yCoordinateToGrid(y + TetrisSingleGrid.SIZE * i));
+                grids[i][j].setNewRectByXY();
+            }
+        }
     }
 }

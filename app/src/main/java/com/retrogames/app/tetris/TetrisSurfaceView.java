@@ -65,11 +65,13 @@ public class TetrisSurfaceView extends SurfaceView implements SurfaceHolder.Call
         }
     }
 
+    // kliknięto pierwszy raz
     private void touchStart(float x, float y) {
         mX = x;
         mY = y;
     }
 
+    // przesuwanie palcem po ekranie
     private void touchMove(float x, float y) {
         float dx = Math.abs(x - mX);
         float dy = Math.abs(y - mY);

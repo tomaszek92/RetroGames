@@ -69,6 +69,10 @@ public class TetrisSingleGrid {
     // ustawianie kwadratu na podstawie współrzędnych x y
     public void setNewRectByXY() {
         this.rect = new Rect(x * SIZE, y * SIZE, x * SIZE + SIZE, y * SIZE + SIZE);
+        this.rect.left = this.rect.left + TetrisGrid.MARGIN_LEFT + TetrisGrid.STROKE_WIDTH;
+        this.rect.right = this.rect.right + TetrisGrid.MARGIN_LEFT + TetrisGrid.STROKE_WIDTH;
+        this.rect.top = this.rect.top + TetrisGrid.MARGIN_TOP + TetrisGrid.STROKE_WIDTH;
+        this.rect.bottom = this.rect.bottom + TetrisGrid.MARGIN_TOP + TetrisGrid.STROKE_WIDTH;
     }
 
     // rysowanie pojedyńczego klocka

@@ -43,6 +43,7 @@ public enum TetrisColors {
         return TetrisColors.GREEN;
     }
 
+    // zwraca gotowy kolor
     public Paint getPaint() {
         Paint paint = new Paint();
         if (this == GREEN) {
