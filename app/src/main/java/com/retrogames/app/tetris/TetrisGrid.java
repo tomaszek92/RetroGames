@@ -77,8 +77,8 @@ public class TetrisGrid {
 
     // rysowanie wszystkich figur
     public void draw(Canvas canvas) {
-        for (TetrisFigure figure : gameFigures) {
-            figure.drawFigure(canvas);
+        for (int i = 0; i <  gameFigures.size(); i++) {
+            gameFigures.get(i).drawFigure(canvas);
         }
     }
 
@@ -108,5 +108,36 @@ public class TetrisGrid {
         int positionInGrid = (int)((y - MARGIN_TOP - STROKE_WIDTH) / TetrisSingleGrid.SIZE);
 
         return positionInGrid;
+    }
+
+    public boolean isFree(int x, int y) {
+        if (x >= GRID_WIDTH || y >= GRID_HEIGHT) {
+            return true;
+        }
+        if (this.gameGrid[x][y] == null) {
+            return true;
+        }
+        return !this.gameGrid[x][y].getOccupied();
+    }
+
+    public void refreshGrid() {
+        for (int i = 0; i < gameGrid.length; i++) {
+            for (int j = 0; j < gameGrid[i].length; j++) {
+                gameGrid[i][j] = null;
+            }
+        }
+        for (TetrisFigure figure : this.gameFigures) {
+            addFigureToGameGrid(figure);
+        }
+    }
+
+    private void addToGrid(TetrisFigure figure) {
+        TetrisSingleGrid[][] grids = figure.getGrid();
+        for (int i = 0; i < grids.length; i++) {
+            for (int j = 0; j < grids[i].length; j++) {
+                gameGrid[i][j] = grids[i][j];
+            }
+        }
+        //gameGrid[][] = figure;
     }
 }

@@ -5,6 +5,9 @@ import android.graphics.Color;
 import android.graphics.Paint;;
 import android.view.SurfaceHolder;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
  * Created by Tomasz on 31.12.13.
  */
@@ -13,12 +16,17 @@ public class TetrisThread extends Thread {
     private SurfaceHolder surfaceHolder;
     private TetrisSurfaceView view;
     private TetrisGrid tetrisGrid;
+    private TetrisFigure figure;
     private Canvas canvas = null;
     private boolean run = false;
 
     // rozmiary ekranu
     private int canvasWidth;
     private int canvasHeight;
+
+    private static int DRAG_TIMEOUT = 1000;
+    private static int DOWN_SPPED = 500;
+    private Timer timer;
 
     public TetrisThread(SurfaceHolder surfaceHolder, TetrisSurfaceView view) {
         this.surfaceHolder = surfaceHolder;
@@ -60,12 +68,54 @@ public class TetrisThread extends Thread {
             TetrisGrid.MARGIN_TOP = canvasHeight - 2 * TetrisGrid.STROKE_WIDTH - TetrisGrid.MARGIN_BOTTOM - TetrisGrid.GRID_HEIGHT * TetrisSingleGrid.SIZE;
             TetrisGrid.MARGIN_RIGHT = 2 * TetrisGrid.STROKE_WIDTH + TetrisGrid.MARGIN_LEFT + TetrisGrid.GRID_WIDTH * TetrisSingleGrid.SIZE;
 
-            figure = new TetrisFigure(TetrisColors.randomColor(), TetrisShapes.randomShape());
+            figure = new TetrisFigure();
             tetrisGrid.addFigure(figure);
+
+            timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    doSomthing();
+                }
+            }, DOWN_SPPED, DOWN_SPPED);
         }
     }
 
-    private TetrisFigure figure;
+    private void doSomthing() {
+        boolean itsEnd = false;
+        TetrisSingleGrid[][] grids = figure.getGrid();
+        for (int i = 0; i < grids.length && itsEnd == false; i++) {
+            for (int j = 0; j < grids[i].length && itsEnd == false ; j++) {
+                if (grids[i][j].getY() + 1 == TetrisGrid.GRID_HEIGHT) {
+                    itsEnd = true;
+                }
+                if (i == grids.length - 1 && grids[i][j].getOccupied()) {
+                    if (!tetrisGrid.isFree(grids[i][j].getX(), grids[i][j].getY() + 1)) {
+                        itsEnd = true;
+                    }
+                }
+                else if (!grids[i][j].getOccupied()) {
+                    if (!tetrisGrid.isFree(grids[i][j].getX(), grids[i][j].getY())) {
+                        itsEnd = true;
+                    }
+                }
+            }
+        }
+
+        if (itsEnd == false) {
+            for (int i = 0; i < grids.length; i++) {
+                for (int j = 0; j < grids[i].length ; j++) {
+                    grids[i][j].setY(grids[i][j].getY() + 1);
+                    grids[i][j].setNewRectByXY();
+                    tetrisGrid.refreshGrid();
+                }
+            }
+        }
+        else {
+            figure = new TetrisFigure();
+            tetrisGrid.addFigure(figure);
+        }
+    }
 
     private void doDraw() {
         if (canvas != null) {
@@ -110,9 +160,14 @@ public class TetrisThread extends Thread {
         TetrisSingleGrid[][] grids = figure.getGrid();
         for (int i = 0; i < grids.length; i++) {
             for (int j = 0; j < grids[i].length; j++) {
-                grids[i][j].setX(TetrisGrid.xCoordinateToGrid(x + TetrisSingleGrid.SIZE * j));
-                grids[i][j].setY(TetrisGrid.yCoordinateToGrid(y + TetrisSingleGrid.SIZE * i));
-                grids[i][j].setNewRectByXY();
+                int xNew = TetrisGrid.xCoordinateToGrid(x + TetrisSingleGrid.SIZE * j);
+                int yNew = TetrisGrid.yCoordinateToGrid(y + TetrisSingleGrid.SIZE * i);
+                if (tetrisGrid.isFree(xNew, yNew)) {
+                    grids[i][j].setX(xNew);
+                    grids[i][j].setY(yNew);
+                    grids[i][j].setNewRectByXY();
+                    tetrisGrid.refreshGrid();
+                }
             }
         }
     }
