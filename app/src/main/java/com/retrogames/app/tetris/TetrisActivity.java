@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -15,9 +16,12 @@ import android.widget.Toast;
  */
 public class TetrisActivity extends Activity {
 
+    TetrisSurfaceView view;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(new TetrisSurfaceView(this));
+        view = new TetrisSurfaceView(this);
+        setContentView(view);
     }
 }

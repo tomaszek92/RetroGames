@@ -22,6 +22,18 @@ public class TetrisSurfaceView extends SurfaceView implements SurfaceHolder.Call
         setFocusable(true);
     }
 
+    public TetrisThread getThread() {
+        return thread;
+    }
+
+    public void stopThread() {
+        if (thread != null) {
+            thread.setRunning(false);
+            thread.interrupt();
+            thread = null;
+        }
+    }
+
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         thread = new TetrisThread(getHolder(), this);

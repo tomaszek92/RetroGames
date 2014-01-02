@@ -13,13 +13,14 @@ public class TetrisSingleGrid {
     private boolean occupied;
     private TetrisColors color;
     private Rect rect;
-    private static final int MARGIN = 5;
-    private static final int COLOR_MARGIN = Color.BLACK;
-    public static int SIZE = 30;
 
     // współrzędne w siatce gry
     private int x;
     private int y;
+
+    private static final int MARGIN = 5;
+    private static final int COLOR_MARGIN = Color.BLACK;
+    public static int SIZE = 30;
 
     public TetrisSingleGrid(boolean occupied, TetrisColors color, int x, int y) {
         this.occupied = occupied;

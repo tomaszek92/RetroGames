@@ -20,14 +20,14 @@ public class TetrisThread extends Thread {
     private int canvasHeight = 400;
 
     // marginesy do rysowania tła
-    private static final int MARGIN_TOP = 100;
-    private static final int MARGIN_BOTTOM = 10;
-    private static final int MARGIN_LEFT = 10;
-    private static final int MARGIN_RIGHT = 10;
+    public static final int MARGIN_TOP = 100;
+    public static final int MARGIN_BOTTOM = 10;
+    public static final int MARGIN_LEFT = 10;
+    public static final int MARGIN_RIGHT = 10;
 
-    private static final int STROKE_WIDTH = 5;
-    private static final int LINE_COLOR = Color.WHITE;
-    private static final int BACKGROUND_COLOR = Color.DKGRAY;
+    public static final int STROKE_WIDTH = 5;
+    public static final int LINE_COLOR = Color.WHITE;
+    public static final int BACKGROUND_COLOR = Color.DKGRAY;
 
     private float positionX;
     private float positionY;
@@ -47,7 +47,9 @@ public class TetrisThread extends Thread {
             try {
                 canvas = surfaceHolder.lockCanvas(null);
                 synchronized (surfaceHolder) {
+                    if (canvas != null) {
                     doDraw();
+                    }
                 }
             }
             finally {
@@ -72,9 +74,11 @@ public class TetrisThread extends Thread {
     private TetrisFigure figure = new TetrisFigure(color, shape);
 
     private void doDraw() {
+        if (canvas != null) {
         drawBackground();
 
         figure.drawFigure(canvas);
+        }
     }
 
     private void drawBackground() {

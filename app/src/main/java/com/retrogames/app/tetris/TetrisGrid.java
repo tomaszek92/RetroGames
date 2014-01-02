@@ -8,10 +8,13 @@ import java.util.List;
  */
 public class TetrisGrid {
 
+    public static int GRID_BEGIN;
+    public static int GRID_CENTER;
+
     private TetrisSingleGrid[][] gameGrid;
     private List<TetrisFigure> gameFigures;
 
-    // liczba klocków
+    // wymiar siatki
     public static int GRID_WIDTH = 10;
     public static int GRID_HEIGHT = 17;
 
@@ -34,6 +37,7 @@ public class TetrisGrid {
 
     // TODO: napisac to
     public int xCoordinateToGrid(float x) {
+
         return 0;
     }
 
