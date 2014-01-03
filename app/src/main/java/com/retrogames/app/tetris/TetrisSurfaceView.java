@@ -4,10 +4,14 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import com.retrogames.app.ChooseGameActivity;
+import com.retrogames.app.R;
 
 /**
  * Created by Tomasz on 31.12.13.
@@ -18,7 +22,7 @@ public class TetrisSurfaceView extends SurfaceView implements SurfaceHolder.Call
     private SurfaceHolder surfaceHolder;
     private float mX;
     private float mY;
-    private static final float TOUCH_TOLERANCE = 10;
+    private static final float TOUCH_TOLERANCE = 1;
 
 
     public TetrisSurfaceView(Context context) {
@@ -42,7 +46,7 @@ public class TetrisSurfaceView extends SurfaceView implements SurfaceHolder.Call
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        thread = new TetrisThread(getHolder(), this);
+        thread = new TetrisThread(getHolder(), this, Typeface.createFromAsset(getContext().getAssets(), ChooseGameActivity.FONT), getResources().getString(R.string.score));
         thread.setRunning(true);
         thread.start();
     }

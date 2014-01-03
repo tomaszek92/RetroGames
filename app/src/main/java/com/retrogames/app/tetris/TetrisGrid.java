@@ -2,7 +2,7 @@ package com.retrogames.app.tetris;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Rect;
+import android.graphics.Typeface;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -15,15 +15,26 @@ public class TetrisGrid {
     private TetrisSingleGrid[][] gameGrid;
     private List<TetrisFigure> gameFigures;
 
-    // marginesy do rysowania tła
+    // marginesy do rysowania wyniku
+    public static int MARGIN_SCORE_TOP = 50;
+    public static int MARGIN_SCORE_LEFT = 50;
+    public static int SCORE_COLOR = Color.WHITE;
+
+    // marginesy do rysowania siatki gry
     public static int MARGIN_RIGHT;
     public static int MARGIN_TOP;
     public static int MARGIN_BOTTOM = 10;
     public static int MARGIN_LEFT = 10;
 
+    // zmienne do rysowania
     public static final int STROKE_WIDTH = 5;
     public static final int LINE_COLOR = Color.WHITE;
     public static final int BACKGROUND_COLOR = Color.DKGRAY;
+
+    // zmienne do wyniku
+    private static int pointsScore = 0;
+    private static final int pointsForOneRoweInOneColor = 1000;
+    private static final int pointsForOneRow = 100;
 
     // wymiar siatki w klockach
     public static int GRID_WIDTH = 10;
@@ -39,6 +50,10 @@ public class TetrisGrid {
 
         gameGrid = new TetrisSingleGrid[GRID_WIDTH][GRID_HEIGHT];
         gameFigures = new LinkedList<TetrisFigure>();
+    }
+
+    public static int getPointsScore() {
+        return pointsScore;
     }
 
     // dodanie nowej figury do planszy gry
@@ -75,8 +90,40 @@ public class TetrisGrid {
         gameFigures.remove(deletedFigure);
     }
 
+    // sprawdzanie i ewnetualne usuwanie całego rzędu
+    public void checkGrid() {
+        for (int j = GRID_HEIGHT - 1; j >= 0; j--) {
+            boolean allRowsAreOccupied = true;
+            boolean oneColor = true;
+
+            for (int i = 0; i < gameGrid.length; i++) {
+                if (gameGrid[i][j] != null) {
+                    if (!gameGrid[i][j].getOccupied()) {
+                        allRowsAreOccupied = false;
+                    }
+                    if (oneColor && gameGrid[0][j].getColor() != gameGrid[i][j].getColor()) {
+                        oneColor = false;
+                    }
+                }
+                else {
+                    allRowsAreOccupied = false;
+                    oneColor = false;
+                    break;
+                }
+            }
+            if (allRowsAreOccupied) {
+                if (oneColor) {
+                    pointsScore += pointsForOneRoweInOneColor;
+                }
+                else {
+                    pointsScore += pointsForOneRow;
+                }
+            }
+        }
+    }
+
     // rysowanie wszystkich figur
-    public void draw(Canvas canvas) {
+    public void drawAllFigures(Canvas canvas) {
         for (int i = 0; i <  gameFigures.size(); i++) {
             gameFigures.get(i).drawFigure(canvas);
         }
@@ -110,7 +157,7 @@ public class TetrisGrid {
         return positionInGrid;
     }
 
-    public boolean isFree(int x, int y) {
+    public boolean isNotOccupied(int x, int y) {
         if (x >= GRID_WIDTH || y >= GRID_HEIGHT) {
             return true;
         }

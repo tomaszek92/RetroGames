@@ -1,9 +1,13 @@
 package com.retrogames.app.tetris;
 
+import android.content.res.Resources;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;;
+import android.graphics.Typeface;
 import android.view.SurfaceHolder;
+import android.os.Bundle;
+
+import com.retrogames.app.R;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -19,6 +23,8 @@ public class TetrisThread extends Thread {
     private TetrisFigure figure;
     private Canvas canvas = null;
     private boolean run = false;
+    private Typeface typeface;
+    private String scoreString;
 
     // rozmiary ekranu
     private int canvasWidth;
@@ -28,9 +34,11 @@ public class TetrisThread extends Thread {
     private static int DOWN_SPPED = 500;
     private Timer timer;
 
-    public TetrisThread(SurfaceHolder surfaceHolder, TetrisSurfaceView view) {
+    public TetrisThread(SurfaceHolder surfaceHolder, TetrisSurfaceView view, Typeface typeface, String scoreString) {
         this.surfaceHolder = surfaceHolder;
         this.view = view;
+        this.typeface = typeface;
+        this.scoreString = scoreString;
     }
 
     public void setRunning(boolean run) {
@@ -75,13 +83,13 @@ public class TetrisThread extends Thread {
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    doSomthing();
+                    goOneToDown();
                 }
             }, DOWN_SPPED, DOWN_SPPED);
         }
     }
 
-    private void doSomthing() {
+    private void goOneToDown() {
         boolean itsEnd = false;
         TetrisSingleGrid[][] grids = figure.getGrid();
         for (int i = 0; i < grids.length && itsEnd == false; i++) {
@@ -90,13 +98,17 @@ public class TetrisThread extends Thread {
                     itsEnd = true;
                 }
                 if (i == grids.length - 1 && grids[i][j].getOccupied()) {
-                    if (!tetrisGrid.isFree(grids[i][j].getX(), grids[i][j].getY() + 1)) {
+                    if (!tetrisGrid.isNotOccupied(grids[i][j].getX(), grids[i][j].getY() + 1)) {
                         itsEnd = true;
                     }
                 }
-                else if (!grids[i][j].getOccupied()) {
-                    if (!tetrisGrid.isFree(grids[i][j].getX(), grids[i][j].getY())) {
+
+                if (!grids[i][j].getOccupied()) {
+                    if (!tetrisGrid.isNotOccupied(grids[i][j].getX(), grids[i][j].getY())) {
                         itsEnd = true;
+                    }
+                    if (j - 1 >= 0 && !grids[i][j-1].getOccupied()) {
+                        itsEnd = false;
                     }
                 }
             }
@@ -115,13 +127,24 @@ public class TetrisThread extends Thread {
             figure = new TetrisFigure();
             tetrisGrid.addFigure(figure);
         }
+
+        tetrisGrid.checkGrid();
     }
 
     private void doDraw() {
         if (canvas != null) {
             drawBackground();
-            tetrisGrid.draw(canvas);
+            drawScore();
+            tetrisGrid.drawAllFigures(canvas);
         }
+    }
+
+    private void drawScore() {
+        Paint paint = new Paint();
+        paint.setColor(TetrisGrid.SCORE_COLOR);
+        paint.setTypeface(typeface);
+        paint.setTextSize(40);
+        canvas.drawText(scoreString + " " + TetrisGrid.getPointsScore(), TetrisGrid.MARGIN_SCORE_LEFT, TetrisGrid.MARGIN_SCORE_TOP, paint);
     }
 
     private void drawBackground() {
@@ -155,14 +178,15 @@ public class TetrisThread extends Thread {
                 paint);
     }
 
-    // TODO: poprawić, aby nie wychodziło poza ekran
+    // TODO: poprawić, aby nie wychodziło poza ekran i aby figury się nie rozjeżdzały
     public void move(float x, float y) {
         TetrisSingleGrid[][] grids = figure.getGrid();
+
         for (int i = 0; i < grids.length; i++) {
             for (int j = 0; j < grids[i].length; j++) {
                 int xNew = TetrisGrid.xCoordinateToGrid(x + TetrisSingleGrid.SIZE * j);
                 int yNew = TetrisGrid.yCoordinateToGrid(y + TetrisSingleGrid.SIZE * i);
-                if (tetrisGrid.isFree(xNew, yNew)) {
+                if (tetrisGrid.isNotOccupied(xNew, yNew)) {
                     grids[i][j].setX(xNew);
                     grids[i][j].setY(yNew);
                     grids[i][j].setNewRectByXY();

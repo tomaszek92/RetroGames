@@ -33,29 +33,25 @@ public enum TetrisShapes {
     // X X
     LETTER_L_SMALL(5),
 
-    //   X
-    // X X
-    LETTER_L_SMALL_R(6),
-
     // X
     // X
     // X X
-    LETTER_L_BIG(7),
+    LETTER_L_BIG(6),
 
     //   X
     //   X
     // X X
-    LETTER_L_BIG_R(8),
+    LETTER_L_BIG_R(7),
 
     // X
     // X X
     //   X
-    CLIPPER(9),
+    CLIPPER(8),
 
     //   X
     // X X
     // X
-    CLIPPER_R(10);
+    CLIPPER_R(9);
 
     private int type;
 
@@ -95,22 +91,18 @@ public enum TetrisShapes {
         }
 
         else if (rand == 6) {
-            return TetrisShapes.LETTER_L_SMALL_R;
-        }
-
-        else if (rand == 7) {
             return TetrisShapes.LETTER_L_BIG;
         }
 
-        else if (rand == 8) {
+        else if (rand == 7) {
             return TetrisShapes.LETTER_L_BIG_R;
         }
 
-        else if (rand == 9) {
+        else if (rand == 8) {
             return TetrisShapes.CLIPPER;
         }
 
-        else if (rand == 10) {
+        else if (rand == 9) {
             return TetrisShapes.CLIPPER_R;
         }
 

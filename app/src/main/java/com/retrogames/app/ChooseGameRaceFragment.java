@@ -26,7 +26,6 @@ public class ChooseGameRaceFragment extends Fragment {
         TextView textView = (TextView) view.findViewById(R.id.choose_game_race_texView);
         Typeface font = Typeface.createFromAsset(getActivity().getAssets(), ChooseGameActivity.FONT);
         textView.setTypeface(font);
-
         return view;
     }
 }
