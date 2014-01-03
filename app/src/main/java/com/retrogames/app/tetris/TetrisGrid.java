@@ -178,13 +178,44 @@ public class TetrisGrid {
         }
     }
 
-    private void addToGrid(TetrisFigure figure) {
+    public void moveFigure(TetrisFigure figure, float x, float y) {
         TetrisSingleGrid[][] grids = figure.getGrid();
-        for (int i = 0; i < grids.length; i++) {
-            for (int j = 0; j < grids[i].length; j++) {
-                gameGrid[i][j] = grids[i][j];
+        TetrisSingleGrid[][] gridsClone = new TetrisSingleGrid[grids.length][];
+        // kopiowanie tablicy grids do gridsClone
+        for (int i = 0; i < gridsClone.length; i++) {
+            gridsClone[i] = new TetrisSingleGrid[grids[i].length];
+        }
+        for (int i = 0; i < gridsClone.length; i++) {
+            for (int j = 0; j < gridsClone[i].length; j++) {
+                gridsClone[i][j] = new TetrisSingleGrid(grids[i][j].getOccupied(), grids[i][j].getColor(), grids[i][j].getX(), grids[i][j].getY());
             }
         }
-        //gameGrid[][] = figure;
+        // sprawdzanie czy jest puste pole
+        for (int i = 0; i < gridsClone.length; i++) {
+            for (int j = 0; j < gridsClone[i].length; j++) {
+                int xNew = TetrisGrid.xCoordinateToGrid(x + TetrisSingleGrid.SIZE * j);
+                int yNew = TetrisGrid.yCoordinateToGrid(y + TetrisSingleGrid.SIZE * i);
+                if (xNew < 0 || xNew >= TetrisGrid.GRID_WIDTH ||
+                        yNew < 0 || yNew >= TetrisGrid.GRID_HEIGHT) {
+                    return;
+                }
+                if (this.isNotOccupied(xNew, yNew)) {
+                    gridsClone[i][j].setX(xNew);
+                    gridsClone[i][j].setY(yNew);
+                }
+                else {
+                    return;
+                }
+            }
+        }
+        // przesuwanie klocka na nową pozycję
+        for (int i = 0; i < grids.length; i++) {
+            for (int j = 0; j < grids[i].length; j++) {
+                grids[i][j].setX(gridsClone[i][j].getX());
+                grids[i][j].setY(gridsClone[i][j].getY());
+                grids[i][j].setNewRectByXY();
+            }
+        }
+        this.refreshGrid();
     }
 }

@@ -92,8 +92,8 @@ public class TetrisThread extends Thread {
     private void goOneToDown() {
         boolean itsEnd = false;
         TetrisSingleGrid[][] grids = figure.getGrid();
-        for (int i = 0; i < grids.length && itsEnd == false; i++) {
-            for (int j = 0; j < grids[i].length && itsEnd == false ; j++) {
+        for (int i = grids.length - 1; i >= 0 && !itsEnd; i--) {
+            for (int j = grids[i].length - 1; j >= 0 && !itsEnd ; j--) {
                 if (grids[i][j].getY() + 1 == TetrisGrid.GRID_HEIGHT) {
                     itsEnd = true;
                 }
@@ -114,7 +114,7 @@ public class TetrisThread extends Thread {
             }
         }
 
-        if (itsEnd == false) {
+        if (!itsEnd) {
             for (int i = 0; i < grids.length; i++) {
                 for (int j = 0; j < grids[i].length ; j++) {
                     grids[i][j].setY(grids[i][j].getY() + 1);
@@ -178,21 +178,7 @@ public class TetrisThread extends Thread {
                 paint);
     }
 
-    // TODO: poprawić, aby nie wychodziło poza ekran i aby figury się nie rozjeżdzały
     public void move(float x, float y) {
-        TetrisSingleGrid[][] grids = figure.getGrid();
-
-        for (int i = 0; i < grids.length; i++) {
-            for (int j = 0; j < grids[i].length; j++) {
-                int xNew = TetrisGrid.xCoordinateToGrid(x + TetrisSingleGrid.SIZE * j);
-                int yNew = TetrisGrid.yCoordinateToGrid(y + TetrisSingleGrid.SIZE * i);
-                if (tetrisGrid.isNotOccupied(xNew, yNew)) {
-                    grids[i][j].setX(xNew);
-                    grids[i][j].setY(yNew);
-                    grids[i][j].setNewRectByXY();
-                    tetrisGrid.refreshGrid();
-                }
-            }
-        }
+        tetrisGrid.moveFigure(figure, x, y);
     }
 }
