@@ -92,6 +92,30 @@ public class TetrisThread extends Thread {
     private void goOneToDown() {
         boolean itsEnd = false;
         TetrisSingleGrid[][] grids = figure.getGrid();
+
+        int k = grids.length - 1;
+        for (int j = 0; j < grids[k].length; j++) {
+            if (grids[k][j].getY() + 1 == TetrisGrid.GRID_HEIGHT) {
+                itsEnd = true;
+            }
+            else if (grids[k][j].getOccupied()) {
+                if (!tetrisGrid.isNotOccupied(grids[k][j].getX(), grids[k][j].getY() + 1)) {
+                    itsEnd = true;
+                }
+            }
+            else if (!grids[k][j].getOccupied()) {
+                if (!tetrisGrid.isNotOccupied(grids[k][j].getX(), grids[k][j].getY())) {
+                    itsEnd = true;
+                }
+            }
+            else  {
+                if (j - 1 >= 0 && !grids[k][j-1].getOccupied()) {
+                    itsEnd = false;
+                }
+            }
+        }
+
+        /*
         for (int i = grids.length - 1; i >= 0 && !itsEnd; i--) {
             for (int j = grids[i].length - 1; j >= 0 && !itsEnd ; j--) {
                 if (grids[i][j].getY() + 1 == TetrisGrid.GRID_HEIGHT) {
@@ -112,7 +136,7 @@ public class TetrisThread extends Thread {
                     }
                 }
             }
-        }
+        }*/
 
         if (!itsEnd) {
             for (int i = 0; i < grids.length; i++) {
