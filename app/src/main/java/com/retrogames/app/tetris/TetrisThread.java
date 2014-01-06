@@ -126,7 +126,7 @@ public class TetrisThread extends Thread {
             for (int k = 0; k < TetrisGrid.GRID_HEIGHT - 1; k++) {
                 tetrisGrid.checkGridAddPointsAndRemoveRows();
             }
-            figure = new TetrisFigure(TetrisColors.randomColor(), TetrisShapes.BOX_3X1, new Random().nextInt(4) * 90);
+            figure = new TetrisFigure(TetrisColors.randomColor(), TetrisShapes.randomShape(), new Random().nextInt(4) * 90);
             tetrisGrid.addFigure(figure);
         }
     }

@@ -99,4 +99,18 @@ public class TetrisSingleGrid {
         }
         return newGrid;
     }
+
+    // klonowanie tablicy dwuwymiarowej
+    public static TetrisSingleGrid[][] cloneArrayDim2(TetrisSingleGrid[][] input) {
+        TetrisSingleGrid[][] output = new TetrisSingleGrid[input.length][];
+        for (int i = 0; i < output.length; i++) {
+            output[i] = new TetrisSingleGrid[input[i].length];
+        }
+        for (int i = 0; i < output.length; i++) {
+            for (int j = 0; j < output[i].length; j++) {
+                output[i][j] = new TetrisSingleGrid(input[i][j].getOccupied(), input[i][j].getColor(), input[i][j].getX(), input[i][j].getY());
+            }
+        }
+        return output;
+    }
 }
