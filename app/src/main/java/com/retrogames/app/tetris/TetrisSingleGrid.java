@@ -89,11 +89,16 @@ public class TetrisSingleGrid {
         TetrisSingleGrid[][] newGrid = new TetrisSingleGrid[grids.length - 1][grids[0].length];
         for (int i = 0; i < grids.length; i++) {
             for (int j = 0; j < grids[i].length; j++) {
-                if (i < row) {
-                    newGrid[i][j] = grids[i][j];
+                try {
+                    if (i < row) {
+                        newGrid[i][j] = grids[i][j];
+                    }
+                    else if (i > row) {
+                        newGrid[i-1][j] = grids[i][j];
+                    }
                 }
-                else if (i > row) {
-                    newGrid[i-1][j] = grids[i][j];
+                catch (Exception e) {
+                    return newGrid;
                 }
             }
         }

@@ -1,5 +1,6 @@
 package com.retrogames.app.tetris;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;;
 import android.graphics.Typeface;
@@ -27,7 +28,6 @@ public class TetrisThread extends Thread {
     private int canvasWidth;
     private int canvasHeight;
 
-    private static int DRAG_TIMEOUT = 1000;
     private static int DOWN_SPPED = 500;
     private Timer timer;
 
@@ -74,7 +74,7 @@ public class TetrisThread extends Thread {
             TetrisGrid.MARGIN_TOP = canvasHeight - 2 * TetrisGrid.STROKE_WIDTH - TetrisGrid.MARGIN_BOTTOM - TetrisGrid.GRID_HEIGHT * TetrisSingleGrid.SIZE;
             TetrisGrid.MARGIN_RIGHT = 2 * TetrisGrid.STROKE_WIDTH + TetrisGrid.MARGIN_LEFT + TetrisGrid.GRID_WIDTH * TetrisSingleGrid.SIZE;
 
-            figure = new TetrisFigure(TetrisColors.randomColor(), TetrisShapes.LETTER_L_SMALL, 0);
+            figure = new TetrisFigure(TetrisColors.randomColor(), TetrisShapes.randomShape(), new Random().nextInt(4) * 90);
             tetrisGrid.addFigure(figure);
 
             timer = new Timer();
@@ -87,6 +87,7 @@ public class TetrisThread extends Thread {
         }
     }
 
+    // przesuwanie figury o jeden w dół
     private void goOneToDown() {
         boolean itsEnd = false;
         TetrisSingleGrid[][] grids = figure.getGrid();
@@ -128,6 +129,18 @@ public class TetrisThread extends Thread {
             }
             figure = new TetrisFigure(TetrisColors.randomColor(), TetrisShapes.randomShape(), new Random().nextInt(4) * 90);
             tetrisGrid.addFigure(figure);
+            TetrisSingleGrid[][] tetrisSingleGrids = figure.getGrid();
+            /*
+            for (int i = 0; i < tetrisSingleGrids.length; i++) {
+                for (int j = 0; j < tetrisSingleGrids[i].length; j++) {
+                    if (!tetrisGrid.isNotOccupied(tetrisSingleGrids[i][j].getX(), tetrisSingleGrids[i][j].getY())) {
+                        Context context = view.getContext();
+                        TetrisActivity activity = (TetrisActivity)context;
+                        activity.closeActivity();
+                    }
+                }
+            }
+            */
         }
     }
 

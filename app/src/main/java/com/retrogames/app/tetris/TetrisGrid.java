@@ -252,30 +252,10 @@ public class TetrisGrid {
             }
         }
         figure.setAngle(90);
-        if (figure.getShape() == TetrisShapes.BOX_1X1) {
-            grids = figure.getGrid();
-            TetrisSingleGrid[][] gridNew = new TetrisSingleGrid[1][1];
-            if (grids[0][0] != null) {
-                gridNew[0][0] = new TetrisSingleGrid(grids[0][0].getOccupied(), grids[0][0].getColor(), grids[0][0].getX(), grids[0][0].getY());
-            }
-            else {
-                gridNew[0][0] = new TetrisSingleGrid(grids[0][1].getOccupied(), grids[0][1].getColor(), grids[0][1].getX(), grids[0][1].getY());
-            }
-            figure.setGrid(gridNew);
-
-            TetrisFigure newFigure = new TetrisFigure(figure.getColor(), figure.getShape(), figure.getAngle());
-            newFigure.setGrid(gridNew);
-            gameGrid[gridNew[0][0].getX()][gridNew[0][0].getY()] = gridNew[0][0];
-            gameFigures.add(newFigure);
-            gameFigures.remove(figure);
-        }
-        else {
-            grids = figure.getGrid();
-            TetrisFigure newFigure = new TetrisFigure(figure.getColor(), figure.getShape(), figure.getAngle());
-            newFigure.setGrid(grids);
-            gameFigures.remove(figure);
-            gameFigures.add(newFigure);
-        }
+        TetrisFigure newFigure = new TetrisFigure(figure.getColor(), figure.getShape(), figure.getAngle());
+        newFigure.setGrid(TetrisSingleGrid.cloneArrayDim2(figure.getGrid()));
+        gameFigures.add(newFigure);
+        gameFigures.remove(figure);
     }
 
     private void changeFigure_CLIPPER(TetrisFigure figure, int deletedRow) {
@@ -307,6 +287,7 @@ public class TetrisGrid {
         else {
             figure.setShape(TetrisShapes.BOX_2X1);
             figure.setGrid(TetrisSingleGrid.deleteRow(figure.getGrid(), gridRow));
+            figure.setAngle(90);
         }
         TetrisFigure newFigure = new TetrisFigure(figure.getColor(), figure.getShape(), figure.getAngle());
         newFigure.setGrid(TetrisSingleGrid.cloneArrayDim2(figure.getGrid()));
@@ -321,7 +302,7 @@ public class TetrisGrid {
             if (gridRow == 0) {
                 figure.setShape(TetrisShapes.LETTER_L_SMALL);
                 figure.setGrid(TetrisSingleGrid.deleteRow(figure.getGrid(), 0));
-                figure.setAngle(90);
+                figure.setAngle(270);
             }
             else if (gridRow == 1) {
                 TetrisSingleGrid[][] gridToNewFigure = TetrisSingleGrid.cloneArrayDim2(grids);
@@ -337,12 +318,13 @@ public class TetrisGrid {
             else {
                 figure.setShape(TetrisShapes.LETTER_L_SMALL);
                 figure.setGrid(TetrisSingleGrid.deleteRow(figure.getGrid(), 2));
-                figure.setAngle(270);
+                figure.setAngle(90);
             }
         }
         else {
             figure.setShape(TetrisShapes.BOX_2X1);
             figure.setGrid(TetrisSingleGrid.deleteRow(figure.getGrid(), gridRow));
+            figure.setAngle(90);
         }
         TetrisFigure newFigure = new TetrisFigure(figure.getColor(), figure.getShape(), figure.getAngle());
         newFigure.setGrid(TetrisSingleGrid.cloneArrayDim2(figure.getGrid()));
@@ -357,6 +339,7 @@ public class TetrisGrid {
             if (gridRow == 0) {
                 figure.setShape(TetrisShapes.LETTER_L_SMALL);
                 figure.setGrid(TetrisSingleGrid.deleteRow(figure.getGrid(), gridRow));
+                figure.setAngle(0);
             }
             else if (gridRow == 1) {
                 TetrisSingleGrid[][] gridToNewFigure = TetrisSingleGrid.cloneArrayDim2(figure.getGrid());
@@ -372,12 +355,14 @@ public class TetrisGrid {
             else {
                 figure.setShape(TetrisShapes.BOX_2X1);
                 figure.setGrid(TetrisSingleGrid.deleteRow(figure.getGrid(), gridRow));
+                figure.setAngle(0);
             }
         }
         else if (figure.getAngle() == 90) {
             if (gridRow == 0) {
                 figure.setShape(TetrisShapes.BOX_3X1);
                 figure.setGrid(TetrisSingleGrid.deleteRow(figure.getGrid(), 0));
+                figure.setAngle(90);
             }
             else {
                 figure.setShape(TetrisShapes.BOX_1X1);
@@ -388,6 +373,7 @@ public class TetrisGrid {
             if (gridRow == 0) {
                 figure.setShape(TetrisShapes.BOX_2X1);
                 figure.setGrid(TetrisSingleGrid.deleteRow(figure.getGrid(), gridRow));
+                figure.setAngle(0);
             }
             else if (gridRow == 1) {
                 TetrisSingleGrid[][] gridToNewFigure = TetrisSingleGrid.cloneArrayDim2(figure.getGrid());
@@ -404,6 +390,7 @@ public class TetrisGrid {
             else {
                 figure.setShape(TetrisShapes.LETTER_L_SMALL);
                 figure.setGrid(TetrisSingleGrid.deleteRow(figure.getGrid(), gridRow));
+                figure.setAngle(180);
             }
         }
         else {
@@ -414,6 +401,7 @@ public class TetrisGrid {
             else {
                 figure.setShape(TetrisShapes.BOX_3X1);
                 figure.setGrid(TetrisSingleGrid.deleteRow(figure.getGrid(), 1));
+                figure.setAngle(90);
             }
         }
         TetrisFigure newFigure = new TetrisFigure(figure.getColor(), figure.getShape(), figure.getAngle());
@@ -480,6 +468,7 @@ public class TetrisGrid {
             else {
                 figure.setShape(TetrisShapes.LETTER_L_SMALL);
                 figure.setGrid(TetrisSingleGrid.deleteRow(figure.getGrid(), gridRow));
+                figure.setAngle(180);
             }
         }
         else {

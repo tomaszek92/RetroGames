@@ -18,6 +18,7 @@ import com.retrogames.app.R;
  */
 public class TetrisSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
 
+    public TetrisActivity activity;
     private TetrisThread thread;
     private SurfaceHolder surfaceHolder;
     private float mX;

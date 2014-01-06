@@ -24,4 +24,14 @@ public class TetrisActivity extends Activity {
         view = new TetrisSurfaceView(this);
         setContentView(view);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        super.onBackPressed();
+    }
+
+    public void closeActivity() {
+        super.onBackPressed();
+    }
 }

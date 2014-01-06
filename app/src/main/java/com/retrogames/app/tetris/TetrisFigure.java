@@ -296,7 +296,7 @@ public class TetrisFigure {
     public void drawFigure(Canvas canvas) {
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
-                if (grid[i][j].getOccupied()){
+                if (grid[i][j] != null && grid[i][j].getOccupied()){
                     grid[i][j].drawSingleGrid(canvas);
                 }
             }
