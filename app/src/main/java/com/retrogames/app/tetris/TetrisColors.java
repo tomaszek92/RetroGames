@@ -24,6 +24,7 @@ public enum TetrisColors {
         return type;
     }
 
+    // zwraca losowy kolor
     public static TetrisColors randomColor() {
         Random random = new Random();
         int rand = random.nextInt(4);

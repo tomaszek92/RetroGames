@@ -2,7 +2,6 @@ package com.retrogames.app.tetris;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Typeface;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -55,6 +54,9 @@ public class TetrisGrid {
     public static int getPointsScore() {
         return pointsScore;
     }
+    public static void setPointsScore(int score) {
+        pointsScore = score;
+    }
 
     // dodanie nowej figury do planszy gry
     public void addFigure(TetrisFigure newFigure) {
@@ -85,19 +87,14 @@ public class TetrisGrid {
         }
     }
 
-    // usuwanie figury z planszy gry
-    public void deleteFigure(TetrisFigure deletedFigure) {
-        gameFigures.remove(deletedFigure);
-    }
-
     // sprawdzanie i ewnetualne usuwanie całego rzędu
-    public void checkGrid() {
+    public void checkGridAddPointsAndRemoveRows() {
         for (int j = GRID_HEIGHT - 1; j >= 0; j--) {
             boolean allRowsAreOccupied = true;
             boolean oneColor = true;
 
-            for (int i = 0; i < gameGrid.length; i++) {
-                if (gameGrid[i][j] != null) {
+            for (int i = 0; i < gameGrid.length && allRowsAreOccupied; i++) {
+                if (gameGrid[i][j] != null && gameGrid[i][j].getOccupied()) {
                     if (!gameGrid[i][j].getOccupied()) {
                         allRowsAreOccupied = false;
                     }
@@ -112,11 +109,207 @@ public class TetrisGrid {
                 }
             }
             if (allRowsAreOccupied) {
+                deleteRow(j);
                 if (oneColor) {
                     pointsScore += pointsForOneRoweInOneColor;
                 }
                 else {
                     pointsScore += pointsForOneRow;
+                }
+            }
+        }
+    }
+
+    // usuwanie rzędu
+    private void deleteRow(int row) {
+        List<TetrisFigure> gameFiguresDeleted = new LinkedList<TetrisFigure>();
+        // wyszukiwanie figur, które leżą w usuwanym wierzu
+        for (int i = 0; i < gameFigures.size(); i++) {
+            TetrisSingleGrid[][] grids = gameFigures.get(i).getGrid();
+            for (int k = 0; k < grids.length; k++) {
+                for (int j = 0; j < grids[k].length; j++) {
+                    if (row == grids[k][j].getY()) {
+                        gameFiguresDeleted.add(gameFigures.get(i));
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < gameFiguresDeleted.size(); i++) {
+            changeFigure(gameFiguresDeleted.get(i), row);
+        }
+
+        clearGridRow(row);
+        downGridRow(row);
+    }
+
+    // tworzenie nowej siatki figury
+    // figure - zmieniana figura
+    // deletedRow - usuwany wiersz
+    private void changeFigure(TetrisFigure figure, int deletedRow) {
+        if (figure.getShape() == TetrisShapes.BOX_1X1) {
+            changeFigureBOX_1X1(figure);
+        }
+        else if (figure.getShape() == TetrisShapes.BOX_2X1) {
+            changeFigureBOX_2X1(figure, deletedRow);
+        }
+        else if (figure.getShape() == TetrisShapes.BOX_3X1) {
+            changeFigureBOX_3X1(figure, deletedRow);
+        }
+        else if (figure.getShape() == TetrisShapes.BOX_2X2) {
+            changeFigureBOX_2X2(figure, deletedRow);
+        }
+        else if (figure.getShape() == TetrisShapes.CLIPPER) {
+
+        }
+        else if (figure.getShape() == TetrisShapes.CLIPPER_R) {
+
+        }
+        else if (figure.getShape() == TetrisShapes.LETTER_L_BIG) {
+
+        }
+        else if (figure.getShape() == TetrisShapes.LETTER_L_BIG_R) {
+
+        }
+        else if (figure.getShape() == TetrisShapes.LETTER_L_SMALL) {
+            changeFigure_LETTER_L_SMALL(figure, deletedRow);
+        }
+    }
+
+    private void changeFigureBOX_1X1(TetrisFigure figure) {
+        gameFigures.remove(figure);
+    }
+
+    private void changeFigureBOX_2X1(TetrisFigure figure, int deletedRow) {
+        if (figure.getAngle() == 0 || figure.getAngle() == 180) {
+            // zmieniamy kształt na klocek 1x1
+            figure.setShape(TetrisShapes.BOX_1X1);
+            TetrisSingleGrid[][] grids = figure.getGrid();
+            // wyszukiwanie który rząd usuwamy
+            int i;
+            for (i = 0; i < grids.length; i++) {
+                if (grids[i][0].getY() == deletedRow) {
+                    break;
+                }
+            }
+            // zmiana siatki figury
+            figure.setGrid(TetrisSingleGrid.deleteRow(figure.getGrid(), i));
+        }
+        else {
+            gameFigures.remove(figure);
+        }
+    }
+
+    private void changeFigureBOX_3X1(TetrisFigure figure, int deletedRow) {
+        if (figure.getAngle() == 0 || figure.getAngle() == 180) {
+            TetrisSingleGrid[][] grids = figure.getGrid();
+            int i;
+            for (i = 0; i < grids.length; i++) {
+                if (grids[i][0].getY() == deletedRow) {
+                    break;
+                }
+            }
+            if (i == 0 || i == 2) {
+                figure.setShape(TetrisShapes.BOX_2X1);
+                figure.setGrid(TetrisSingleGrid.deleteRow(figure.getGrid(), i));
+            }
+            else {
+                TetrisSingleGrid[][] gridToNewFigure = new TetrisSingleGrid[grids.length][];
+                for (int i1 = 0; i1 < gridToNewFigure.length; i1++) {
+                    gridToNewFigure[i1] = new TetrisSingleGrid[grids[i1].length];
+                }
+                for (int i1 = 0; i1 < gridToNewFigure.length; i1++) {
+                    for (int j1 = 0; j1 < gridToNewFigure[i1].length; j1++) {
+                        gridToNewFigure[i1][j1] = new TetrisSingleGrid(grids[i1][j1].getOccupied(), grids[i1][j1].getColor(), grids[i1][j1].getX(), grids[i1][j1].getY());
+                    }
+                }
+                figure.setShape(TetrisShapes.BOX_1X1);
+                figure.setGrid(TetrisSingleGrid.deleteRow(figure.getGrid(), 2));
+                figure.setGrid(TetrisSingleGrid.deleteRow(figure.getGrid(), 1));
+                TetrisFigure newFigure = new TetrisFigure(figure.getColor(), figure.getShape(), figure.getAngle());
+                newFigure.setGrid(gridToNewFigure);
+                newFigure.setGrid(TetrisSingleGrid.deleteRow(newFigure.getGrid(), 1));
+                newFigure.setGrid(TetrisSingleGrid.deleteRow(newFigure.getGrid(), 1));
+                addFigure(newFigure);
+            }
+        }
+        else {
+            gameFigures.remove(figure);
+        }
+    }
+
+    private void changeFigureBOX_2X2(TetrisFigure figure, int deletedRow) {
+        figure.setShape(TetrisShapes.BOX_2X1);
+        TetrisSingleGrid[][] grids = figure.getGrid();
+        int i;
+        for (i = 0; i < grids.length; i++) {
+            if (grids[i][0].getY() == deletedRow) {
+                break;
+            }
+        }
+        figure.setGrid(TetrisSingleGrid.deleteRow(figure.getGrid(), i));
+    }
+
+    private void changeFigure_LETTER_L_SMALL(TetrisFigure figure, int deletedRow) {
+        TetrisSingleGrid[][] grids = figure.getGrid();
+        int i;
+        for (i = 0; i < grids.length; i++) {
+            if (grids[i][0].getY() == deletedRow) {
+                break;
+            }
+        }
+        if (figure.getAngle() == 0 || figure.getAngle() == 90) {
+            if (i == 0) {
+                figure.setShape(TetrisShapes.BOX_2X1);
+                figure.setGrid(TetrisSingleGrid.deleteRow(figure.getGrid(), 0));
+            }
+            else {
+                figure.setShape(TetrisShapes.BOX_1X1);
+                figure.setGrid(TetrisSingleGrid.deleteRow(figure.getGrid(), 1));
+            }
+        }
+        else {
+            if (i == 0) {
+                figure.setShape(TetrisShapes.BOX_2X1);
+                figure.setGrid(TetrisSingleGrid.deleteRow(figure.getGrid(), 0));
+            }
+            else {
+                figure.setShape(TetrisShapes.BOX_1X1);
+                figure.setGrid(TetrisSingleGrid.deleteRow(figure.getGrid(), 1));
+            }
+        }
+        grids = figure.getGrid();
+        TetrisSingleGrid[][] gridNew = new TetrisSingleGrid[1][1];
+        if (grids[0][0] != null) {
+            gridNew[0][0] = new TetrisSingleGrid(grids[0][0].getOccupied(), grids[0][0].getColor(), grids[0][0].getX(), grids[0][0].getY());
+        }
+        else {
+            gridNew[0][0] = new TetrisSingleGrid(grids[0][1].getOccupied(), grids[0][1].getColor(), grids[0][1].getX(), grids[0][1].getY());
+        }
+        figure.setGrid(gridNew);
+        figure.setAngle(90);
+        TetrisFigure newFigure = new TetrisFigure(figure.getColor(), figure.getShape(), figure.getAngle());
+        newFigure.setGrid(gridNew);
+        gameGrid[gridNew[0][0].getX()][gridNew[0][0].getY()] = gridNew[0][0];
+        gameFigures.add(newFigure);
+        gameFigures.remove(figure);
+    }
+
+    // czyszczenie rzędu
+    private void clearGridRow(int deletedRow) {
+        for (int i = 0; i < gameGrid.length; i++) {
+            gameGrid[i][deletedRow] = null;
+        }
+    }
+
+    // przesuwanie w dół wszystkich klocków powyżej deletedRow
+    private void downGridRow(int deletedRow) {
+        for (int i = 0; i < gameGrid.length; i++) {
+            for (int j = deletedRow; j > 0; j--) {
+                gameGrid[i][j] = gameGrid[i][j-1];
+                if (gameGrid[i][j] != null) {
+                    gameGrid[i][j].setY(gameGrid[i][j].getY() + 1);
+                    gameGrid[i][j].setNewRectByXY();
                 }
             }
         }
@@ -130,7 +323,7 @@ public class TetrisGrid {
     }
 
     // zamiena współrzędnej x w pikselach na odpowiednią współrzędną w siatce
-    public static int xCoordinateToGrid(float x) {
+    private static int xCoordinateToGrid(float x) {
         if (x < MARGIN_LEFT + STROKE_WIDTH) {
             x = MARGIN_LEFT + STROKE_WIDTH;
         }
@@ -144,7 +337,7 @@ public class TetrisGrid {
     }
 
     // zamiena współrzędnej y w pikselach na odpowiednią współrzędną w siatce
-    public static int yCoordinateToGrid(float y) {
+    private static int yCoordinateToGrid(float y) {
         if (y < MARGIN_TOP + STROKE_WIDTH) {
             y = MARGIN_TOP + STROKE_WIDTH;
         }
@@ -157,6 +350,7 @@ public class TetrisGrid {
         return positionInGrid;
     }
 
+    // sprawdzanie czy pole na siatce nie jest zajęte
     public boolean isNotOccupied(int x, int y) {
         if (x >= GRID_WIDTH || y >= GRID_HEIGHT) {
             return true;
@@ -167,6 +361,7 @@ public class TetrisGrid {
         return !this.gameGrid[x][y].getOccupied();
     }
 
+    // wyznaczanie siatki gry od nowa na podstawie listy gameFigures
     public void refreshGrid() {
         for (int i = 0; i < gameGrid.length; i++) {
             for (int j = 0; j < gameGrid[i].length; j++) {
@@ -178,6 +373,7 @@ public class TetrisGrid {
         }
     }
 
+    // przesuwanie figury na podane współrzędne x i y w pikselach
     public void moveFigure(TetrisFigure figure, float x, float y) {
         TetrisSingleGrid[][] grids = figure.getGrid();
         TetrisSingleGrid[][] gridsClone = new TetrisSingleGrid[grids.length][];
@@ -193,10 +389,10 @@ public class TetrisGrid {
         // sprawdzanie czy jest puste pole
         for (int i = 0; i < gridsClone.length; i++) {
             for (int j = 0; j < gridsClone[i].length; j++) {
-                int xNew = TetrisGrid.xCoordinateToGrid(x + TetrisSingleGrid.SIZE * j);
-                int yNew = TetrisGrid.yCoordinateToGrid(y + TetrisSingleGrid.SIZE * i);
-                if (xNew < 0 || xNew >= TetrisGrid.GRID_WIDTH ||
-                        yNew < 0 || yNew >= TetrisGrid.GRID_HEIGHT) {
+                int xNew = xCoordinateToGrid(x + TetrisSingleGrid.SIZE * j);
+                int yNew = yCoordinateToGrid(y + TetrisSingleGrid.SIZE * i);
+                if (xNew < 0 || xNew >= GRID_WIDTH ||
+                        yNew < 0 || yNew >= GRID_HEIGHT) {
                     return;
                 }
                 if (this.isNotOccupied(xNew, yNew)) {
@@ -206,6 +402,26 @@ public class TetrisGrid {
                 else {
                     return;
                 }
+            }
+        }
+        // sprawdzanie, czy żadne klocki na siebie nie naszły
+        // poza dolną krawędź ekranu
+        int count = 0;
+        for (int i = 0; i < gridsClone.length; i++) {
+            for (int j = 0; j < gridsClone[i].length; j++) {
+                if (gridsClone[i][j].getY() == GRID_HEIGHT - 1) {
+                    count++;
+                }
+            }
+            if (count >= 3 && (figure.getShape() == TetrisShapes.CLIPPER_R
+                    || figure.getShape() == TetrisShapes.CLIPPER
+                    || figure.getShape() == TetrisShapes.BOX_2X2
+                    || figure.getShape() == TetrisShapes.LETTER_L_SMALL)) {
+                return;
+            }
+            else if (count >= 4 && (figure.getShape() == TetrisShapes.LETTER_L_BIG
+                    || figure.getShape() == TetrisShapes.LETTER_L_BIG_R)) {
+                return;
             }
         }
         // przesuwanie klocka na nową pozycję

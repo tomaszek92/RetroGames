@@ -10,9 +10,36 @@ import java.util.Random;
 public class TetrisFigure {
 
     private int angle = 0;
+    public void setAngle(int angle) {
+        this.angle = angle;
+    }
+    public int getAngle() {
+        return this.angle;
+    }
+
     private TetrisColors color;
+    public TetrisColors getColor() {
+        return this.color;
+    }
+    public void setColor(TetrisColors color) {
+        this.color = color;
+    }
+
     private TetrisShapes shape;
+    public TetrisShapes getShape() {
+        return this.shape;
+    }
+    public void setShape(TetrisShapes shape) {
+        this.shape = shape;
+    }
+
     private TetrisSingleGrid[][] grid;
+    public TetrisSingleGrid[][] getGrid() {
+        return  this.grid;
+    }
+    public void setGrid(TetrisSingleGrid[][] grid) {
+        this.grid = grid;
+    }
 
     public TetrisFigure() {
         this.color = TetrisColors.randomColor();
@@ -32,213 +59,39 @@ public class TetrisFigure {
     // tworzenie siatki figury, w zależności od typu figury i kąta obrotu
     private void makeGrid() {
         if (shape == TetrisShapes.BOX_1X1) {
-            grid = new TetrisSingleGrid[1][1];
-            grid[0][0] = new TetrisSingleGrid(true, color, 4, 0);
+            makeGridForBOX_1_1();
         }
         else if (shape == TetrisShapes.BOX_2X1) {
-            if (this.angle == 0 || this.angle == 180) {
-                grid = new TetrisSingleGrid[2][1];
-                grid[0][0] = new TetrisSingleGrid(true, color, 4, 0);
-                grid[1][0] = new TetrisSingleGrid(true, color, 4, 1);
-            }
-            // this.angle == 90 || this.angle == 180
-            else {
-                grid = new TetrisSingleGrid[1][2];
-                grid[0][0] = new TetrisSingleGrid(true, color, 4, 0);
-                grid[0][1] = new TetrisSingleGrid(true, color, 5, 0);
-            }
+            makeGridForBOX_2X1();
         }
 
         else if (shape == TetrisShapes.BOX_2X2) {
-            grid = new TetrisSingleGrid[2][2];
-            grid[0][0] = new TetrisSingleGrid(true, color, 4, 0);
-            grid[1][0] = new TetrisSingleGrid(true, color, 4, 1);
-            grid[0][1] = new TetrisSingleGrid(true, color, 5, 0);
-            grid[1][1] = new TetrisSingleGrid(true, color, 5, 1);
+            makeGridForBOX2_2();
         }
 
         else if (shape == TetrisShapes.BOX_3X1) {
-            if (this.angle == 0 || this.angle == 180) {
-                grid = new TetrisSingleGrid[3][1];
-                grid[0][0] = new TetrisSingleGrid(true, color, 4, 0);
-                grid[1][0] = new TetrisSingleGrid(true, color, 4, 1);
-                grid[2][0] = new TetrisSingleGrid(true, color, 4, 2);
-            }
-            else {
-                grid = new TetrisSingleGrid[1][3];
-                grid[0][0] = new TetrisSingleGrid(true, color, 3, 0);
-                grid[0][1] = new TetrisSingleGrid(true, color, 4, 0);
-                grid[0][2] = new TetrisSingleGrid(true, color, 5, 0);
-            }
+            makeGridForBOX_3X1();
 
-        }
-
-        else if (shape == TetrisShapes.BOX_4X1) {
-            if (this.angle == 0 || this.angle == 180) {
-                grid = new TetrisSingleGrid[4][1];
-                grid[0][0] = new TetrisSingleGrid(true, color, 4, 0);
-                grid[1][0] = new TetrisSingleGrid(true, color, 4, 1);
-                grid[2][0] = new TetrisSingleGrid(true, color, 4, 2);
-                grid[3][0] = new TetrisSingleGrid(true, color, 4, 3);
-            }
-            else {
-                grid = new TetrisSingleGrid[1][4];
-                grid[0][0] = new TetrisSingleGrid(true, color, 3, 0);
-                grid[0][1] = new TetrisSingleGrid(true, color, 4, 0);
-                grid[0][2] = new TetrisSingleGrid(true, color, 5, 0);
-                grid[0][3] = new TetrisSingleGrid(true, color, 6, 0);
-            }
         }
 
         else if (shape == TetrisShapes.CLIPPER) {
-            if (this.angle == 0 || this.angle == 180) {
-                grid = new TetrisSingleGrid[3][2];
-                grid[0][0] = new TetrisSingleGrid(true, color, 4, 0);
-                grid[0][1] = new TetrisSingleGrid(false, color, 5, 0);
-                grid[1][0] = new TetrisSingleGrid(true, color, 4, 1);
-                grid[1][1] = new TetrisSingleGrid(true, color, 5, 1);
-                grid[2][0] = new TetrisSingleGrid(false, color, 4, 2);
-                grid[2][1] = new TetrisSingleGrid(true, color, 5, 2);
-            }
-            else {
-                grid = new TetrisSingleGrid[2][3];
-                grid[0][0] = new TetrisSingleGrid(false, color, 3, 0);
-                grid[0][1] = new TetrisSingleGrid(true, color, 4, 0);
-                grid[0][2] = new TetrisSingleGrid(true, color, 5, 0);
-                grid[1][0] = new TetrisSingleGrid(true, color, 3, 1);
-                grid[1][1] = new TetrisSingleGrid(true, color, 4, 1);
-                grid[1][2] = new TetrisSingleGrid(false, color, 5, 1);
-            }
+            makeGridForCLIPPER();
         }
 
         else if (shape == TetrisShapes.CLIPPER_R) {
-            if (this.angle == 0 || this.angle == 180) {
-                grid = new TetrisSingleGrid[3][2];
-                grid[0][0] = new TetrisSingleGrid(false, color, 4, 0);
-                grid[0][1] = new TetrisSingleGrid(true, color, 5, 0);
-                grid[1][0] = new TetrisSingleGrid(true, color, 4, 1);
-                grid[1][1] = new TetrisSingleGrid(true, color, 5, 1);
-                grid[2][0] = new TetrisSingleGrid(true, color, 4, 2);
-                grid[2][1] = new TetrisSingleGrid(false, color, 5, 2);
-            }
-            else {
-                grid = new TetrisSingleGrid[2][3];
-                grid[0][0] = new TetrisSingleGrid(true, color, 3, 0);
-                grid[0][1] = new TetrisSingleGrid(true, color, 4, 0);
-                grid[0][2] = new TetrisSingleGrid(false, color, 5, 0);
-                grid[1][0] = new TetrisSingleGrid(false, color, 3, 1);
-                grid[1][1] = new TetrisSingleGrid(true, color, 4, 1);
-                grid[1][2] = new TetrisSingleGrid(true, color, 5, 1);
-            }
+            makeGridForCLIPPER_R();
         }
 
         else if (shape == TetrisShapes.LETTER_L_BIG) {
-            if (this.angle == 0) {
-                grid = new TetrisSingleGrid[3][2];
-                grid[0][0] = new TetrisSingleGrid(true, color, 4, 0);
-                grid[0][1] = new TetrisSingleGrid(false, color, 5, 0);
-                grid[1][0] = new TetrisSingleGrid(true, color, 4, 1);
-                grid[1][1] = new TetrisSingleGrid(false, color, 5, 1);
-                grid[2][0] = new TetrisSingleGrid(true, color, 4, 2);
-                grid[2][1] = new TetrisSingleGrid(true, color, 5, 2);
-            }
-            else if (this.angle == 90) {
-                grid = new TetrisSingleGrid[2][3];
-                grid[0][0] = new TetrisSingleGrid(false, color, 3, 0);
-                grid[0][1] = new TetrisSingleGrid(false, color, 4, 0);
-                grid[0][2] = new TetrisSingleGrid(true, color, 5, 0);
-                grid[1][0] = new TetrisSingleGrid(true, color, 3, 1);
-                grid[1][1] = new TetrisSingleGrid(true, color, 4, 1);
-                grid[1][2] = new TetrisSingleGrid(true, color, 5, 1);
-            }
-            else if (this.angle == 180) {
-                grid = new TetrisSingleGrid[3][2];
-                grid[0][0] = new TetrisSingleGrid(true, color, 4, 0);
-                grid[0][1] = new TetrisSingleGrid(true, color, 5, 0);
-                grid[1][0] = new TetrisSingleGrid(false, color, 4, 1);
-                grid[1][1] = new TetrisSingleGrid(true, color, 5, 1);
-                grid[2][0] = new TetrisSingleGrid(false, color, 4, 2);
-                grid[2][1] = new TetrisSingleGrid(true, color, 5, 2);
-            }
-            else {
-                grid = new TetrisSingleGrid[2][3];
-                grid[0][0] = new TetrisSingleGrid(true, color, 3, 0);
-                grid[0][1] = new TetrisSingleGrid(true, color, 4, 0);
-                grid[0][2] = new TetrisSingleGrid(true, color, 5, 0);
-                grid[1][0] = new TetrisSingleGrid(true, color, 3, 1);
-                grid[1][1] = new TetrisSingleGrid(false, color, 4, 1);
-                grid[1][2] = new TetrisSingleGrid(false, color, 5, 1);
-            }
+            makeGridForLETTER_L_BIG();
         }
 
         else if (shape == TetrisShapes.LETTER_L_BIG_R) {
-            if (this.angle == 0) {
-                grid = new TetrisSingleGrid[3][2];
-                grid[0][0] = new TetrisSingleGrid(false, color, 4, 0);
-                grid[0][1] = new TetrisSingleGrid(true, color, 5, 0);
-                grid[1][0] = new TetrisSingleGrid(false, color, 4, 1);
-                grid[1][1] = new TetrisSingleGrid(true, color, 5, 1);
-                grid[2][0] = new TetrisSingleGrid(true, color, 4, 2);
-                grid[2][1] = new TetrisSingleGrid(true, color, 5, 2);
-            }
-            else if (this.angle == 90) {
-                grid = new TetrisSingleGrid[2][3];
-                grid[0][0] = new TetrisSingleGrid(true, color, 3, 0);
-                grid[0][1] = new TetrisSingleGrid(true, color, 4, 0);
-                grid[0][2] = new TetrisSingleGrid(true, color, 5, 0);
-                grid[1][0] = new TetrisSingleGrid(false, color, 3, 1);
-                grid[1][1] = new TetrisSingleGrid(false, color, 4, 1);
-                grid[1][2] = new TetrisSingleGrid(true, color, 5, 1);
-            }
-            else if (this.angle == 180) {
-                grid = new TetrisSingleGrid[3][2];
-                grid[0][0] = new TetrisSingleGrid(true, color, 4, 0);
-                grid[0][1] = new TetrisSingleGrid(true, color, 5, 0);
-                grid[1][0] = new TetrisSingleGrid(true, color, 4, 1);
-                grid[1][1] = new TetrisSingleGrid(false, color, 5, 1);
-                grid[2][0] = new TetrisSingleGrid(true, color, 4, 2);
-                grid[2][1] = new TetrisSingleGrid(false, color, 5, 2);
-            }
-            else {
-                grid = new TetrisSingleGrid[2][3];
-                grid[0][0] = new TetrisSingleGrid(true, color, 3, 0);
-                grid[0][1] = new TetrisSingleGrid(false, color, 4, 0);
-                grid[0][2] = new TetrisSingleGrid(false, color, 5, 0);
-                grid[1][0] = new TetrisSingleGrid(true, color, 3, 1);
-                grid[1][1] = new TetrisSingleGrid(true, color, 4, 1);
-                grid[1][2] = new TetrisSingleGrid(true, color, 5, 1);
-            }
+            makeGridForLETTER_L_BIG_R();
         }
 
         else if (shape == TetrisShapes.LETTER_L_SMALL) {
-            if (this.angle == 0) {
-                grid = new TetrisSingleGrid[2][2];
-                grid[0][0] = new TetrisSingleGrid(true, color, 4, 0);
-                grid[0][1] = new TetrisSingleGrid(false, color, 5, 0);
-                grid[1][0] = new TetrisSingleGrid(true, color, 4, 1);
-                grid[1][1] = new TetrisSingleGrid(true, color, 5, 1);
-            }
-            else if (this.angle == 90) {
-                grid = new TetrisSingleGrid[2][2];
-                grid[0][0] = new TetrisSingleGrid(false, color, 4, 0);
-                grid[0][1] = new TetrisSingleGrid(true, color, 5, 0);
-                grid[1][0] = new TetrisSingleGrid(true, color, 4, 1);
-                grid[1][1] = new TetrisSingleGrid(true, color, 5, 1);
-            }
-            else if (this.angle == 180) {
-                grid = new TetrisSingleGrid[2][2];
-                grid[0][0] = new TetrisSingleGrid(true, color, 4, 0);
-                grid[0][1] = new TetrisSingleGrid(true, color, 5, 0);
-                grid[1][0] = new TetrisSingleGrid(false, color, 4, 1);
-                grid[1][1] = new TetrisSingleGrid(true, color, 5, 1);
-            }
-            else {
-                grid = new TetrisSingleGrid[2][2];
-                grid[0][0] = new TetrisSingleGrid(true, color, 4, 0);
-                grid[0][1] = new TetrisSingleGrid(false, color, 5, 0);
-                grid[1][0] = new TetrisSingleGrid(true, color, 4, 1);
-                grid[1][1] = new TetrisSingleGrid(false, color, 5, 1);
-            }
+            makeGridForLETTER_L_SMALL();
         }
 
         else {
@@ -246,22 +99,197 @@ public class TetrisFigure {
         }
     }
 
-    public TetrisColors getColor() {
-        return this.color;
-    }
-    public void setColor(TetrisColors color) {
-        this.color = color;
+    private void makeGridForLETTER_L_SMALL() {
+        if (this.angle == 0) {
+            grid = new TetrisSingleGrid[2][2];
+            grid[0][0] = new TetrisSingleGrid(true, color, 4, 0);
+            grid[0][1] = new TetrisSingleGrid(false, color, 5, 0);
+            grid[1][0] = new TetrisSingleGrid(true, color, 4, 1);
+            grid[1][1] = new TetrisSingleGrid(true, color, 5, 1);
+        }
+        else if (this.angle == 90) {
+            grid = new TetrisSingleGrid[2][2];
+            grid[0][0] = new TetrisSingleGrid(false, color, 4, 0);
+            grid[0][1] = new TetrisSingleGrid(true, color, 5, 0);
+            grid[1][0] = new TetrisSingleGrid(true, color, 4, 1);
+            grid[1][1] = new TetrisSingleGrid(true, color, 5, 1);
+        }
+        else if (this.angle == 180) {
+            grid = new TetrisSingleGrid[2][2];
+            grid[0][0] = new TetrisSingleGrid(true, color, 4, 0);
+            grid[0][1] = new TetrisSingleGrid(true, color, 5, 0);
+            grid[1][0] = new TetrisSingleGrid(false, color, 4, 1);
+            grid[1][1] = new TetrisSingleGrid(true, color, 5, 1);
+        }
+        else {
+            grid = new TetrisSingleGrid[2][2];
+            grid[0][0] = new TetrisSingleGrid(true, color, 4, 0);
+            grid[0][1] = new TetrisSingleGrid(true, color, 5, 0);
+            grid[1][0] = new TetrisSingleGrid(true, color, 4, 1);
+            grid[1][1] = new TetrisSingleGrid(false, color, 5, 1);
+        }
     }
 
-    public TetrisShapes getShape() {
-        return this.shape;
-    }
-    public void setShape(TetrisShapes shape) {
-        this.shape = shape;
+    private void makeGridForLETTER_L_BIG_R() {
+        if (this.angle == 0) {
+            grid = new TetrisSingleGrid[3][2];
+            grid[0][0] = new TetrisSingleGrid(false, color, 4, 0);
+            grid[0][1] = new TetrisSingleGrid(true, color, 5, 0);
+            grid[1][0] = new TetrisSingleGrid(false, color, 4, 1);
+            grid[1][1] = new TetrisSingleGrid(true, color, 5, 1);
+            grid[2][0] = new TetrisSingleGrid(true, color, 4, 2);
+            grid[2][1] = new TetrisSingleGrid(true, color, 5, 2);
+        }
+        else if (this.angle == 90) {
+            grid = new TetrisSingleGrid[2][3];
+            grid[0][0] = new TetrisSingleGrid(true, color, 3, 0);
+            grid[0][1] = new TetrisSingleGrid(true, color, 4, 0);
+            grid[0][2] = new TetrisSingleGrid(true, color, 5, 0);
+            grid[1][0] = new TetrisSingleGrid(false, color, 3, 1);
+            grid[1][1] = new TetrisSingleGrid(false, color, 4, 1);
+            grid[1][2] = new TetrisSingleGrid(true, color, 5, 1);
+        }
+        else if (this.angle == 180) {
+            grid = new TetrisSingleGrid[3][2];
+            grid[0][0] = new TetrisSingleGrid(true, color, 4, 0);
+            grid[0][1] = new TetrisSingleGrid(true, color, 5, 0);
+            grid[1][0] = new TetrisSingleGrid(true, color, 4, 1);
+            grid[1][1] = new TetrisSingleGrid(false, color, 5, 1);
+            grid[2][0] = new TetrisSingleGrid(true, color, 4, 2);
+            grid[2][1] = new TetrisSingleGrid(false, color, 5, 2);
+        }
+        else {
+            grid = new TetrisSingleGrid[2][3];
+            grid[0][0] = new TetrisSingleGrid(true, color, 3, 0);
+            grid[0][1] = new TetrisSingleGrid(false, color, 4, 0);
+            grid[0][2] = new TetrisSingleGrid(false, color, 5, 0);
+            grid[1][0] = new TetrisSingleGrid(true, color, 3, 1);
+            grid[1][1] = new TetrisSingleGrid(true, color, 4, 1);
+            grid[1][2] = new TetrisSingleGrid(true, color, 5, 1);
+        }
     }
 
-    public TetrisSingleGrid[][] getGrid() {
-        return  this.grid;
+    private void makeGridForLETTER_L_BIG() {
+        if (this.angle == 0) {
+            grid = new TetrisSingleGrid[3][2];
+            grid[0][0] = new TetrisSingleGrid(true, color, 4, 0);
+            grid[0][1] = new TetrisSingleGrid(false, color, 5, 0);
+            grid[1][0] = new TetrisSingleGrid(true, color, 4, 1);
+            grid[1][1] = new TetrisSingleGrid(false, color, 5, 1);
+            grid[2][0] = new TetrisSingleGrid(true, color, 4, 2);
+            grid[2][1] = new TetrisSingleGrid(true, color, 5, 2);
+        }
+        else if (this.angle == 90) {
+            grid = new TetrisSingleGrid[2][3];
+            grid[0][0] = new TetrisSingleGrid(false, color, 3, 0);
+            grid[0][1] = new TetrisSingleGrid(false, color, 4, 0);
+            grid[0][2] = new TetrisSingleGrid(true, color, 5, 0);
+            grid[1][0] = new TetrisSingleGrid(true, color, 3, 1);
+            grid[1][1] = new TetrisSingleGrid(true, color, 4, 1);
+            grid[1][2] = new TetrisSingleGrid(true, color, 5, 1);
+        }
+        else if (this.angle == 180) {
+            grid = new TetrisSingleGrid[3][2];
+            grid[0][0] = new TetrisSingleGrid(true, color, 4, 0);
+            grid[0][1] = new TetrisSingleGrid(true, color, 5, 0);
+            grid[1][0] = new TetrisSingleGrid(false, color, 4, 1);
+            grid[1][1] = new TetrisSingleGrid(true, color, 5, 1);
+            grid[2][0] = new TetrisSingleGrid(false, color, 4, 2);
+            grid[2][1] = new TetrisSingleGrid(true, color, 5, 2);
+        }
+        else {
+            grid = new TetrisSingleGrid[2][3];
+            grid[0][0] = new TetrisSingleGrid(true, color, 3, 0);
+            grid[0][1] = new TetrisSingleGrid(true, color, 4, 0);
+            grid[0][2] = new TetrisSingleGrid(true, color, 5, 0);
+            grid[1][0] = new TetrisSingleGrid(true, color, 3, 1);
+            grid[1][1] = new TetrisSingleGrid(false, color, 4, 1);
+            grid[1][2] = new TetrisSingleGrid(false, color, 5, 1);
+        }
+    }
+
+    private void makeGridForCLIPPER_R() {
+        if (this.angle == 0 || this.angle == 180) {
+            grid = new TetrisSingleGrid[3][2];
+            grid[0][0] = new TetrisSingleGrid(false, color, 4, 0);
+            grid[0][1] = new TetrisSingleGrid(true, color, 5, 0);
+            grid[1][0] = new TetrisSingleGrid(true, color, 4, 1);
+            grid[1][1] = new TetrisSingleGrid(true, color, 5, 1);
+            grid[2][0] = new TetrisSingleGrid(true, color, 4, 2);
+            grid[2][1] = new TetrisSingleGrid(false, color, 5, 2);
+        }
+        else {
+            grid = new TetrisSingleGrid[2][3];
+            grid[0][0] = new TetrisSingleGrid(true, color, 3, 0);
+            grid[0][1] = new TetrisSingleGrid(true, color, 4, 0);
+            grid[0][2] = new TetrisSingleGrid(false, color, 5, 0);
+            grid[1][0] = new TetrisSingleGrid(false, color, 3, 1);
+            grid[1][1] = new TetrisSingleGrid(true, color, 4, 1);
+            grid[1][2] = new TetrisSingleGrid(true, color, 5, 1);
+        }
+    }
+
+    private void makeGridForCLIPPER() {
+        if (this.angle == 0 || this.angle == 180) {
+            grid = new TetrisSingleGrid[3][2];
+            grid[0][0] = new TetrisSingleGrid(true, color, 4, 0);
+            grid[0][1] = new TetrisSingleGrid(false, color, 5, 0);
+            grid[1][0] = new TetrisSingleGrid(true, color, 4, 1);
+            grid[1][1] = new TetrisSingleGrid(true, color, 5, 1);
+            grid[2][0] = new TetrisSingleGrid(false, color, 4, 2);
+            grid[2][1] = new TetrisSingleGrid(true, color, 5, 2);
+        }
+        else {
+            grid = new TetrisSingleGrid[2][3];
+            grid[0][0] = new TetrisSingleGrid(false, color, 3, 0);
+            grid[0][1] = new TetrisSingleGrid(true, color, 4, 0);
+            grid[0][2] = new TetrisSingleGrid(true, color, 5, 0);
+            grid[1][0] = new TetrisSingleGrid(true, color, 3, 1);
+            grid[1][1] = new TetrisSingleGrid(true, color, 4, 1);
+            grid[1][2] = new TetrisSingleGrid(false, color, 5, 1);
+        }
+    }
+
+    private void makeGridForBOX_3X1() {
+        if (this.angle == 0 || this.angle == 180) {
+            grid = new TetrisSingleGrid[3][1];
+            grid[0][0] = new TetrisSingleGrid(true, color, 4, 0);
+            grid[1][0] = new TetrisSingleGrid(true, color, 4, 1);
+            grid[2][0] = new TetrisSingleGrid(true, color, 4, 2);
+        }
+        else {
+            grid = new TetrisSingleGrid[1][3];
+            grid[0][0] = new TetrisSingleGrid(true, color, 3, 0);
+            grid[0][1] = new TetrisSingleGrid(true, color, 4, 0);
+            grid[0][2] = new TetrisSingleGrid(true, color, 5, 0);
+        }
+    }
+
+    private void makeGridForBOX2_2() {
+        grid = new TetrisSingleGrid[2][2];
+        grid[0][0] = new TetrisSingleGrid(true, color, 4, 0);
+        grid[1][0] = new TetrisSingleGrid(true, color, 4, 1);
+        grid[0][1] = new TetrisSingleGrid(true, color, 5, 0);
+        grid[1][1] = new TetrisSingleGrid(true, color, 5, 1);
+    }
+
+    private void makeGridForBOX_2X1() {
+        if (this.angle == 0 || this.angle == 180) {
+            grid = new TetrisSingleGrid[2][1];
+            grid[0][0] = new TetrisSingleGrid(true, color, 4, 0);
+            grid[1][0] = new TetrisSingleGrid(true, color, 4, 1);
+        }
+        // this.angle == 90 || this.angle == 180
+        else {
+            grid = new TetrisSingleGrid[1][2];
+            grid[0][0] = new TetrisSingleGrid(true, color, 4, 0);
+            grid[0][1] = new TetrisSingleGrid(true, color, 5, 0);
+        }
+    }
+
+    private void makeGridForBOX_1_1() {
+        grid = new TetrisSingleGrid[1][1];
+        grid[0][0] = new TetrisSingleGrid(true, color, 4, 0);
     }
 
     // rysowanie figury

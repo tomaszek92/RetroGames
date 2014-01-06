@@ -22,7 +22,7 @@ public class TetrisSurfaceView extends SurfaceView implements SurfaceHolder.Call
     private SurfaceHolder surfaceHolder;
     private float mX;
     private float mY;
-    private static final float TOUCH_TOLERANCE = 1;
+    private static final float TOUCH_TOLERANCE = 5;
 
 
     public TetrisSurfaceView(Context context) {

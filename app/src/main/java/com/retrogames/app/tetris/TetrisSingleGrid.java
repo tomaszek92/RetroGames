@@ -83,4 +83,20 @@ public class TetrisSingleGrid {
         Rect rectNew = new Rect(rect.left + MARGIN, rect.top + MARGIN, rect.right - MARGIN, rect.bottom - MARGIN);
         canvas.drawRect(rectNew, color.getPaint());
     }
+
+    // tworzenie nowej siatki na podstawie podanej w parametrze z usuniętym wieszem row
+    public static TetrisSingleGrid[][] deleteRow(TetrisSingleGrid[][] grids, int row) {
+        TetrisSingleGrid[][] newGrid = new TetrisSingleGrid[grids.length - 1][grids[0].length];
+        for (int i = 0; i < grids.length; i++) {
+            for (int j = 0; j < grids[i].length; j++) {
+                if (i < row) {
+                    newGrid[i][j] = grids[i][j];
+                }
+                else if (i > row) {
+                    newGrid[i-1][j] = grids[i][j];
+                }
+            }
+        }
+        return newGrid;
+    }
 }

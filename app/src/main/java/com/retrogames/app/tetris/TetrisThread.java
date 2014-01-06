@@ -1,14 +1,11 @@
 package com.retrogames.app.tetris;
 
-import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;;
 import android.graphics.Typeface;
 import android.view.SurfaceHolder;
-import android.os.Bundle;
 
-import com.retrogames.app.R;
-
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -52,7 +49,7 @@ public class TetrisThread extends Thread {
                 canvas = surfaceHolder.lockCanvas(null);
                 synchronized (surfaceHolder) {
                     if (canvas != null) {
-                    doDraw();
+                    drawAll();
                     }
                 }
             }
@@ -70,13 +67,14 @@ public class TetrisThread extends Thread {
             canvasHeight = height;
 
             tetrisGrid = new TetrisGrid(canvasHeight, canvasWidth);
+            tetrisGrid.setPointsScore(0);
 
-            int size1 = (int)((canvasWidth - 2 * TetrisGrid.MARGIN_LEFT - TetrisGrid.STROKE_WIDTH * 2) / TetrisGrid.GRID_WIDTH);
-            TetrisSingleGrid.SIZE = size1;
+            int size = (int)((canvasWidth - 2 * TetrisGrid.MARGIN_LEFT - TetrisGrid.STROKE_WIDTH * 2) / TetrisGrid.GRID_WIDTH);
+            TetrisSingleGrid.SIZE = size;
             TetrisGrid.MARGIN_TOP = canvasHeight - 2 * TetrisGrid.STROKE_WIDTH - TetrisGrid.MARGIN_BOTTOM - TetrisGrid.GRID_HEIGHT * TetrisSingleGrid.SIZE;
             TetrisGrid.MARGIN_RIGHT = 2 * TetrisGrid.STROKE_WIDTH + TetrisGrid.MARGIN_LEFT + TetrisGrid.GRID_WIDTH * TetrisSingleGrid.SIZE;
 
-            figure = new TetrisFigure();
+            figure = new TetrisFigure(TetrisColors.randomColor(), TetrisShapes.LETTER_L_SMALL, 0);
             tetrisGrid.addFigure(figure);
 
             timer = new Timer();
@@ -93,29 +91,6 @@ public class TetrisThread extends Thread {
         boolean itsEnd = false;
         TetrisSingleGrid[][] grids = figure.getGrid();
 
-        int k = grids.length - 1;
-        for (int j = 0; j < grids[k].length; j++) {
-            if (grids[k][j].getY() + 1 == TetrisGrid.GRID_HEIGHT) {
-                itsEnd = true;
-            }
-            else if (grids[k][j].getOccupied()) {
-                if (!tetrisGrid.isNotOccupied(grids[k][j].getX(), grids[k][j].getY() + 1)) {
-                    itsEnd = true;
-                }
-            }
-            else if (!grids[k][j].getOccupied()) {
-                if (!tetrisGrid.isNotOccupied(grids[k][j].getX(), grids[k][j].getY())) {
-                    itsEnd = true;
-                }
-            }
-            else  {
-                if (j - 1 >= 0 && !grids[k][j-1].getOccupied()) {
-                    itsEnd = false;
-                }
-            }
-        }
-
-        /*
         for (int i = grids.length - 1; i >= 0 && !itsEnd; i--) {
             for (int j = grids[i].length - 1; j >= 0 && !itsEnd ; j--) {
                 if (grids[i][j].getY() + 1 == TetrisGrid.GRID_HEIGHT) {
@@ -131,12 +106,12 @@ public class TetrisThread extends Thread {
                     if (!tetrisGrid.isNotOccupied(grids[i][j].getX(), grids[i][j].getY())) {
                         itsEnd = true;
                     }
-                    if (j - 1 >= 0 && !grids[i][j-1].getOccupied()) {
+                    if (i - 1 >= 0 && !grids[i-1][j].getOccupied()) {
                         itsEnd = false;
                     }
                 }
             }
-        }*/
+        }
 
         if (!itsEnd) {
             for (int i = 0; i < grids.length; i++) {
@@ -148,14 +123,15 @@ public class TetrisThread extends Thread {
             }
         }
         else {
-            figure = new TetrisFigure();
+            for (int k = 0; k < TetrisGrid.GRID_HEIGHT - 1; k++) {
+                tetrisGrid.checkGridAddPointsAndRemoveRows();
+            }
+            figure = new TetrisFigure(TetrisColors.randomColor(), TetrisShapes.BOX_3X1, new Random().nextInt(4) * 90);
             tetrisGrid.addFigure(figure);
         }
-
-        tetrisGrid.checkGrid();
     }
 
-    private void doDraw() {
+    private void drawAll() {
         if (canvas != null) {
             drawBackground();
             drawScore();
