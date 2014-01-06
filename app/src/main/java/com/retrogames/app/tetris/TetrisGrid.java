@@ -89,12 +89,12 @@ public class TetrisGrid {
 
     // sprawdzanie i ewnetualne usuwanie całego rzędu
     public void checkGridAddPointsAndRemoveRows() {
-        for (int j = GRID_HEIGHT - 1; j >= 0; j--) {
+        for (int j = 0; j < GRID_HEIGHT; j++) {
             boolean allRowsAreOccupied = true;
             boolean oneColor = true;
 
             for (int i = 0; i < gameGrid.length && allRowsAreOccupied; i++) {
-                if (gameGrid[i][j] != null && gameGrid[i][j].getOccupied()) {
+                if (gameGrid[i][j] != null  && gameGrid[i][j].getOccupied()) {
                     if (!gameGrid[i][j].getOccupied()) {
                         allRowsAreOccupied = false;
                     }
@@ -110,6 +110,8 @@ public class TetrisGrid {
             }
             if (allRowsAreOccupied) {
                 deleteRow(j);
+                clearGridRow(j);
+                downGridRow(j);
                 if (oneColor) {
                     pointsScore += pointsForOneRoweInOneColor;
                 }
@@ -134,13 +136,9 @@ public class TetrisGrid {
                 }
             }
         }
-
         for (int i = 0; i < gameFiguresDeleted.size(); i++) {
             changeFigure(gameFiguresDeleted.get(i), row);
         }
-
-        clearGridRow(row);
-        downGridRow(row);
     }
 
     // tworzenie nowej siatki figury
@@ -228,8 +226,8 @@ public class TetrisGrid {
                 figure.setGrid(TetrisSingleGrid.deleteRow(figure.getGrid(), 1));
                 TetrisFigure newFigure = new TetrisFigure(figure.getColor(), figure.getShape(), figure.getAngle());
                 newFigure.setGrid(gridToNewFigure);
-                newFigure.setGrid(TetrisSingleGrid.deleteRow(newFigure.getGrid(), 1));
-                newFigure.setGrid(TetrisSingleGrid.deleteRow(newFigure.getGrid(), 1));
+                newFigure.setGrid(TetrisSingleGrid.deleteRow(newFigure.getGrid(), 0));
+                newFigure.setGrid(TetrisSingleGrid.deleteRow(newFigure.getGrid(), 0));
                 addFigure(newFigure);
             }
         }
@@ -278,21 +276,31 @@ public class TetrisGrid {
                 figure.setGrid(TetrisSingleGrid.deleteRow(figure.getGrid(), 1));
             }
         }
-        grids = figure.getGrid();
-        TetrisSingleGrid[][] gridNew = new TetrisSingleGrid[1][1];
-        if (grids[0][0] != null) {
-            gridNew[0][0] = new TetrisSingleGrid(grids[0][0].getOccupied(), grids[0][0].getColor(), grids[0][0].getX(), grids[0][0].getY());
+        figure.setAngle(90);
+        if (figure.getShape() == TetrisShapes.BOX_1X1) {
+            grids = figure.getGrid();
+            TetrisSingleGrid[][] gridNew = new TetrisSingleGrid[1][1];
+            if (grids[0][0] != null) {
+                gridNew[0][0] = new TetrisSingleGrid(grids[0][0].getOccupied(), grids[0][0].getColor(), grids[0][0].getX(), grids[0][0].getY());
+            }
+            else {
+                gridNew[0][0] = new TetrisSingleGrid(grids[0][1].getOccupied(), grids[0][1].getColor(), grids[0][1].getX(), grids[0][1].getY());
+            }
+            figure.setGrid(gridNew);
+
+            TetrisFigure newFigure = new TetrisFigure(figure.getColor(), figure.getShape(), figure.getAngle());
+            newFigure.setGrid(gridNew);
+            gameGrid[gridNew[0][0].getX()][gridNew[0][0].getY()] = gridNew[0][0];
+            gameFigures.add(newFigure);
+            gameFigures.remove(figure);
         }
         else {
-            gridNew[0][0] = new TetrisSingleGrid(grids[0][1].getOccupied(), grids[0][1].getColor(), grids[0][1].getX(), grids[0][1].getY());
+            grids = figure.getGrid();
+            TetrisFigure newFigure = new TetrisFigure(figure.getColor(), figure.getShape(), figure.getAngle());
+            newFigure.setGrid(grids);
+            gameFigures.remove(figure);
+            gameFigures.add(newFigure);
         }
-        figure.setGrid(gridNew);
-        figure.setAngle(90);
-        TetrisFigure newFigure = new TetrisFigure(figure.getColor(), figure.getShape(), figure.getAngle());
-        newFigure.setGrid(gridNew);
-        gameGrid[gridNew[0][0].getX()][gridNew[0][0].getY()] = gridNew[0][0];
-        gameFigures.add(newFigure);
-        gameFigures.remove(figure);
     }
 
     // czyszczenie rzędu
@@ -433,5 +441,9 @@ public class TetrisGrid {
             }
         }
         this.refreshGrid();
+    }
+
+    private TetrisSingleGrid[][] cloneTetrisSingleGridArrayDim2(TetrisSingleGrid[][] input) {
+        return new TetrisSingleGrid[0][0];
     }
 }
