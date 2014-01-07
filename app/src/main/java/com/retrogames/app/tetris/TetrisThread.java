@@ -74,7 +74,7 @@ public class TetrisThread extends Thread {
             TetrisGrid.MARGIN_TOP = canvasHeight - 2 * TetrisGrid.STROKE_WIDTH - TetrisGrid.MARGIN_BOTTOM - TetrisGrid.GRID_HEIGHT * TetrisSingleGrid.SIZE;
             TetrisGrid.MARGIN_RIGHT = 2 * TetrisGrid.STROKE_WIDTH + TetrisGrid.MARGIN_LEFT + TetrisGrid.GRID_WIDTH * TetrisSingleGrid.SIZE;
 
-            figure = new TetrisFigure(TetrisColors.randomColor(), TetrisShapes.randomShape(), new Random().nextInt(4) * 90);
+            figure = new TetrisFigure(TetrisColors.randomColor(), TetrisShapes.BOX_2X1, new Random().nextInt(4) * 90);
             tetrisGrid.addFigure(figure);
 
             timer = new Timer();
