@@ -74,7 +74,7 @@ public class TetrisThread extends Thread {
             TetrisGrid.MARGIN_TOP = canvasHeight - 2 * TetrisGrid.STROKE_WIDTH - TetrisGrid.MARGIN_BOTTOM - TetrisGrid.GRID_HEIGHT * TetrisSingleGrid.SIZE;
             TetrisGrid.MARGIN_RIGHT = 2 * TetrisGrid.STROKE_WIDTH + TetrisGrid.MARGIN_LEFT + TetrisGrid.GRID_WIDTH * TetrisSingleGrid.SIZE;
 
-            figure = new TetrisFigure(TetrisColors.randomColor(), TetrisShapes.BOX_2X1, new Random().nextInt(4) * 90);
+            figure = new TetrisFigure(TetrisColors.randomColor(), TetrisShapes.randomShape(), new Random().nextInt(4) * 90);
             tetrisGrid.addFigure(figure);
 
             timer = new Timer();
@@ -127,20 +127,24 @@ public class TetrisThread extends Thread {
             for (int k = 0; k < TetrisGrid.GRID_HEIGHT - 1; k++) {
                 tetrisGrid.checkGridAddPointsAndRemoveRows();
             }
-            figure = new TetrisFigure(TetrisColors.randomColor(), TetrisShapes.randomShape(), new Random().nextInt(4) * 90);
-            tetrisGrid.addFigure(figure);
-            TetrisSingleGrid[][] tetrisSingleGrids = figure.getGrid();
-            /*
-            for (int i = 0; i < tetrisSingleGrids.length; i++) {
-                for (int j = 0; j < tetrisSingleGrids[i].length; j++) {
-                    if (!tetrisGrid.isNotOccupied(tetrisSingleGrids[i][j].getX(), tetrisSingleGrids[i][j].getY())) {
-                        Context context = view.getContext();
-                        TetrisActivity activity = (TetrisActivity)context;
-                        activity.closeActivity();
+            figure = new TetrisFigure(TetrisColors.randomColor(), TetrisShapes.BOX_2X1, new Random().nextInt(4) * 90);
+            grids = figure.getGrid();
+            boolean endGame = false;
+
+            for (int i = 0; i < grids.length; i++) {
+                for (int j = 0; j < grids[i].length; j++) {
+                    if (!tetrisGrid.isNotOccupied(grids[i][j].getX(), grids[i][j].getY())) {
+                        endGame = true;
                     }
                 }
             }
-            */
+
+            tetrisGrid.addFigure(figure);
+            TetrisSingleGrid[][] tetrisSingleGrids = figure.getGrid();
+
+            if (endGame) {
+                //closeThred();
+            }
         }
     }
 
@@ -191,7 +195,17 @@ public class TetrisThread extends Thread {
                 paint);
     }
 
-    public void move(float x, float y) {
+    private void closeThred() {
+        Context context = view.getContext();
+        TetrisActivity activity = (TetrisActivity)context;
+        activity.closeActivity();
+    }
+
+    public void moveFigure(float x, float y) {
         tetrisGrid.moveFigure(figure, x, y);
+    }
+
+    public void turnFigure() {
+        //tetrisGrid.turnFigure(canvas, figure);
     }
 }

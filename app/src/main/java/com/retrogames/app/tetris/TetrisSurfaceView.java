@@ -5,10 +5,12 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.os.SystemClock;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Toast;
 
 import com.retrogames.app.ChooseGameActivity;
 import com.retrogames.app.R;
@@ -24,7 +26,7 @@ public class TetrisSurfaceView extends SurfaceView implements SurfaceHolder.Call
     private float mX;
     private float mY;
     private static final float TOUCH_TOLERANCE = 5;
-
+    private static final long DOUBLE_TAP_TIME = 100;
 
     public TetrisSurfaceView(Context context) {
         super(context);
@@ -85,9 +87,11 @@ public class TetrisSurfaceView extends SurfaceView implements SurfaceHolder.Call
             mX = x;
             mY = y;
         }
-        thread.move(mX, mY);
+        thread.moveFigure(mX, mY);
     }
 
+    int clickCounts = 0;
+    long startTime;
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         float touchX = event.getX();
@@ -95,6 +99,23 @@ public class TetrisSurfaceView extends SurfaceView implements SurfaceHolder.Call
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                clickCounts++;
+                if (clickCounts == 1) {
+                    startTime = System.currentTimeMillis();
+                }
+                else if (clickCounts == 2) {
+                    long duration = System.currentTimeMillis() - startTime;
+                    if (duration < DOUBLE_TAP_TIME) {
+                        clickCounts = 0;
+                        thread.turnFigure();
+                        return true;
+                    }
+                    else  {
+                        clickCounts = 1;
+                        startTime = System.currentTimeMillis();
+                        return true;
+                    }
+                }
                 touchStart(touchX, touchY);
                 break;
 
