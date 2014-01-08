@@ -1,17 +1,20 @@
 package com.retrogames.app.tetris;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.os.Message;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.Toast;
-
+import android.os.Handler;
 import com.retrogames.app.ChooseGameActivity;
 import com.retrogames.app.R;
 
@@ -23,6 +26,7 @@ public class TetrisSurfaceView extends SurfaceView implements SurfaceHolder.Call
     public TetrisActivity activity;
     private TetrisThread thread;
     private SurfaceHolder surfaceHolder;
+    private Handler handler;
     private float mX;
     private float mY;
     private static final float TOUCH_TOLERANCE = 5;
@@ -35,22 +39,22 @@ public class TetrisSurfaceView extends SurfaceView implements SurfaceHolder.Call
         setFocusable(true);
     }
 
-    public TetrisThread getThread() {
-        return thread;
-    }
-
-    public void stopThread() {
-        if (thread != null) {
-            thread.setRunning(false);
-            thread.interrupt();
-            thread = null;
-        }
-    }
-
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        thread = new TetrisThread(getHolder(), this, Typeface.createFromAsset(getContext().getAssets(), ChooseGameActivity.FONT), getResources().getString(R.string.score));
+        handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                thread.setRunning(false);
+                thread.interrupt();
+                Intent intent = new Intent(getContext(), ChooseGameActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                getContext().startActivity(intent);
+            }
+        };
+        thread = new TetrisThread(getHolder(), this, Typeface.createFromAsset(getContext().getAssets(), ChooseGameActivity.FONT), getResources().getString(R.string.score), handler);
         thread.setRunning(true);
+
         thread.start();
     }
 

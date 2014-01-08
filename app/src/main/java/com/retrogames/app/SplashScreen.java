@@ -41,7 +41,9 @@ public class SplashScreen extends Activity {
         if (this.isFinishing()) {
             return;
         }
-        startActivity(new Intent(SplashScreen.this, ChooseGameActivity.class));
+        Intent intent = new Intent(SplashScreen.this, ChooseGameActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(intent);
         finish();
     }
 }

@@ -2,8 +2,10 @@ package com.retrogames.app.tetris;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;;
+import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.os.Handler;
+import android.os.Message;
 import android.view.SurfaceHolder;
 
 import java.util.Random;
@@ -23,6 +25,7 @@ public class TetrisThread extends Thread {
     private boolean run = false;
     private Typeface typeface;
     private String scoreString;
+    private Handler handler;
 
     // rozmiary ekranu
     private int canvasWidth;
@@ -31,11 +34,12 @@ public class TetrisThread extends Thread {
     private static int DOWN_SPPED = 500;
     private Timer timer;
 
-    public TetrisThread(SurfaceHolder surfaceHolder, TetrisSurfaceView view, Typeface typeface, String scoreString) {
+    public TetrisThread(SurfaceHolder surfaceHolder, TetrisSurfaceView view, Typeface typeface, String scoreString, Handler handler) {
         this.surfaceHolder = surfaceHolder;
         this.view = view;
         this.typeface = typeface;
         this.scoreString = scoreString;
+        this.handler = handler;
     }
 
     public void setRunning(boolean run) {
@@ -127,7 +131,7 @@ public class TetrisThread extends Thread {
             for (int k = 0; k < TetrisGrid.GRID_HEIGHT - 1; k++) {
                 tetrisGrid.checkGridAddPointsAndRemoveRows();
             }
-            figure = new TetrisFigure(TetrisColors.randomColor(), TetrisShapes.BOX_2X1, new Random().nextInt(4) * 90);
+            figure = new TetrisFigure(TetrisColors.randomColor(), TetrisShapes.randomShape(), new Random().nextInt(4) * 90);
             grids = figure.getGrid();
             boolean endGame = false;
 
@@ -140,10 +144,11 @@ public class TetrisThread extends Thread {
             }
 
             tetrisGrid.addFigure(figure);
-            TetrisSingleGrid[][] tetrisSingleGrids = figure.getGrid();
-
             if (endGame) {
-                //closeThred();
+                if (run) {
+                    handler.sendMessage(Message.obtain());
+                    run = false;
+                }
             }
         }
     }
@@ -195,11 +200,6 @@ public class TetrisThread extends Thread {
                 paint);
     }
 
-    private void closeThred() {
-        Context context = view.getContext();
-        TetrisActivity activity = (TetrisActivity)context;
-        activity.closeActivity();
-    }
 
     public void moveFigure(float x, float y) {
         tetrisGrid.moveFigure(figure, x, y);

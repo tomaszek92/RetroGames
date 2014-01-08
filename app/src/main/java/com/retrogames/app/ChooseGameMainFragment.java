@@ -49,7 +49,6 @@ public class ChooseGameMainFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
                 final String item = (String) parent.getItemAtPosition(position);
-                Toast.makeText(getActivity(), "You choose " + position, Toast.LENGTH_LONG).show();
 
                 switch (position) {
                     case ChooseGameActivity.INDEX_RACE-1:

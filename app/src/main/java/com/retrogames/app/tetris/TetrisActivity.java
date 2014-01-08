@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.Message;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -16,7 +17,6 @@ import android.widget.Toast;
  * Created by Tomasz on 31.12.13.
  */
 public class TetrisActivity extends Activity {
-
     TetrisSurfaceView view;
 
     @Override
@@ -24,9 +24,5 @@ public class TetrisActivity extends Activity {
         super.onCreate(savedInstanceState);
         view = new TetrisSurfaceView(this);
         setContentView(view);
-    }
-
-    public void closeActivity() {
-        super.onBackPressed();
     }
 }

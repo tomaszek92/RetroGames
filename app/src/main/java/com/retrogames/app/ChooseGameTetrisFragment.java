@@ -39,7 +39,9 @@ public class ChooseGameTetrisFragment extends Fragment {
         button_start_game.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), TetrisActivity.class));
+                Intent intent = new Intent(getActivity(), TetrisActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(intent);
             }
         });
 

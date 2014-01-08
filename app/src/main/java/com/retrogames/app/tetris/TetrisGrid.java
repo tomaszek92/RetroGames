@@ -599,6 +599,30 @@ public class TetrisGrid {
             }
         }
 
+        // sprawdzanie, czy żadne klocki na siebie nie naszły
+        // poza dolną krawędź ekranu
+        int count = 0;
+        for (int i = 0; i < gridsClone.length; i++) {
+            for (int j = 0; j < gridsClone[i].length; j++) {
+                if (gridsClone[i][j].getY() == GRID_HEIGHT - 1) {
+                    count++;
+                }
+            }
+            if (count >=2 && figure.getShape() == TetrisShapes.BOX_2X1 && (figure.getAngle() == 0 || figure.getAngle() == 180)) {
+                return;
+            }
+            if (count >= 3 && (figure.getShape() == TetrisShapes.CLIPPER_R
+                    || figure.getShape() == TetrisShapes.CLIPPER
+                    || figure.getShape() == TetrisShapes.BOX_2X2
+                    || figure.getShape() == TetrisShapes.LETTER_L_SMALL)) {
+                return;
+            }
+            else if (count >= 4 && (figure.getShape() == TetrisShapes.LETTER_L_BIG
+                    || figure.getShape() == TetrisShapes.LETTER_L_BIG_R)) {
+                return;
+            }
+        }
+
         // przesuwanie klocka na nową pozycję
         for (int i = 0; i < grids.length; i++) {
             for (int j = 0; j < grids[i].length; j++) {

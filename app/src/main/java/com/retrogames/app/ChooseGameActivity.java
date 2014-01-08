@@ -5,11 +5,14 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.widget.Toast;
 
 public class ChooseGameActivity extends FragmentActivity {
 
     private MyAdapter myAdapter;
     private ViewPager viewPager;
+
+    private static final int ONE_SECOND = 1000;
 
     public static final int INDEX_MAIN = 0;
     public static final int INDEX_RACE = 1;
@@ -28,6 +31,27 @@ public class ChooseGameActivity extends FragmentActivity {
 
         viewPager = (ViewPager)findViewById(R.id.viewpager);
         viewPager.setAdapter(myAdapter);
+    }
+
+    int countBackPressed = 0;
+    long startTime = 0;
+    @Override
+    public void onBackPressed() {
+        if (countBackPressed == 0) {
+            startTime = System.currentTimeMillis();
+            countBackPressed++;
+            Toast.makeText(this, "Press one more to quit", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else if (countBackPressed == 1) {
+            long duration = System.currentTimeMillis() - startTime;
+            if (duration < ONE_SECOND) {
+                super.onBackPressed();
+            }
+            else {
+                countBackPressed = 0;
+            }
+        }
     }
 
     public ViewPager getViewPager() {
