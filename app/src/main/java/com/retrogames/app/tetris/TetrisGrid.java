@@ -2,6 +2,9 @@ package com.retrogames.app.tetris;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.media.MediaPlayer;
+
+import com.retrogames.app.R;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -44,12 +47,20 @@ public class TetrisGrid {
     public static int CANVAS_HEIGHT;
     public static int CANVAS_WIDTH;
 
-    public TetrisGrid(int height, int width) {
+    private MediaPlayer mp_put_block;
+    private MediaPlayer mp_row_deleted;
+    private MediaPlayer mp_tun;
+
+    public TetrisGrid(TetrisSurfaceView view, int height, int width) {
         CANVAS_HEIGHT = height;
         CANVAS_WIDTH = width;
 
         gameGrid = new TetrisSingleGrid[GRID_WIDTH][GRID_HEIGHT];
         gameFigures = new LinkedList<TetrisFigure>();
+
+        this.mp_put_block = MediaPlayer.create(view.getContext(), R.raw.tetris_put_block);
+        this.mp_row_deleted = MediaPlayer.create(view.getContext(), R.raw.tetris_row_deleted);
+        this.mp_tun = MediaPlayer.create(view.getContext(), R.raw.tetris_turn);
     }
 
     public static int getPointsScore() {
@@ -57,6 +68,10 @@ public class TetrisGrid {
     }
     public static void setPointsScore(int score) {
         pointsScore = score;
+    }
+
+    public void playSoundPutBlock() {
+        mp_put_block.start();
     }
 
     // dodanie nowej figury do planszy gry
@@ -119,6 +134,7 @@ public class TetrisGrid {
                 else {
                     pointsScore += pointsForOneRow;
                 }
+                mp_row_deleted.start();
             }
         }
     }
@@ -694,6 +710,7 @@ public class TetrisGrid {
         figure.setGrid(turnGrids);
         figure.setAngle(turnFigure.getAngle());
         refreshGrid();
-        //drawAllFigures(canvas);
+
+        mp_tun.start();
     }
 }

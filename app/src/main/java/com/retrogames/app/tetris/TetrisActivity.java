@@ -13,6 +13,8 @@ import android.view.SurfaceView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Timer;
+
 /**
  * Created by Tomasz on 31.12.13.
  */
@@ -24,5 +26,39 @@ public class TetrisActivity extends Activity {
         super.onCreate(savedInstanceState);
         view = new TetrisSurfaceView(this);
         setContentView(view);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        TetrisThread thread = view.getThread();
+        if (thread != null) {
+            thread.setRunning(true);
+            thread.startTimer();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        TetrisThread thread = view.getThread();
+        if (thread != null) {
+            stopThreadAndTimer(thread);
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        TetrisThread thread = view.getThread();
+        if (thread != null) {
+            stopThreadAndTimer(thread);
+        }
+    }
+
+    private void stopThreadAndTimer(TetrisThread thread) {
+        thread.setRunning(false);
+        Timer timer = thread.getTimer();
+        timer.cancel();
     }
 }

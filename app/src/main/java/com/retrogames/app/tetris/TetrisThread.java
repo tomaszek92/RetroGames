@@ -1,12 +1,17 @@
 package com.retrogames.app.tetris;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Message;
 import android.view.SurfaceHolder;
+import android.view.View;
+
+import com.retrogames.app.R;
 
 import java.util.Random;
 import java.util.Timer;
@@ -46,6 +51,10 @@ public class TetrisThread extends Thread {
         this.run = run;
     }
 
+    public Timer getTimer() {
+        return this.timer;
+    }
+
     @Override
     public void run() {
         while (run) {
@@ -70,7 +79,7 @@ public class TetrisThread extends Thread {
             canvasWidth = width;
             canvasHeight = height;
 
-            tetrisGrid = new TetrisGrid(canvasHeight, canvasWidth);
+            tetrisGrid = new TetrisGrid(view, canvasHeight, canvasWidth);
             tetrisGrid.setPointsScore(0);
 
             int size = (int)((canvasWidth - 2 * TetrisGrid.MARGIN_LEFT - TetrisGrid.STROKE_WIDTH * 2) / TetrisGrid.GRID_WIDTH);
@@ -82,13 +91,17 @@ public class TetrisThread extends Thread {
             tetrisGrid.addFigure(figure);
 
             timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    goOneToDown();
-                }
-            }, DOWN_SPPED, DOWN_SPPED);
+            startTimer();
         }
+    }
+
+    public void startTimer() {
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                goOneToDown();
+            }
+        }, DOWN_SPPED, DOWN_SPPED);
     }
 
     // przesuwanie figury o jeden w dół
@@ -128,6 +141,7 @@ public class TetrisThread extends Thread {
             }
         }
         else {
+            tetrisGrid.playSoundPutBlock();
             for (int k = 0; k < TetrisGrid.GRID_HEIGHT - 1; k++) {
                 tetrisGrid.checkGridAddPointsAndRemoveRows();
             }
@@ -199,7 +213,6 @@ public class TetrisThread extends Thread {
                 TetrisGrid.MARGIN_TOP,
                 paint);
     }
-
 
     public void moveFigure(float x, float y) {
         tetrisGrid.moveFigure(figure, x, y);

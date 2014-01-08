@@ -54,8 +54,11 @@ public class TetrisSurfaceView extends SurfaceView implements SurfaceHolder.Call
         };
         thread = new TetrisThread(getHolder(), this, Typeface.createFromAsset(getContext().getAssets(), ChooseGameActivity.FONT), getResources().getString(R.string.score), handler);
         thread.setRunning(true);
-
         thread.start();
+    }
+
+    public TetrisThread getThread() {
+        return this.thread;
     }
 
     @Override
