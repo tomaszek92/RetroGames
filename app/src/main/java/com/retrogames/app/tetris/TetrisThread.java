@@ -219,6 +219,9 @@ public class TetrisThread extends Thread {
     }
 
     public void turnFigure() {
-        //tetrisGrid.turnFigure(canvas, figure);
+        if (figure.turn()) {
+            tetrisGrid.playSoundTurnFigure();
+            tetrisGrid.refreshGrid();
+        }
     }
 }

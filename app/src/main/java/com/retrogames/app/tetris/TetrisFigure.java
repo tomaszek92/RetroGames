@@ -308,9 +308,58 @@ public class TetrisFigure {
         }
     }
 
-    // TODO: napisac obracanie figur
-    public void turn() {
-        this.angle = (this.angle + 90) % 360;
+    // obracanie figury w lewo
+    public boolean turn() {
+        int posX = grid[0][0].getX();
+        int posY = grid[0][0].getY();
+
+        TetrisFigure newFigure = new TetrisFigure(this.color, this.shape, (this.angle + 90) % 360);
+        newFigure.makeGrid();
+
+        TetrisSingleGrid[][] cloneGrid = newFigure.getGrid();
+
+        // side == -1 => wyszło w lewej strony
+        // side == 1 => wyszło w prawej strony
+        // side == 0 => mieście się w obszarze gry
+        short side = 0;
+        for (int i = 0; i < cloneGrid.length; i++) {
+            for (int j = 0; j < cloneGrid[i].length; j++) {
+                cloneGrid[i][j].setX(posX + j);
+                cloneGrid[i][j].setY(cloneGrid[i][j].getY() + posY);
+                if (cloneGrid[i][j].getX() >= TetrisGrid.GRID_WIDTH) {
+                    side = 1;
+                }
+                else if (cloneGrid[i][j].getX() < 0) {
+                    side = -1;
+                }
+                if (cloneGrid[i][j].getY() >= TetrisGrid.GRID_HEIGHT || cloneGrid[i][j].getY() < 0) {
+                    return false;
+                }
+            }
+        }
+        if (side == 1) {
+            for (int i = 0; i < cloneGrid.length; i++) {
+                for (int j = 0; j < cloneGrid[i].length; j++) {
+                    cloneGrid[i][j].setX(cloneGrid[i][j].getX() - 1);
+                }
+            }
+        }
+        else if (side == -1) {
+            for (int i = 0; i < cloneGrid.length; i++) {
+                for (int j = 0; j < cloneGrid[i].length; j++) {
+                    cloneGrid[i][j].setX(cloneGrid[i][j].getX() + 1);
+                }
+            }
+        }
+        this.angle = (angle + 90) % 360;
         this.makeGrid();
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                grid[i][j].setX(cloneGrid[i][j].getX());
+                grid[i][j].setY(cloneGrid[i][j].getY());
+                grid[i][j].setNewRectByXY();
+            }
+        }
+        return true;
     }
 }

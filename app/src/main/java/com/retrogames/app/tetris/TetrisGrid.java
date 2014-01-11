@@ -49,7 +49,7 @@ public class TetrisGrid {
 
     private MediaPlayer mp_put_block;
     private MediaPlayer mp_row_deleted;
-    private MediaPlayer mp_tun;
+    private MediaPlayer mp_turn;
 
     public TetrisGrid(TetrisSurfaceView view, int height, int width) {
         CANVAS_HEIGHT = height;
@@ -60,7 +60,7 @@ public class TetrisGrid {
 
         this.mp_put_block = MediaPlayer.create(view.getContext(), R.raw.tetris_put_block);
         this.mp_row_deleted = MediaPlayer.create(view.getContext(), R.raw.tetris_row_deleted);
-        this.mp_tun = MediaPlayer.create(view.getContext(), R.raw.tetris_turn);
+        this.mp_turn = MediaPlayer.create(view.getContext(), R.raw.tetris_turn);
     }
 
     public static int getPointsScore() {
@@ -72,6 +72,10 @@ public class TetrisGrid {
 
     public void playSoundPutBlock() {
         mp_put_block.start();
+    }
+
+    public void playSoundTurnFigure() {
+        mp_turn.start();
     }
 
     // dodanie nowej figury do planszy gry
@@ -648,69 +652,5 @@ public class TetrisGrid {
             }
         }
         this.refreshGrid();
-    }
-
-    public void turnFigure(Canvas canvas, TetrisFigure figure) {
-        TetrisFigure turnFigure = new TetrisFigure(figure.getColor(), figure.getShape(), (figure.getAngle() + 90) % 360);
-        TetrisSingleGrid[][] grids = figure.getGrid();
-        TetrisSingleGrid[][] turnGrids = turnFigure.getGrid();
-        boolean firstOption = true;
-
-        if (figure.getShape() == TetrisShapes.BOX_1X1) {
-            return;
-        }
-        else if (figure.getShape() == TetrisShapes.BOX_2X1) {
-            firstOption = true;
-        }
-        else if (figure.getShape() == TetrisShapes.BOX_3X1) {
-
-        }
-        else if (figure.getShape() == TetrisShapes.BOX_2X2) {
-
-        }
-        else if (figure.getShape() == TetrisShapes.CLIPPER) {
-
-        }
-        else if (figure.getShape() == TetrisShapes.CLIPPER_R) {
-
-        }
-        else if (figure.getShape() == TetrisShapes.LETTER_L_BIG) {
-
-        }
-        else if (figure.getShape() == TetrisShapes.LETTER_L_BIG_R) {
-
-        }
-        else if (figure.getShape() == TetrisShapes.LETTER_L_SMALL) {
-
-        }
-
-        if (firstOption) {
-            for (int i = 0; i < turnGrids.length; i++) {
-                for (int j = 0; j < turnGrids[i].length; j++) {
-                    turnGrids[i][j].setX(grids[j][i].getX());
-                    turnGrids[i][j].setY(grids[j][i].getY());
-                }
-            }
-        }
-        else {
-            for (int i = 0; i < turnGrids.length; i++) {
-                for (int j = 0; j < turnGrids[i].length; j++) {
-                    turnGrids[i][j].setX(grids[i][j].getX());
-                    turnGrids[i][j].setY(grids[i][j].getY());
-                }
-            }
-        }
-
-        for (int i = 0; i < turnGrids.length; i++) {
-            for (int j = 0; j < turnGrids[i].length; j++) {
-                turnGrids[i][j].setNewRectByXY();
-            }
-        }
-
-        figure.setGrid(turnGrids);
-        figure.setAngle(turnFigure.getAngle());
-        refreshGrid();
-
-        mp_tun.start();
     }
 }

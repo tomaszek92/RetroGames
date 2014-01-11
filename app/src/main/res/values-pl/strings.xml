@@ -8,5 +8,6 @@
     <string name="game_settings">USTAWIENIA</string>
     <string name="start_game">ROZPOCZNIJ GRE</string>
     <string name="score">WYNIK</string>
+    <string name="best_score">NAJLEPSZY WYNIK</string>
 
 </resources>
