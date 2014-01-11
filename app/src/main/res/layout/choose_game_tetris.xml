@@ -20,4 +20,12 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
 
+    <Button
+        android:id="@+id/choose_game_tetris_button_best_score"
+        android:text="@string/best_score"
+        android:gravity="center"
+        android:background="@android:color/transparent"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

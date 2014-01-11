@@ -30,7 +30,7 @@ public class TetrisSurfaceView extends SurfaceView implements SurfaceHolder.Call
     private float mX;
     private float mY;
     private static final float TOUCH_TOLERANCE = 5;
-    private static final long DOUBLE_TAP_TIME = 500;
+    private static final long DOUBLE_TAP_TIME = 200;
 
     public TetrisSurfaceView(Context context) {
         super(context);

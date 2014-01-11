@@ -16,7 +16,6 @@ public class TetrisGrid {
 
     private TetrisSingleGrid[][] gameGrid;
     private List<TetrisFigure> gameFigures;
-    List<TetrisFigure> gameFiguresDeleted = new LinkedList<TetrisFigure>();
 
     // marginesy do rysowania wyniku
     public static int MARGIN_SCORE_TOP = 50;
@@ -76,6 +75,10 @@ public class TetrisGrid {
 
     public void playSoundTurnFigure() {
         mp_turn.start();
+    }
+
+    public void playSoundRowDeleted() {
+        mp_row_deleted.start();
     }
 
     // dodanie nowej figury do planszy gry
@@ -138,15 +141,15 @@ public class TetrisGrid {
                 else {
                     pointsScore += pointsForOneRow;
                 }
-                mp_row_deleted.start();
+                playSoundRowDeleted();
             }
         }
     }
 
     // usuwanie rzędu
     private void deleteRow(int row) {
-        //List<TetrisFigure> gameFiguresDeleted = new LinkedList<TetrisFigure>();
-        gameFiguresDeleted = new LinkedList<TetrisFigure>();
+        List<TetrisFigure> gameFiguresDeleted = new LinkedList<TetrisFigure>();
+
         // wyszukiwanie figur, które leżą w usuwanym wierzu
         for (int i = 0; i < gameFigures.size(); i++) {
             TetrisSingleGrid[][] grids = gameFigures.get(i).getGrid();
@@ -600,14 +603,17 @@ public class TetrisGrid {
         TetrisSingleGrid[][] grids = figure.getGrid();
         TetrisSingleGrid[][] gridsClone = TetrisSingleGrid.cloneArrayDim2(grids);
 
+        int exitL = 0;
         // sprawdzanie czy jest puste pole
         for (int i = 0; i < gridsClone.length; i++) {
             for (int j = 0; j < gridsClone[i].length; j++) {
                 int xNew = xCoordinateToGrid(x + TetrisSingleGrid.SIZE * j);
                 int yNew = yCoordinateToGrid(y + TetrisSingleGrid.SIZE * i);
-                if (xNew < 0 || xNew >= GRID_WIDTH ||
-                        yNew < 0 || yNew >= GRID_HEIGHT) {
+                if (xNew >= GRID_WIDTH || yNew < 0 || yNew >= GRID_HEIGHT) {
                     return;
+                }
+                if (xNew < 0 && exitL > xNew) {
+                    exitL = xNew;
                 }
                 if (this.isNotOccupied(xNew, yNew)) {
                     gridsClone[i][j].setX(xNew);
@@ -615,6 +621,14 @@ public class TetrisGrid {
                 }
                 else {
                     return;
+                }
+            }
+        }
+
+        if (exitL < 0) {
+            for (int i = 0; i < gridsClone.length; i++) {
+                for (int j = 0; j < gridsClone[i].length; j++) {
+                    gridsClone[i][j].setX(gridsClone[i][j].getX() - exitL);
                 }
             }
         }

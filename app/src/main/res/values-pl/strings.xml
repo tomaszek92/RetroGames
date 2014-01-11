@@ -9,5 +9,6 @@
     <string name="start_game">ROZPOCZNIJ GRE</string>
     <string name="score">WYNIK</string>
     <string name="best_score">NAJLEPSZY WYNIK</string>
+    <string name="exit_string">Naciśnij jeszcze raz, aby wyjść</string>
 
 </resources>

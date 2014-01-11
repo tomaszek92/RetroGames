@@ -20,6 +20,9 @@
             android:name=".ChooseGameActivity"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".BestScoreActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".tetris.TetrisActivity"
             android:screenOrientation="portrait"/>
     </application>

@@ -1,6 +1,7 @@
 package com.retrogames.app.tetris;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -8,9 +9,11 @@ import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.view.SurfaceHolder;
 import android.view.View;
 
+import com.retrogames.app.ChooseGameActivity;
 import com.retrogames.app.R;
 
 import java.util.Random;
@@ -160,11 +163,22 @@ public class TetrisThread extends Thread {
             tetrisGrid.addFigure(figure);
             if (endGame) {
                 if (run) {
+                    if (ChooseGameActivity.BEST_SCORE_TETRIS < TetrisGrid.getPointsScore()) {
+                        saveNewBestScore();
+                    }
                     handler.sendMessage(Message.obtain());
                     run = false;
                 }
             }
         }
+    }
+
+    private void saveNewBestScore() {
+        ChooseGameActivity.BEST_SCORE_TETRIS = TetrisGrid.getPointsScore();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(view.getContext());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(ChooseGameActivity.BEST_SCORE_TETRIS_STRING, ChooseGameActivity.BEST_SCORE_TETRIS);
+        editor.commit();
     }
 
     private void drawAll() {

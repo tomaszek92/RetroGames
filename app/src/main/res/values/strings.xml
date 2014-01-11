@@ -9,5 +9,6 @@
     <string name="start_game">START GAME</string>
     <string name="score">SCORE</string>
     <string name="best_score">BEST SCORE</string>
+    <string name="exit_string">Press one more to quit</string>
 
 </resources>

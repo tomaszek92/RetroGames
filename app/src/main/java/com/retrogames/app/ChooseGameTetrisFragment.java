@@ -45,6 +45,18 @@ public class ChooseGameTetrisFragment extends Fragment {
             }
         });
 
+        Button button_best_score = (Button)view.findViewById(R.id.choose_game_tetris_button_best_score);
+        button_best_score.setTypeface(font);
+        button_best_score.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), BestScoreActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                intent.putExtra(ChooseGameActivity.INDEX_GAME_STRING, ChooseGameActivity.INDEX_TETRIS);
+                startActivity(intent);
+            }
+        });
+
         return view;
     }
 }
