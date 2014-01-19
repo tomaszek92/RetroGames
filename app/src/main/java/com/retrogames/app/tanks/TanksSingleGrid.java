@@ -21,6 +21,7 @@ public class TanksSingleGrid {
     // parametry do rysowania czołga
     private static final int MARGIN = 5;
     private static final int COLOR_MARGIN = Color.BLACK;
+    private static final int COLOR_CELL = Color.rgb(51,102,77);
     public static int SIZE = 30;
 
     public TanksSingleGrid(boolean occupied, int x, int y) {
@@ -74,7 +75,7 @@ public class TanksSingleGrid {
         paint.setColor(COLOR_MARGIN);
         canvas.drawRect(rect, paint);
         Rect rectNew = new Rect(rect.left + MARGIN, rect.top + MARGIN, rect.right - MARGIN, rect.bottom - MARGIN);
-        paint.setColor(Color.GREEN);
+        paint.setColor(COLOR_CELL);
         canvas.drawRect(rectNew, paint);
     }
 
