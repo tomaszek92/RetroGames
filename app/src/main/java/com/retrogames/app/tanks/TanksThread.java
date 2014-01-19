@@ -33,6 +33,8 @@ public class TanksThread extends Thread {
     private Typeface typeface;
     private String scoreString;
     private Handler handler;
+    private TanksGrid tanksGrid;
+    private TanksFigure figure;
 
     private int canvasWidth;
     private int canvasHeight;
@@ -60,20 +62,22 @@ public class TanksThread extends Thread {
         synchronized (surfaceHolder) {
             canvasWidth = width;
             canvasHeight = height;
-/**
-            tetrisGrid = new TetrisGrid(view, canvasHeight, canvasWidth);
-            tetrisGrid.setPointsScore(0);
 
-            int size = (int)((canvasWidth - 2 * TetrisGrid.MARGIN_LEFT - TetrisGrid.STROKE_WIDTH * 2) / TetrisGrid.GRID_WIDTH);
-            TetrisSingleGrid.SIZE = size;
-            TetrisGrid.MARGIN_TOP = canvasHeight - 2 * TetrisGrid.STROKE_WIDTH - TetrisGrid.MARGIN_BOTTOM - TetrisGrid.GRID_HEIGHT * TetrisSingleGrid.SIZE;
-            TetrisGrid.MARGIN_RIGHT = 2 * TetrisGrid.STROKE_WIDTH + TetrisGrid.MARGIN_LEFT + TetrisGrid.GRID_WIDTH * TetrisSingleGrid.SIZE;
+            tanksGrid = new TanksGrid(view, canvasHeight, canvasWidth);
+            tanksGrid.setPointsScore(0);
 
-            figure = new TetrisFigure(TetrisColors.randomColor(), TetrisShapes.randomShape(), new Random().nextInt(4) * 90);
-            tetrisGrid.addFigure(figure);
-*/
+            int size = (int)((canvasWidth - 2 * TanksGrid.MARGIN_LEFT - TanksGrid.STROKE_WIDTH * 2) / TanksGrid.GRID_WIDTH);
+            TanksSingleGrid.SIZE = size;
+            TanksGrid.MARGIN_TOP = canvasHeight - 2 * TanksGrid.STROKE_WIDTH - TanksGrid.MARGIN_BOTTOM - TanksGrid.GRID_HEIGHT * TanksSingleGrid.SIZE;
+            TanksGrid.MARGIN_RIGHT = 2 * TanksGrid.STROKE_WIDTH + TanksGrid.MARGIN_LEFT + TanksGrid.GRID_WIDTH * TanksSingleGrid.SIZE;
+
+            figure = new TanksFigure( TanksShapes.YOU, new Random().nextInt(4) * 90);
+            tanksGrid.addFigure(figure);
+
+            figure = new TanksFigure( TanksShapes.ENEMY, new Random().nextInt(4) * 90);
+            tanksGrid.addFigure(figure);
             timer = new Timer();
-
+            //startTimer();
         }
     }
 
@@ -84,7 +88,7 @@ public class TanksThread extends Thread {
                 canvas = surfaceHolder.lockCanvas(null);
                 synchronized (surfaceHolder) {
                     if (canvas != null) {
-                        //drawAll();
+                        drawAll();
                     }
                 }
             }
@@ -94,6 +98,50 @@ public class TanksThread extends Thread {
                 }
             }
         }
+    }
+    private void drawAll() {
+        if (canvas != null) {
+            drawBackground();
+            drawScore();
+            tanksGrid.drawAllFigures(canvas);
+        }
+    }
+    private void drawScore() {
+        Paint paint = new Paint();
+        paint.setColor(TanksGrid.SCORE_COLOR);
+        paint.setTypeface(typeface);
+        paint.setTextSize(40);
+        canvas.drawText(scoreString + " " + TanksGrid.getPointsScore(), TanksGrid.MARGIN_SCORE_LEFT, TanksGrid.MARGIN_SCORE_TOP, paint);
+    }
+    private void drawBackground() {
+        // wypełnianie tła
+        canvas.drawColor(TanksGrid.BACKGROUND_COLOR);
+
+        // rysowanie linii
+        Paint paint = new Paint();
+        paint.setStrokeWidth(TanksGrid.STROKE_WIDTH);
+        paint.setColor(TanksGrid.LINE_COLOR);
+
+        canvas.drawLine(TanksGrid.MARGIN_LEFT,
+                TanksGrid.MARGIN_TOP,
+                TanksGrid.MARGIN_LEFT,
+                canvasHeight - TanksGrid.MARGIN_BOTTOM,
+                paint);
+        canvas.drawLine(TanksGrid.MARGIN_LEFT,
+                canvasHeight - TanksGrid.MARGIN_BOTTOM,
+                TanksGrid.MARGIN_RIGHT,
+                canvasHeight - TanksGrid.MARGIN_BOTTOM,
+                paint);
+        canvas.drawLine(TanksGrid.MARGIN_RIGHT,
+                canvasHeight - TanksGrid.MARGIN_BOTTOM,
+                TanksGrid.MARGIN_RIGHT,
+                TanksGrid.MARGIN_TOP,
+                paint);
+        canvas.drawLine(TanksGrid.MARGIN_RIGHT,
+                TanksGrid.MARGIN_TOP,
+                TanksGrid.MARGIN_LEFT,
+                TanksGrid.MARGIN_TOP,
+                paint);
     }
 
 }
