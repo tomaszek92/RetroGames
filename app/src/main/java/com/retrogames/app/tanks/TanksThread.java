@@ -76,6 +76,10 @@ public class TanksThread extends Thread {
 
             figure = new TanksFigure( TanksShapes.ENEMY, new Random().nextInt(4) * 90);
             tanksGrid.addFigure(figure);
+
+            figure = new TanksFigure( TanksShapes.BULLET, new Random().nextInt(4) * 90);
+            tanksGrid.addFigure(figure);
+
             timer = new Timer();
             //startTimer();
         }

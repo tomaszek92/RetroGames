@@ -4,7 +4,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/main_icon2"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
@@ -28,7 +28,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.retrogames.app.tanks.TanksActivity"
-            android:label="@string/title_activity_tanks" >
+            android:label="@string/title_activity_tanks"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 
