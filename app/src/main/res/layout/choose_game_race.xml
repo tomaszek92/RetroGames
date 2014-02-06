@@ -12,4 +12,14 @@
         android:text="@string/game_race"
         style="@style/TextViewStyle"/>
 
+    <Button
+        android:id="@+id/choose_game_race_button_start"
+        android:text="@string/start_game"
+        style="@style/ButtonStyle"/>
+
+    <Button
+        android:id="@+id/choose_game_race_button_best_score"
+        android:text="@string/best_score"
+        style="@style/ButtonStyle"/>
+
 </LinearLayout>

@@ -48,7 +48,7 @@ public class ChooseGameTanksFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), BestScoreActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                intent.putExtra(ChooseGameActivity.INDEX_GAME_STRING, ChooseGameActivity.INDEX_TETRIS);
+                intent.putExtra(ChooseGameActivity.INDEX_GAME_STRING, ChooseGameActivity.INDEX_TANKS);
                 startActivity(intent);
             }
         });
