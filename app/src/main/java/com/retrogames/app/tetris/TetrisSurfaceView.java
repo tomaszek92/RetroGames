@@ -34,6 +34,7 @@ public class TetrisSurfaceView extends SurfaceView implements SurfaceHolder.Call
 
     public TetrisSurfaceView(Context context) {
         super(context);
+        this.activity = (TetrisActivity)context;
         surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
         setFocusable(true);
@@ -52,7 +53,7 @@ public class TetrisSurfaceView extends SurfaceView implements SurfaceHolder.Call
                 getContext().startActivity(intent);
             }
         };
-        thread = new TetrisThread(getHolder(), this, Typeface.createFromAsset(getContext().getAssets(), ChooseGameActivity.FONT), getResources().getString(R.string.score), handler);
+        thread = new TetrisThread(getHolder(), this, Typeface.createFromAsset(getContext().getAssets(), ChooseGameActivity.FONT), getResources().getString(R.string.score), handler, activity);
         thread.setRunning(true);
         thread.start();
     }

@@ -9,7 +9,7 @@
         android:id="@+id/game_name"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textSize="20dp"
         android:layout_margin="10dp"
         android:gravity="center"/>

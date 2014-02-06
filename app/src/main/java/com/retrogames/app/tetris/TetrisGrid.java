@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 
+import com.retrogames.app.ChooseGameSettingsFragment;
 import com.retrogames.app.R;
 
 import java.util.LinkedList;
@@ -70,15 +71,21 @@ public class TetrisGrid {
     }
 
     public void playSoundPutBlock() {
-        mp_put_block.start();
+        if (ChooseGameSettingsFragment.SOUND) {
+            mp_put_block.start();
+        }
     }
 
     public void playSoundTurnFigure() {
-        mp_turn.start();
+        if (ChooseGameSettingsFragment.SOUND) {
+            mp_turn.start();
+        }
     }
 
     public void playSoundRowDeleted() {
-        mp_row_deleted.start();
+        if (ChooseGameSettingsFragment.SOUND) {
+            mp_row_deleted.start();
+        }
     }
 
     // dodanie nowej figury do planszy gry
@@ -111,7 +118,8 @@ public class TetrisGrid {
     }
 
     // sprawdzanie i ewnetualne usuwanie całego rzędu
-    public void checkGridAddPointsAndRemoveRows() {
+    public int checkGridAddPointsAndRemoveRows() {
+        int countRows = 0;
         for (int j = 0; j < GRID_HEIGHT; j++) {
             boolean allRowsAreOccupied = true;
             boolean oneColor = true;
@@ -133,6 +141,7 @@ public class TetrisGrid {
             }
             if (allRowsAreOccupied) {
                 deleteRow(j);
+                countRows++;
                 clearGridRow(j);
                 downGridRow(j);
                 if (oneColor) {
@@ -144,6 +153,7 @@ public class TetrisGrid {
                 playSoundRowDeleted();
             }
         }
+        return countRows;
     }
 
     // usuwanie rzędu

@@ -12,4 +12,14 @@
         android:text="@string/game_settings"
         style="@style/TextViewStyle"/>
 
+    <TextView
+        android:id="@+id/choose_game_settings_sound"
+        android:text="@string/settng_sound"
+
+        style="@style/TextViewStyle"/>
+
+    <TextView
+        android:id="@+id/choose_game_settings_vibration"
+        android:text="@string/setting_vibrate"
+        style="@style/TextViewStyle"/>
 </LinearLayout>

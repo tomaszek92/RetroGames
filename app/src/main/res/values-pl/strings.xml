@@ -10,5 +10,8 @@
     <string name="score">WYNIK</string>
     <string name="best_score">NAJLEPSZY WYNIK</string>
     <string name="exit_string">Naciśnij jeszcze raz, aby wyjść</string>
+    <string name="action_settings">USTAWIENIA</string>
+    <string name="setting_vibrate">WIBRACJES</string>
+    <string name="settng_sound">DZWIEKI</string>
 
 </resources>

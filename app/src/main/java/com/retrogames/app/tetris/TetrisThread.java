@@ -2,19 +2,17 @@ package com.retrogames.app.tetris;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.view.SurfaceHolder;
-import android.view.View;
 
 import com.retrogames.app.ChooseGameActivity;
-import com.retrogames.app.R;
+import com.retrogames.app.ChooseGameSettingsFragment;
 
 import java.util.Random;
 import java.util.Timer;
@@ -25,6 +23,7 @@ import java.util.TimerTask;
  */
 public class TetrisThread extends Thread {
 
+    private TetrisActivity activity;
     private SurfaceHolder surfaceHolder;
     private TetrisSurfaceView view;
     private TetrisGrid tetrisGrid;
@@ -39,15 +38,17 @@ public class TetrisThread extends Thread {
     private int canvasWidth;
     private int canvasHeight;
 
+    private static int VIBRATOR_LENGTH = 100;
     private static int DOWN_SPPED = 500;
     private Timer timer;
 
-    public TetrisThread(SurfaceHolder surfaceHolder, TetrisSurfaceView view, Typeface typeface, String scoreString, Handler handler) {
+    public TetrisThread(SurfaceHolder surfaceHolder, TetrisSurfaceView view, Typeface typeface, String scoreString, Handler handler, TetrisActivity activity) {
         this.surfaceHolder = surfaceHolder;
         this.view = view;
         this.typeface = typeface;
         this.scoreString = scoreString;
         this.handler = handler;
+        this.activity = activity;
     }
 
     public void setRunning(boolean run) {
@@ -146,7 +147,8 @@ public class TetrisThread extends Thread {
         else {
             tetrisGrid.playSoundPutBlock();
             for (int k = 0; k < TetrisGrid.GRID_HEIGHT - 1; k++) {
-                tetrisGrid.checkGridAddPointsAndRemoveRows();
+                int lenght = tetrisGrid.checkGridAddPointsAndRemoveRows();
+                vibrate(lenght);
             }
             figure = new TetrisFigure(TetrisColors.randomColor(), TetrisShapes.randomShape(), new Random().nextInt(4) * 90);
             grids = figure.getGrid();
@@ -170,6 +172,13 @@ public class TetrisThread extends Thread {
                     run = false;
                 }
             }
+        }
+    }
+
+    private void vibrate(int lenght) {
+        if (ChooseGameSettingsFragment.VIBRATION) {
+            Vibrator vibrator = (Vibrator)activity.getSystemService(Context.VIBRATOR_SERVICE);
+            vibrator.vibrate(lenght * VIBRATOR_LENGTH);
         }
     }
 

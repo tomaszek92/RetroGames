@@ -13,22 +13,13 @@
         style="@style/TextViewStyle"/>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:singleLine="false"
+        style="@style/ButtonStyle"
         android:text="@string/start_game"
-        android:gravity="center"
-        android:background="@android:color/transparent"
-        android:id="@+id/choose_game_tanks_button_start"
-        android:focusable="false" />
+        android:id="@+id/choose_game_tanks_button_start"/>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/ButtonStyle"
         android:text="@string/best_score"
-        android:id="@+id/choose_game_tanks_button_best_score"
-        android:layout_gravity="center_horizontal"
-        android:background="@android:color/transparent" />
+        android:id="@+id/choose_game_tanks_button_best_score" />
 
 </LinearLayout>
