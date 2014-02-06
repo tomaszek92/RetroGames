@@ -82,13 +82,13 @@ public class TanksGrid {
     }
     public void addFigure(TanksFigure newFigure) {
         gameFigures.add(newFigure);
-        playSoundDie(); // del
+       // playSoundDie(); // del
         //moveFigureToStartPosition(newFigure);
         addFigureToGameGrid(newFigure);
     }
     private void addFigureToGameGrid(TanksFigure figure) {
         TanksSingleGrid[][] tetrisSingleGrids = figure.getGrid();
-        playSoundShoot();//del
+      //  playSoundShoot();//del
         for (int i = 0; i < tetrisSingleGrids.length; i++) {
             for (int j = 0; j < tetrisSingleGrids[i].length; j++) {
                 if (tetrisSingleGrids[i][j].getOccupied()) {
@@ -103,6 +103,120 @@ public class TanksGrid {
             gameFigures.get(i).drawFigure(canvas);
         }
     }
+    private static int xCoordinateToGrid(float x) {
+        if (x < MARGIN_LEFT + STROKE_WIDTH) {
+            x = MARGIN_LEFT + STROKE_WIDTH;
+        }
+        else if (x > MARGIN_RIGHT) {
+            x = MARGIN_RIGHT;
+        }
 
+        int positionInGrid = (int)((x - MARGIN_LEFT - STROKE_WIDTH) / TanksSingleGrid.SIZE);
+
+        return positionInGrid;
+    }
+
+    // zamiena współrzędnej y w pikselach na odpowiednią współrzędną w siatce
+    private static int yCoordinateToGrid(float y) {
+        if (y < MARGIN_TOP + STROKE_WIDTH) {
+            y = MARGIN_TOP + STROKE_WIDTH;
+        }
+        else if (y >  CANVAS_HEIGHT - MARGIN_BOTTOM - STROKE_WIDTH) {
+            y = CANVAS_HEIGHT - MARGIN_BOTTOM - TanksSingleGrid.SIZE;
+        }
+
+        int positionInGrid = (int)((y - MARGIN_TOP - STROKE_WIDTH) / TanksSingleGrid.SIZE);
+
+        return positionInGrid;
+    }
+
+    public boolean isNotOccupied(int x, int y) {
+        if (x >= GRID_WIDTH || y >= GRID_HEIGHT) {
+            return true;
+        }
+        if (this.gameGrid[x][y] == null) {
+            return true;
+        }
+        return !this.gameGrid[x][y].getOccupied();
+    }
+    public void moveTank(TanksFigure figure, float x, float y) {
+        if (x < MARGIN_LEFT + STROKE_WIDTH) {
+            x = MARGIN_LEFT + STROKE_WIDTH;
+        }
+        else if (x > MARGIN_RIGHT) {
+            x = MARGIN_RIGHT;
+        }
+
+        if (y < MARGIN_TOP + STROKE_WIDTH) {
+            y = MARGIN_TOP + STROKE_WIDTH;
+        }
+        else if (y >  CANVAS_HEIGHT - MARGIN_BOTTOM - STROKE_WIDTH) {
+            y = CANVAS_HEIGHT - MARGIN_BOTTOM - TanksSingleGrid.SIZE;
+        }
+
+        TanksSingleGrid[][] grids = figure.getGrid();
+        TanksSingleGrid[][] gridsClone = TanksSingleGrid.cloneArrayDim2(grids);
+
+        int exitL = 0;
+        // sprawdzanie czy jest puste pole
+        for (int i = 0; i < gridsClone.length; i++) {
+            for (int j = 0; j < gridsClone[i].length; j++) {
+                int xNew = xCoordinateToGrid(x + TanksSingleGrid.SIZE * j);
+                int yNew = yCoordinateToGrid(y + TanksSingleGrid.SIZE * i);
+                if (xNew >= GRID_WIDTH || yNew < 0 || yNew >= GRID_HEIGHT) {
+                    return;
+                }
+                if (xNew < 0 && exitL > xNew) {
+                    exitL = xNew;
+                }
+                if (this.isNotOccupied(xNew, yNew)) {
+                    gridsClone[i][j].setX(xNew);
+                    gridsClone[i][j].setY(yNew);
+                }
+                else {
+                    return;
+                }
+            }
+        }
+
+        if (exitL < 0) {
+            for (int i = 0; i < gridsClone.length; i++) {
+                for (int j = 0; j < gridsClone[i].length; j++) {
+                    gridsClone[i][j].setX(gridsClone[i][j].getX() - exitL);
+                }
+            }
+        }
+
+        // sprawdzanie, czy żadne klocki na siebie nie naszły
+        // poza dolną krawędź ekranu
+        int count = 0;
+        for (int i = 0; i < gridsClone.length; i++) {
+            for (int j = 0; j < gridsClone[i].length; j++) {
+                if (gridsClone[i][j].getY() == GRID_HEIGHT - 1) {
+                    return;
+                }
+            }
+        }
+
+        // przesuwanie klocka na nową pozycję
+        for (int i = 0; i < grids.length; i++) {
+            for (int j = 0; j < grids[i].length; j++) {
+                grids[i][j].setX(gridsClone[i][j].getX());
+                grids[i][j].setY(gridsClone[i][j].getY());
+                grids[i][j].setNewRectByXY();
+            }
+        }
+        this.refreshGrid();
+    }
+    public void refreshGrid() {
+        for (int i = 0; i < gameGrid.length; i++) {
+            for (int j = 0; j < gameGrid[i].length; j++) {
+                gameGrid[i][j] = null;
+            }
+        }
+        for (TanksFigure figure : this.gameFigures) {
+            addFigureToGameGrid(figure);
+        }
+    }
 
 }

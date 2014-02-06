@@ -89,7 +89,7 @@ public class TanksSurfaceView extends SurfaceView implements SurfaceHolder.Callb
             mX = x;
             mY = y;
         }
-        //thread.moveFigure(mX, mY);
+        thread.moveTank(mX, mY);
     }
     int clickCounts = 0;
     long startTime;

@@ -71,14 +71,49 @@ public class TanksThread extends Thread {
             TanksGrid.MARGIN_TOP = canvasHeight - 2 * TanksGrid.STROKE_WIDTH - TanksGrid.MARGIN_BOTTOM - TanksGrid.GRID_HEIGHT * TanksSingleGrid.SIZE;
             TanksGrid.MARGIN_RIGHT = 2 * TanksGrid.STROKE_WIDTH + TanksGrid.MARGIN_LEFT + TanksGrid.GRID_WIDTH * TanksSingleGrid.SIZE;
 
-            figure = new TanksFigure( TanksShapes.YOU, new Random().nextInt(4) * 90);
-            tanksGrid.addFigure(figure);
+
 
             figure = new TanksFigure( TanksShapes.ENEMY, new Random().nextInt(4) * 90);
             tanksGrid.addFigure(figure);
 
             figure = new TanksFigure( TanksShapes.BULLET, new Random().nextInt(4) * 90);
             tanksGrid.addFigure(figure);
+            figure = new TanksFigure( TanksShapes.ENEMY, new Random().nextInt(4) * 90);
+            tanksGrid.addFigure(figure);
+            figure = new TanksFigure( TanksShapes.ENEMY, new Random().nextInt(4) * 90);
+            tanksGrid.addFigure(figure);
+            figure = new TanksFigure( TanksShapes.ENEMY, new Random().nextInt(4) * 90);
+            tanksGrid.addFigure(figure);
+            figure = new TanksFigure( TanksShapes.ENEMY, new Random().nextInt(4) * 90);
+            tanksGrid.addFigure(figure);
+            figure = new TanksFigure( TanksShapes.ENEMY, new Random().nextInt(4) * 90);
+            tanksGrid.addFigure(figure);
+            figure = new TanksFigure( TanksShapes.ENEMY, new Random().nextInt(4) * 90);
+            tanksGrid.addFigure(figure);
+            figure = new TanksFigure( TanksShapes.ENEMY, new Random().nextInt(4) * 90);
+            tanksGrid.addFigure(figure);
+            figure = new TanksFigure( TanksShapes.ENEMY, new Random().nextInt(4) * 90);
+            tanksGrid.addFigure(figure);
+            figure = new TanksFigure( TanksShapes.ENEMY, new Random().nextInt(4) * 90);
+            tanksGrid.addFigure(figure);
+
+            figure = new TanksFigure( TanksShapes.ENEMY, new Random().nextInt(4) * 90);
+            tanksGrid.addFigure(figure);
+            figure = new TanksFigure( TanksShapes.ENEMY, new Random().nextInt(4) * 90);
+            tanksGrid.addFigure(figure);
+            figure = new TanksFigure( TanksShapes.ENEMY, new Random().nextInt(4) * 90);
+            tanksGrid.addFigure(figure);
+            figure = new TanksFigure( TanksShapes.ENEMY, new Random().nextInt(4) * 90);
+            tanksGrid.addFigure(figure);
+            figure = new TanksFigure( TanksShapes.ENEMY, new Random().nextInt(4) * 90);
+            tanksGrid.addFigure(figure);
+            figure = new TanksFigure( TanksShapes.ENEMY, new Random().nextInt(4) * 90);
+            tanksGrid.addFigure(figure);
+
+            figure = new TanksFigure( TanksShapes.YOU, new Random().nextInt(4) * 90);
+            tanksGrid.addFigure(figure);
+
+
 
             timer = new Timer();
             //startTimer();
@@ -109,6 +144,10 @@ public class TanksThread extends Thread {
             drawScore();
             tanksGrid.drawAllFigures(canvas);
         }
+    }
+
+    public void moveTank(float x, float y) {
+        tanksGrid.moveTank(figure, x, y);
     }
     private void drawScore() {
         Paint paint = new Paint();
