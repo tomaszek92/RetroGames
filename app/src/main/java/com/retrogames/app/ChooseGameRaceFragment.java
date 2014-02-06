@@ -1,12 +1,16 @@
 package com.retrogames.app;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+
+import com.retrogames.app.race.RaceActivity;
 
 /**
  * Created by Tomasz on 30.12.13.
@@ -26,6 +30,30 @@ public class ChooseGameRaceFragment extends Fragment {
         TextView textView = (TextView) view.findViewById(R.id.choose_game_race_texView);
         Typeface font = Typeface.createFromAsset(getActivity().getAssets(), ChooseGameActivity.FONT);
         textView.setTypeface(font);
+
+        Button buttonStart = (Button)view.findViewById(R.id.choose_game_race_button_start);
+        buttonStart.setTypeface(font);
+        buttonStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), RaceActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(intent);
+            }
+        });
+
+        Button buttonBestScore  = (Button)view.findViewById(R.id.choose_game_race_button_best_score);
+        buttonBestScore.setTypeface(font);
+        buttonBestScore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), BestScoreActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                intent.putExtra(ChooseGameActivity.INDEX_GAME_STRING, ChooseGameActivity.INDEX_RACE);
+                startActivity(intent);
+            }
+        });
+
         return view;
     }
 }

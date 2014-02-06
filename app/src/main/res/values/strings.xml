@@ -10,6 +10,7 @@
     <string name="score">SCORE</string>
     <string name="best_score">BEST SCORE</string>
     <string name="exit_string">Press one more to quit</string>
+    <string name="return_to_main_menu">Press one more to return to menu</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_tanks_thread">TanksThread</string>
     <string name="setting_vibrate">VIBRATIONS</string>

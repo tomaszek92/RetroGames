@@ -29,6 +29,9 @@
             android:name="com.retrogames.app.tanks.TanksActivity"
             android:screenOrientation="portrait">
         </activity>
+        <activity
+            android:name=".race.RaceActivity"
+            android:screenOrientation="portrait"/>
     </application>
     
     <uses-permission android:name="android.permission.VIBRATE"/>
