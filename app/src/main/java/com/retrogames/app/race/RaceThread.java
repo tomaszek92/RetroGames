@@ -106,7 +106,15 @@ public class RaceThread extends Thread {
     }
 
     private void goOneToDown() {
-
+        if (raceGrid.getNextCar() == 10) {
+            raceGrid.addEnemyCar();
+            raceGrid.setNextCar(0);
+        }
+        else {
+            raceGrid.setNextCar(raceGrid.getNextCar() + 1);
+        }
+        raceGrid.goOneDown(car);
+        raceGrid.draw(canvas);
     }
 
     private void drawAll() {
@@ -157,17 +165,19 @@ public class RaceThread extends Thread {
     }
 
     public void moveCar(float x, float y) {
-        int newPosition;
+        RacePosition newPosition;
         if (x >= 0 && x < canvasWidth / 3) {
-            newPosition = 0;
+            newPosition = RacePosition.LEFT;
         }
         else if (x > canvasWidth / 3 && x < canvasWidth / 3 * 2) {
-            newPosition = 1;
+            newPosition = RacePosition.CENTER;
         }
         else {
-            newPosition = 2;
+            newPosition = RacePosition.RIGHT;
         }
-        car.setPosition(newPosition);
+        raceGrid.move(newPosition, car);
     }
+
+
 
 }

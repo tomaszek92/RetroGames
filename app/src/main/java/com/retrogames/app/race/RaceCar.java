@@ -12,25 +12,38 @@ public class RaceCar {
     //   X
     // X X X
     private RaceSingleGrid[][] grid;
+    public RaceSingleGrid[][] getGrid() {
+        return this.grid;
+    }
+    public void setGrid(RaceSingleGrid[][] grid) {
+        this.grid = grid;
+    }
 
-    // 0 - left
-    // 1 - center
-    // 2 - right
-    private int position = 1;
-    public int getPosition() {
+    private RacePosition position = RacePosition.CENTER;
+    public RacePosition getPosition() {
         return this.position;
     }
-    public void setPosition(int position) {
+    public void setPosition(RacePosition position) {
         this.position = position;
-        setXs(position);
+        setXs(position.toInt());
         setRects();
     }
+
+
 
     public RaceCar() {
         createGrid();
         setOccupieds();
-        setXs(1);
-        setYs();
+        setXs(RacePosition.CENTER.toInt());
+        setYs(10);
+        setRects();
+    }
+
+    public RaceCar(RacePosition position, int upY) {
+        createGrid();
+        setOccupieds();
+        setXs(position.toInt());
+        setYs(upY);
         setRects();
     }
 
@@ -42,19 +55,19 @@ public class RaceCar {
         }
     }
 
-    private void setYs() {
-        grid[0][0].setY(10);
-        grid[0][1].setY(10);
-        grid[0][2].setY(10);
-        grid[1][0].setY(11);
-        grid[1][1].setY(11);
-        grid[1][2].setY(11);
-        grid[2][0].setY(12);
-        grid[2][1].setY(12);
-        grid[2][2].setY(12);
-        grid[3][0].setY(13);
-        grid[3][1].setY(13);
-        grid[3][2].setY(13);
+    private void setYs(int pos) {
+        grid[0][0].setY(pos);
+        grid[0][1].setY(pos);
+        grid[0][2].setY(pos);
+        grid[1][0].setY(pos + 1);
+        grid[1][1].setY(pos + 1);
+        grid[1][2].setY(pos + 1);
+        grid[2][0].setY(pos + 2);
+        grid[2][1].setY(pos + 2);
+        grid[2][2].setY(pos + 2);
+        grid[3][0].setY(pos + 3);
+        grid[3][1].setY(pos + 3);
+        grid[3][2].setY(pos + 3);
     }
 
     private void setXs(int k) {

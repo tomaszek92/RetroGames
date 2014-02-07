@@ -74,4 +74,23 @@ public class RaceSingleGrid {
         this.rect.top = this.rect.top + RaceGrid.MARGIN_TOP + RaceGrid.STROKE_WIDTH;
         this.rect.bottom = this.rect.bottom + RaceGrid.MARGIN_TOP + RaceGrid.STROKE_WIDTH;
     }
+
+    public static RaceSingleGrid[][] deleteLastRow(RaceSingleGrid[][] grid) {
+        RaceSingleGrid[][] returnGrid = new RaceSingleGrid[grid.length - 1][3];
+        for (int i = 0; i < grid.length - 1; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                returnGrid[i][j] = copy(grid[i][j]);
+            }
+        }
+        return returnGrid;
+    }
+
+    private static RaceSingleGrid copy(RaceSingleGrid copied) {
+        RaceSingleGrid singleGrid = new RaceSingleGrid();
+        singleGrid.setY(copied.getY());
+        singleGrid.setX(copied.getX());
+        singleGrid.setRect(copied.getRect());
+        singleGrid.setOccupied(copied.getOccupied());
+        return singleGrid;
+    }
 }
