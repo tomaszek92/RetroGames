@@ -1,8 +1,11 @@
 package com.retrogames.app;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -87,6 +90,8 @@ public class ChooseGameActivity extends FragmentActivity {
         BEST_SCORE_RACE = sharedPreferences.getInt(BEST_SCORE_RACE_STRING, 0);
         BEST_SCORE_TANKS = sharedPreferences.getInt(BEST_SCORE_TANKS_STRING, 0);
         BEST_SCORE_TETRIS = sharedPreferences.getInt(BEST_SCORE_TETRIS_STRING, 0);
+        ChooseGameSettingsFragment.SOUND = sharedPreferences.getBoolean(ChooseGameSettingsFragment.SOUND_STRING, true);
+        ChooseGameSettingsFragment.VIBRATION = sharedPreferences.getBoolean(ChooseGameSettingsFragment.VIBRATION_STRING, true);
     }
 
     public static class MyAdapter extends FragmentPagerAdapter {

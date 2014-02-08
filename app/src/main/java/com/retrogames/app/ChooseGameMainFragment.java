@@ -1,6 +1,7 @@
 package com.retrogames.app;
 
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -27,6 +28,10 @@ public class ChooseGameMainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // ustawianie widoku
         View view = inflater.inflate(R.layout.choose_game_main, container, false);
+
+        if (ChooseGameSettingsFragment.SOUND) {
+            MediaPlayer.create(view.getContext(), R.raw.all_next_game).start();
+        }
 
         // ustawianie czcionki
         TextView textView = (TextView) view.findViewById(R.id.choose_game_main_texView);

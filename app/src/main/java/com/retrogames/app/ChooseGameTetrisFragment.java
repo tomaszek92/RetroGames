@@ -2,6 +2,7 @@ package com.retrogames.app;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -26,6 +27,10 @@ public class ChooseGameTetrisFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.choose_game_tetris, container, false);
+
+        if (ChooseGameSettingsFragment.SOUND) {
+            MediaPlayer.create(view.getContext(), R.raw.all_next_game).start();
+        }
 
         // ustawianie czcionki
         Typeface font = Typeface.createFromAsset(getActivity().getAssets(), ChooseGameActivity.FONT);

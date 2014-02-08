@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -18,8 +19,8 @@ import android.widget.TextView;
  */
 public class ChooseGameSettingsFragment extends Fragment {
 
-    private static String SOUND_STRING = "SOUND";
-    private static String VIBRATION_STRING = "VIBRATION";
+    public static String SOUND_STRING = "SOUND";
+    public static String VIBRATION_STRING = "VIBRATION";
 
     public static boolean SOUND = true;
     public static boolean VIBRATION = true;
@@ -33,9 +34,13 @@ public class ChooseGameSettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.choose_game_settings, container, false);
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
-        SOUND = sharedPreferences.getBoolean(SOUND_STRING, true);
-        VIBRATION = sharedPreferences.getBoolean(VIBRATION_STRING, true);
+        if (ChooseGameSettingsFragment.SOUND) {
+            MediaPlayer.create(view.getContext(), R.raw.all_next_game).start();
+        }
+
+        //SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+        //SOUND = sharedPreferences.getBoolean(SOUND_STRING, true);
+        //VIBRATION = sharedPreferences.getBoolean(VIBRATION_STRING, true);
 
         // ustawianie czcionki
         TextView textView = (TextView) view.findViewById(R.id.choose_game_settings_texView);

@@ -2,7 +2,11 @@ package com.retrogames.app.race;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.util.Log;
+
+import com.retrogames.app.ChooseGameSettingsFragment;
+import com.retrogames.app.R;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -57,11 +61,21 @@ public class RaceGrid {
         return this.movesToNextCar;
     }
 
-    public RaceGrid(int canvasHeight, int canvasWidth) {
+    private MediaPlayer mp_race_explosion;
+
+    public RaceGrid(RaceSurfaceView view, int canvasHeight, int canvasWidth) {
         CANVAS_HEIGHT = canvasHeight;
         CANVAS_WIDTH = canvasWidth;
         this.grids = new RaceSingleGrid[GRID_WIDTH][GRID_HEIGHT];
         this.movesToNextCar = 9;
+
+        this.mp_race_explosion = MediaPlayer.create(view.getContext(), R.raw.race_explosion);
+    }
+
+    public void playSoundExsplosion() {
+        if (ChooseGameSettingsFragment.SOUND) {
+            mp_race_explosion.start();
+        }
     }
 
     public void draw(Canvas canvas) {

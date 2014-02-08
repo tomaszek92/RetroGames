@@ -1,15 +1,18 @@
 package com.retrogames.app.race;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.view.SurfaceHolder;
 
 import com.retrogames.app.ChooseGameActivity;
+import com.retrogames.app.ChooseGameSettingsFragment;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -83,7 +86,7 @@ public class RaceThread extends Thread {
             canvasWidth = width;
             canvasHeight = height;
 
-            raceGrid = new RaceGrid(canvasHeight, canvasWidth);
+            raceGrid = new RaceGrid(view, canvasHeight, canvasWidth);
             RaceGrid.setPointsScore(0);
 
             int size = (int)((canvasWidth - 2 * RaceGrid.MARGIN_LEFT - RaceGrid.STROKE_WIDTH * 2) / RaceGrid.GRID_WIDTH);
@@ -189,7 +192,9 @@ public class RaceThread extends Thread {
 
     public static int timerCounter = 0;
     private void endGame() {
+        raceGrid.playSoundExsplosion();
         Timer endTimer = new Timer();
+        vibrate(VIBRATOR_LENGTH);
         endTimer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -212,6 +217,13 @@ public class RaceThread extends Thread {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putInt(ChooseGameActivity.BEST_SCORE_RACE_STRING, ChooseGameActivity.BEST_SCORE_RACE);
             editor.commit();
+        }
+    }
+
+    private void vibrate(int lenght) {
+        if (ChooseGameSettingsFragment.VIBRATION) {
+            Vibrator vibrator = (Vibrator)activity.getSystemService(Context.VIBRATOR_SERVICE);
+            vibrator.vibrate(lenght);
         }
     }
 }
