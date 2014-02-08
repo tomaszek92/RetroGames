@@ -113,9 +113,7 @@ public class RaceThread extends Thread {
             raceGrid.setMovesToNextCar(raceGrid.getMovesToNextCar() + 1);
         }
         if (raceGrid.goOneDown(car)) {
-            //TODO przekazanie, że koniec gry
-            handler.sendMessage(Message.obtain());
-            run = false;
+            endGame();
         }
         raceGrid.draw(canvas);
     }
@@ -167,6 +165,7 @@ public class RaceThread extends Thread {
                 paint);
     }
 
+    private boolean canMoveCar = true;
     public void moveCar(float x, float y) {
         RacePosition newPosition;
         if (x >= 0 && x < canvasWidth / 3) {
@@ -178,13 +177,25 @@ public class RaceThread extends Thread {
         else {
             newPosition = RacePosition.RIGHT;
         }
-        if (raceGrid.move(newPosition, car)) {
-            //TODO przekazanie, że koniec gry
-            //handler.sendMessage(Message.obtain());
-            //run = false;
+        if (canMoveCar && raceGrid.move(newPosition, car)) {
+            endGame();
         }
     }
 
-
-
+    public static int timerCounter = 0;
+    private void endGame() {
+        Timer endTimer = new Timer();
+        endTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                canMoveCar = false;
+                raceGrid.animateCrash(car);
+                RaceThread.timerCounter++;
+                if (RaceThread.timerCounter == 10) {
+                    handler.sendMessage(Message.obtain());
+                    run = false;
+                }
+            }
+        }, 200, 200);
+    }
 }

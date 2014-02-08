@@ -6,6 +6,7 @@ import android.util.Log;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Tomasz on 06.02.14.
@@ -117,6 +118,9 @@ public class RaceGrid {
 
     // zwaraca true jeśli jest zderzenie, false jeśi nie ma zderzenia
     public boolean move(RacePosition newPosition, RaceCar car) {
+        if (newPosition == car.getPosition()) {
+            return false;
+        }
         RaceSingleGrid[][] carGrid = car.getGrid();
         for (int i = 0; i < carGrid.length; i++) {
             for (int j = 0; j < carGrid[i].length; j++) {
@@ -129,6 +133,8 @@ public class RaceGrid {
             return false;
         }
         else {
+            car.setPosition(newPosition);
+            refreshGrid();
             Log.i("Wypadek", "move");
             return true;
         }
@@ -180,6 +186,7 @@ public class RaceGrid {
                         if (gridCar[k][j].getY() == GRID_HEIGHT) {
                             if (gridCar.length == 1) {
                                 removeCar(cars.get(i));
+                                pointsScore += pointsToAdd;
                                 deletedRow = true;
                                 break;
                             }
@@ -200,7 +207,16 @@ public class RaceGrid {
 
     public void addEnemyCar() {
         RaceCar newCar = new RaceCar(RacePosition.randomPosition(), -3);
-        //cars.add(newCar);
         addCar(newCar);
+    }
+
+    public void animateCrash(RaceCar car) {
+        RaceSingleGrid[][] carGrid = car.getGrid();
+        Random rand = new Random();
+        for (int i = 0; i < carGrid.length; i++) {
+            for (int j = 0; j < carGrid[i].length; j++) {
+                carGrid[i][j].setOccupied(rand.nextBoolean());
+            }
+        }
     }
 }
