@@ -14,5 +14,6 @@
     <string name="action_settings">USTAWIENIA</string>
     <string name="setting_vibrate">WIBRACJE</string>
     <string name="settng_sound">DZWIEKI</string>
+    <string name="level">POZIOM</string>
 
 </resources>

@@ -44,6 +44,9 @@ public class RaceGrid {
     public static int CANVAS_HEIGHT;
     public static int CANVAS_WIDTH;
 
+    public static int LEVEL = 1;
+    public static int LEVEL_MAX = 10;
+    public static int DOWN_SPEED_CHANGE = 40;
     public static int DOWN_SPEED = 500;
 
     private int movesToNextCar;

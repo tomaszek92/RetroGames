@@ -2,17 +2,22 @@ package com.retrogames.app.race;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import com.retrogames.app.ChooseGameActivity;
 import com.retrogames.app.R;
+import com.retrogames.app.tetris.TetrisGrid;
 
 import java.util.Timer;
 
 /**
  * Created by Tomasz on 06.02.14.
  */
+
+//TODO dodać dźwięki i wibracje
 public class RaceActivity extends Activity {
     RaceSurfaceView view;
 
@@ -71,7 +76,13 @@ public class RaceActivity extends Activity {
         else if (countBackPressed == 1) {
             long duration = System.currentTimeMillis() - startTime;
             if (duration < ONE_SECOND) {
-                //TODO zapisywanie nowego rekordu
+                if (ChooseGameActivity.BEST_SCORE_RACE < RaceGrid.getPointsScore()) {
+                    ChooseGameActivity.BEST_SCORE_RACE = RaceGrid.getPointsScore();
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putInt(ChooseGameActivity.BEST_SCORE_RACE_STRING, ChooseGameActivity.BEST_SCORE_RACE);
+                    editor.commit();
+                }
                 Intent intent = new Intent(this, ChooseGameActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
@@ -81,5 +92,4 @@ public class RaceActivity extends Activity {
             }
         }
     }
-
 }

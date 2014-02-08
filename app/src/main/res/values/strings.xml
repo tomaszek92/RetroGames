@@ -15,5 +15,6 @@
     <string name="title_activity_tanks_thread">TanksThread</string>
     <string name="setting_vibrate">VIBRATIONS</string>
     <string name="settng_sound">SOUNDS</string>
+    <string name="level">LEVEL</string>
 
 </resources>

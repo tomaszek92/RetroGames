@@ -1,11 +1,15 @@
 package com.retrogames.app.race;
 
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.view.SurfaceHolder;
+
+import com.retrogames.app.ChooseGameActivity;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -101,7 +105,8 @@ public class RaceThread extends Thread {
             public void run() {
                 goOneToDown();
             }
-        }, RaceGrid.DOWN_SPEED, RaceGrid.DOWN_SPEED);
+        }, RaceGrid.DOWN_SPEED - RaceGrid.DOWN_SPEED_CHANGE *  RaceGrid.LEVEL,
+                RaceGrid.DOWN_SPEED - RaceGrid.DOWN_SPEED_CHANGE *  RaceGrid.LEVEL);
     }
 
     private void goOneToDown() {
@@ -192,10 +197,21 @@ public class RaceThread extends Thread {
                 raceGrid.animateCrash(car);
                 RaceThread.timerCounter++;
                 if (RaceThread.timerCounter == 10) {
+                    checkAndSaveBestScore();
                     handler.sendMessage(Message.obtain());
                     run = false;
                 }
             }
         }, 200, 200);
+    }
+
+    public void checkAndSaveBestScore() {
+        if (ChooseGameActivity.BEST_SCORE_RACE < RaceGrid.getPointsScore()) {
+            ChooseGameActivity.BEST_SCORE_RACE = RaceGrid.getPointsScore();
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(view.getContext());
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt(ChooseGameActivity.BEST_SCORE_RACE_STRING, ChooseGameActivity.BEST_SCORE_RACE);
+            editor.commit();
+        }
     }
 }

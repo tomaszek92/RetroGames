@@ -22,4 +22,9 @@
         android:text="@string/best_score"
         style="@style/ButtonStyle"/>
 
+    <Button
+        style="@style/ButtonStyle"
+        android:text="@string/level"
+        android:id="@+id/choose_game_race_button_level"/>
+
 </LinearLayout>

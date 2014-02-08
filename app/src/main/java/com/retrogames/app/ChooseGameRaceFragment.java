@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.retrogames.app.race.RaceActivity;
+import com.retrogames.app.race.RaceGrid;
 
 /**
  * Created by Tomasz on 30.12.13.
@@ -51,6 +52,21 @@ public class ChooseGameRaceFragment extends Fragment {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 intent.putExtra(ChooseGameActivity.INDEX_GAME_STRING, ChooseGameActivity.INDEX_RACE);
                 startActivity(intent);
+            }
+        });
+
+        Button buttonLevel = (Button)view.findViewById(R.id.choose_game_race_button_level);
+        buttonLevel.setTypeface(font);
+        buttonLevel.setText(getString(R.string.level) + " " + RaceGrid.LEVEL);
+        buttonLevel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                RaceGrid.LEVEL++;
+                if (RaceGrid.LEVEL > RaceGrid.LEVEL_MAX) {
+                    RaceGrid.LEVEL = 1;
+                }
+                Button buttonLevel = (Button)view.findViewById(R.id.choose_game_race_button_level);
+                buttonLevel.setText(getString(R.string.level) + " " + RaceGrid.LEVEL);
             }
         });
 
