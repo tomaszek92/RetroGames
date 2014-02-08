@@ -11,7 +11,7 @@ import android.graphics.Rect;
 public class RaceSingleGrid {
 
     // czy pole jest zajmowane
-    private boolean occupied;
+    public boolean occupied;
     public void setOccupied(boolean occupied) {
         this.occupied = occupied;
     }

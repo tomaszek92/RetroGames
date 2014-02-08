@@ -43,19 +43,21 @@ public class RaceGrid {
     public static int CANVAS_HEIGHT;
     public static int CANVAS_WIDTH;
 
-    private int nextCar;
-    public void setNextCar(int nextCar) {
-        this.nextCar = nextCar;
+    public static int DOWN_SPEED = 500;
+
+    private int movesToNextCar;
+    public void setMovesToNextCar(int movesToNextCar) {
+        this.movesToNextCar = movesToNextCar;
     }
-    public int getNextCar() {
-        return this.nextCar;
+    public int getMovesToNextCar() {
+        return this.movesToNextCar;
     }
 
     public RaceGrid(int canvasHeight, int canvasWidth) {
         CANVAS_HEIGHT = canvasHeight;
         CANVAS_WIDTH = canvasWidth;
         this.grids = new RaceSingleGrid[GRID_WIDTH][GRID_HEIGHT];
-        this.nextCar = 9;
+        this.movesToNextCar = 9;
     }
 
     public void draw(Canvas canvas) {
@@ -69,7 +71,12 @@ public class RaceGrid {
         RaceSingleGrid[][] grid = car.getGrid();
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
-                grids[grid[i][j].getX()][grid[i][j].getY()] = grid[i][j];
+                if (grid[i][j].getY() >= 0
+                        && grid[i][j].getY() < GRID_HEIGHT
+                        && grid[i][j].getX() >= 0
+                        && grid[i][j].getX() < GRID_WIDTH ) {
+                    grids[grid[i][j].getX()][grid[i][j].getY()] = grid[i][j];
+                }
             }
         }
     }
@@ -86,16 +93,6 @@ public class RaceGrid {
         pointsScore = score;
     }
 
-    public boolean isNotOccupied(int x, int y) {
-        if (x >= GRID_WIDTH || y >= GRID_HEIGHT) {
-            return true;
-        }
-        if (this.grids[x][y] == null) {
-            return true;
-        }
-        return !this.grids[x][y].getOccupied();
-    }
-
     private void refreshGrid() {
         for (int i = 0; i < grids.length; i++) {
             for (int j = 0; j < grids[i].length; j++) {
@@ -107,39 +104,69 @@ public class RaceGrid {
             RaceSingleGrid[][] gridCar = cars.get(i).getGrid();
             for (int k = 0; k < gridCar.length; k++) {
                 for (int j = 0; j < gridCar[k].length; j++) {
+                    if (gridCar[k][j].getY() >= 0
+                            && gridCar[k][j].getY() < GRID_HEIGHT
+                            && gridCar[k][j].getX() >= 0
+                            && gridCar[k][j].getX() < GRID_WIDTH ) {
                     grids[gridCar[k][j].getX()][gridCar[k][j].getY()] = gridCar[k][j];
+                    }
                 }
             }
         }
     }
 
-    public void move(RacePosition newPosition, RaceCar car) {
+    // zwaraca true jeśli jest zderzenie, false jeśi nie ma zderzenia
+    public boolean move(RacePosition newPosition, RaceCar car) {
+        RaceSingleGrid[][] carGrid = car.getGrid();
+        for (int i = 0; i < carGrid.length; i++) {
+            for (int j = 0; j < carGrid[i].length; j++) {
+                carGrid[i][j].setX(newPosition.toInt() * 3 + j);
+            }
+        }
         if (!carCrashed(newPosition, car)) {
             car.setPosition(newPosition);
             refreshGrid();
+            return false;
         }
         else {
-            //TODO koniec gry
-            Log.i("END GAME", "END GAME");
+            Log.i("Wypadek", "move");
+            return true;
         }
     }
 
     private boolean carCrashed(RacePosition newRacePosition, RaceCar car) {
         RaceSingleGrid[][] grid1 = car.getGrid();
         for (int i = 0; i < 4; i++) {
-            if (!isNotOccupied(newRacePosition.toInt() * 3 + 1 , grid1[i][1].getY())) {
+            if (isOccupied(newRacePosition.toInt() * 3 + 1 , grid1[i][1].getY())) {
                 return true;
             }
         }
         return false;
     }
 
-    public void goOneDown(RaceCar car) {
+    private boolean isOccupied(int x, int y) {
+        if (x < 0 || x >= GRID_WIDTH || y < 0 || y >= GRID_HEIGHT) {
+            return false;
+        }
+        if (grids[x][y] == null) {
+            return false;
+        }
+        return grids[x][y].getOccupied();
+    }
+
+    // zwaraca true jeśli jest zderzenie, false jeśi nie ma zderzenia
+    public boolean goOneDown(RaceCar car) {
         // przez wszystkie samochody
         for (int i = 0; i < cars.size(); i++) {
             // tylko nie przez sterowany przez gracz
             if (cars.get(i) != car) {
                 RaceSingleGrid[][] gridCar = cars.get(i).getGrid();
+
+                // sprawdzanie ostatniego rzędu, czy nie ma wypadku
+                if (isOccupied(gridCar[gridCar.length - 1][1].getX(), gridCar[gridCar.length - 1][1].getY() + 1)) {
+                    Log.i("WYPADEK", "goOneDown");
+                    return true;
+                }
 
                 // przechodzimy przez całą siatkę
                 boolean deletedRow = false;
@@ -149,7 +176,7 @@ public class RaceGrid {
                         gridCar[k][j].setY(gridCar[k][j].getY() + 1);
                         gridCar[k][j].setNewRectByXY();
 
-                        // jeśli siatka samochodu wychodzi poza ekran gry
+                        // jeśli siatka samochodu wychodzi poza ekran gry z dołu
                         if (gridCar[k][j].getY() == GRID_HEIGHT) {
                             if (gridCar.length == 1) {
                                 removeCar(cars.get(i));
@@ -168,10 +195,12 @@ public class RaceGrid {
             }
         }
         refreshGrid();
+        return false;
     }
 
     public void addEnemyCar() {
-        RaceCar newCar = new RaceCar(RacePosition.randomPosition(), 0);
-        cars.add(newCar);
+        RaceCar newCar = new RaceCar(RacePosition.randomPosition(), -3);
+        //cars.add(newCar);
+        addCar(newCar);
     }
 }

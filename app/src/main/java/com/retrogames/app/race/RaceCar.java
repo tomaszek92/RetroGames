@@ -29,8 +29,6 @@ public class RaceCar {
         setRects();
     }
 
-
-
     public RaceCar() {
         createGrid();
         setOccupieds();
@@ -118,10 +116,21 @@ public class RaceCar {
 
     public void drawCar(Canvas canvas) {
         for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[i].length; j++) {
-                if (!grid[i][j].isNotOccupied()) {
-                    grid[i][j].drawSingleGrid(canvas);
+            try {
+                for (int j = 0; j < grid[i].length; j++) {
+                    if (!grid[i][j].isNotOccupied()) {
+                        if (grid[i][j].getY() >= 0
+                                && grid[i][j].getY() < RaceGrid.GRID_HEIGHT
+                                && grid[i][j].getX() >= 0
+                                && grid[i][j].getX() < RaceGrid.GRID_WIDTH ) {
+                            grid[i][j].drawSingleGrid(canvas);
+                        }
+                    }
                 }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                return;
             }
         }
     }

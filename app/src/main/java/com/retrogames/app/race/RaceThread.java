@@ -4,9 +4,9 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Handler;
+import android.os.Message;
 import android.view.SurfaceHolder;
 
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -31,7 +31,6 @@ public class RaceThread extends Thread {
     private int canvasHeight;
 
     private static int VIBRATOR_LENGTH = 100;
-    private static int DOWN_SPPED = 500;
     private Timer timer;
 
     public RaceThread(SurfaceHolder surfaceHolder,
@@ -102,18 +101,22 @@ public class RaceThread extends Thread {
             public void run() {
                 goOneToDown();
             }
-        }, DOWN_SPPED, DOWN_SPPED);
+        }, RaceGrid.DOWN_SPEED, RaceGrid.DOWN_SPEED);
     }
 
     private void goOneToDown() {
-        if (raceGrid.getNextCar() == 10) {
+        if (raceGrid.getMovesToNextCar() == 10) {
             raceGrid.addEnemyCar();
-            raceGrid.setNextCar(0);
+            raceGrid.setMovesToNextCar(0);
         }
         else {
-            raceGrid.setNextCar(raceGrid.getNextCar() + 1);
+            raceGrid.setMovesToNextCar(raceGrid.getMovesToNextCar() + 1);
         }
-        raceGrid.goOneDown(car);
+        if (raceGrid.goOneDown(car)) {
+            //TODO przekazanie, że koniec gry
+            handler.sendMessage(Message.obtain());
+            run = false;
+        }
         raceGrid.draw(canvas);
     }
 
@@ -175,7 +178,11 @@ public class RaceThread extends Thread {
         else {
             newPosition = RacePosition.RIGHT;
         }
-        raceGrid.move(newPosition, car);
+        if (raceGrid.move(newPosition, car)) {
+            //TODO przekazanie, że koniec gry
+            //handler.sendMessage(Message.obtain());
+            //run = false;
+        }
     }
 
 
