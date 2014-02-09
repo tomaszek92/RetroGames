@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.support.v7.appcompat.R;
 import android.view.SurfaceHolder;
 
 import com.retrogames.app.ChooseGameActivity;
@@ -52,6 +53,8 @@ public class RaceThread extends Thread {
         this.scoreString = scoreString;
         this.handler = handler;
         this.activity = activity;
+
+        endTimer = null;
     }
 
     public void setRunning(boolean run) {
@@ -190,10 +193,17 @@ public class RaceThread extends Thread {
         }
     }
 
+    public void stopEndTimer() {
+        if (endTimer != null) {
+            endTimer.cancel();
+        }
+    }
+
+    private Timer endTimer;
     public static int timerCounter = 0;
     private void endGame() {
         raceGrid.playSoundExsplosion();
-        Timer endTimer = new Timer();
+        endTimer = new Timer();
         vibrate(VIBRATOR_LENGTH);
         endTimer.schedule(new TimerTask() {
             @Override

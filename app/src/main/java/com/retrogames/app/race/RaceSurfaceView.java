@@ -66,6 +66,7 @@ public class RaceSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
+        thread.stopEndTimer();
         boolean retry = true;
         thread.setRunning(false);
         while (retry) {
