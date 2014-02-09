@@ -48,7 +48,7 @@ public class RaceSingleGrid {
     // parametry do rysowania klocka
     private static final int MARGIN = 5;
     private static final int COLOR_MARGIN = Color.BLACK;
-    private static final int COLOR_SINGLE_GRID = Color.rgb(51,102,77);
+    private static final int COLOR_SINGLE_GRID = Color.WHITE; // Color.rgb(51,102,77);
     public static int SIZE = 30;
 
     // rysowanie pojedyńczego klocka

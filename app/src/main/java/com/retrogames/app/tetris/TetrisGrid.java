@@ -115,7 +115,7 @@ public class TetrisGrid {
         TetrisSingleGrid[][] tetrisSingleGrids = figure.getGrid();
         for (int i = 0; i < tetrisSingleGrids.length; i++) {
             for (int j = 0; j < tetrisSingleGrids[i].length; j++) {
-                if (tetrisSingleGrids[i][j].getOccupied()) {
+                if (tetrisSingleGrids[i][j] != null && tetrisSingleGrids[i][j].getOccupied()) {
                     gameGrid[tetrisSingleGrids[i][j].getX()][tetrisSingleGrids[i][j].getY()] = tetrisSingleGrids[i][j];
                 }
             }
@@ -673,6 +673,10 @@ public class TetrisGrid {
                     || figure.getShape() == TetrisShapes.LETTER_L_BIG_R)) {
                 return;
             }
+        }
+
+        if (grids[0][0].getY() > gridsClone[0][0].getY()) {
+            return;
         }
 
         // przesuwanie klocka na nową pozycję

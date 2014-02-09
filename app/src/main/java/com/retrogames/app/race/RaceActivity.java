@@ -17,7 +17,6 @@ import java.util.Timer;
  * Created by Tomasz on 06.02.14.
  */
 
-//TODO dodać dźwięki i wibracje
 public class RaceActivity extends Activity {
     RaceSurfaceView view;
 

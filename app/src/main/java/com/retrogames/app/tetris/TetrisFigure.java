@@ -338,9 +338,18 @@ public class TetrisFigure {
             }
         }
         if (side == 1) {
-            for (int i = 0; i < cloneGrid.length; i++) {
-                for (int j = 0; j < cloneGrid[i].length; j++) {
-                    cloneGrid[i][j].setX(cloneGrid[i][j].getX() - 1);
+            if (newFigure.getShape() == TetrisShapes.BOX_3X1) {
+                for (int i = 0; i < cloneGrid.length; i++) {
+                    for (int j = 0; j < cloneGrid[i].length; j++) {
+                        cloneGrid[i][j].setX(cloneGrid[i][j].getX() - 2);
+                    }
+                }
+            }
+            else {
+                for (int i = 0; i < cloneGrid.length; i++) {
+                    for (int j = 0; j < cloneGrid[i].length; j++) {
+                        cloneGrid[i][j].setX(cloneGrid[i][j].getX() - 1);
+                    }
                 }
             }
         }

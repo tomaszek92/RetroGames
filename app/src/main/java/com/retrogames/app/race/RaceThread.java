@@ -118,6 +118,7 @@ public class RaceThread extends Thread {
     }
 
     private void goOneToDown() {
+        if (canMoveCar) {
         if (raceGrid.getMovesToNextCar() == 10) {
             Random random = new Random();
             if (random.nextBoolean()) {
@@ -133,6 +134,7 @@ public class RaceThread extends Thread {
         }
         if (raceGrid.goOneDown(car)) {
             endGame();
+        }
         }
     }
 
