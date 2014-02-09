@@ -66,6 +66,7 @@ public class RaceGrid {
     public RaceGrid(RaceSurfaceView view, int canvasHeight, int canvasWidth) {
         CANVAS_HEIGHT = canvasHeight;
         CANVAS_WIDTH = canvasWidth;
+        pointsScore = 0;
         this.grids = new RaceSingleGrid[GRID_WIDTH][GRID_HEIGHT];
         this.movesToNextCar = 9;
 

@@ -97,6 +97,7 @@ public class RaceThread extends Thread {
             car = new RaceCar();
             raceGrid.addCar(car);
 
+            timerCounter = 0;
             timer = new Timer();
             startTimer();
         }
@@ -123,7 +124,6 @@ public class RaceThread extends Thread {
         if (raceGrid.goOneDown(car)) {
             endGame();
         }
-        raceGrid.draw(canvas);
     }
 
     private void drawAll() {
@@ -205,10 +205,10 @@ public class RaceThread extends Thread {
                     checkAndSaveBestScore();
                     handler.sendMessage(Message.obtain());
                     run = false;
+                    this.cancel();
                 }
             }
         }, 200, 200);
-        //run = false;
     }
 
     public void checkAndSaveBestScore() {
