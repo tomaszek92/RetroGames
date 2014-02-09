@@ -230,6 +230,29 @@ public class RaceGrid {
         addCar(newCar);
     }
 
+    public void addTwoEnemyCars() {
+        Random random = new Random();
+        int rand = random.nextInt(3);
+        RacePosition position1;
+        RacePosition position2;
+        if (rand == 0) {
+            position1 = RacePosition.LEFT;
+            position2 = RacePosition.RIGHT;
+        }
+        else if (rand == 1) {
+            position1 = RacePosition.LEFT;
+            position2 = RacePosition.CENTER;
+        }
+        else {
+            position1 = RacePosition.CENTER;
+            position2 = RacePosition.RIGHT;
+        }
+        RaceCar newCar1 = new RaceCar(position1, -3);
+        RaceCar newCar2 = new RaceCar(position2, -3);
+        addCar(newCar1);
+        addCar(newCar2);
+    }
+
     public void animateCrash(RaceCar car) {
         RaceSingleGrid[][] carGrid = car.getGrid();
         Random rand = new Random();

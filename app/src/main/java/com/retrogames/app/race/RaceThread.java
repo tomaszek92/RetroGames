@@ -15,6 +15,7 @@ import android.view.SurfaceHolder;
 import com.retrogames.app.ChooseGameActivity;
 import com.retrogames.app.ChooseGameSettingsFragment;
 
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -118,7 +119,13 @@ public class RaceThread extends Thread {
 
     private void goOneToDown() {
         if (raceGrid.getMovesToNextCar() == 10) {
-            raceGrid.addEnemyCar();
+            Random random = new Random();
+            if (random.nextBoolean()) {
+                raceGrid.addEnemyCar();
+            }
+            else {
+                raceGrid.addTwoEnemyCars();
+            }
             raceGrid.setMovesToNextCar(0);
         }
         else {
