@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.retrogames.app.tetris.TetrisActivity;
+import com.retrogames.app.tetris.TetrisGrid;
 
 /**
  * Created by Tomasz on 30.12.13.
@@ -59,6 +60,21 @@ public class ChooseGameTetrisFragment extends Fragment {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 intent.putExtra(ChooseGameActivity.INDEX_GAME_STRING, ChooseGameActivity.INDEX_TANKS);
                 startActivity(intent);
+            }
+        });
+
+        Button button_level = (Button)view.findViewById(R.id.choose_game_tetris_button_level);
+        button_level.setTypeface(font);
+        button_level.setText(getString(R.string.level) + " " + TetrisGrid.LEVEL);
+        button_level.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TetrisGrid.LEVEL++;
+                if (TetrisGrid.LEVEL > TetrisGrid.LEVEL_MAX) {
+                    TetrisGrid.LEVEL = 1;
+                }
+                Button button_level = (Button)view.findViewById(R.id.choose_game_tetris_button_level);
+                button_level.setText(getString(R.string.level) + " " + TetrisGrid.LEVEL);
             }
         });
 

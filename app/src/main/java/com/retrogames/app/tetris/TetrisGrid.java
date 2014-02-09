@@ -47,6 +47,11 @@ public class TetrisGrid {
     public static int CANVAS_HEIGHT;
     public static int CANVAS_WIDTH;
 
+    public static int LEVEL = 1;
+    public static int LEVEL_MAX = 10;
+    public static int DOWN_SPEED_CHANGE = 40;
+    public static int DOWN_SPEED = 500;
+
     private MediaPlayer mp_put_block;
     private MediaPlayer mp_row_deleted;
     private MediaPlayer mp_turn;
@@ -120,15 +125,15 @@ public class TetrisGrid {
     // sprawdzanie i ewnetualne usuwanie całego rzędu
     public int checkGridAddPointsAndRemoveRows() {
         int countRows = 0;
-        for (int j = 0; j < GRID_HEIGHT; j++) {
-            boolean allRowsAreOccupied = true;
-            boolean oneColor = true;
 
+        // przechodzimy po wszystkich wierszach od góry do dołu
+        for (int j = 0; j < GRID_HEIGHT; j++) {
+            boolean allRowsAreOccupied = true; // flaga czy wiersz jest cały zajęty
+            boolean oneColor = true; // flaga czy wiersz jest w jednym kolorze
+
+            // dla każdego klocka w wierszu
             for (int i = 0; i < gameGrid.length && allRowsAreOccupied; i++) {
                 if (gameGrid[i][j] != null  && gameGrid[i][j].getOccupied()) {
-                    if (!gameGrid[i][j].getOccupied()) {
-                        allRowsAreOccupied = false;
-                    }
                     if (oneColor && gameGrid[0][j].getColor() != gameGrid[i][j].getColor()) {
                         oneColor = false;
                     }
@@ -162,12 +167,15 @@ public class TetrisGrid {
 
         // wyszukiwanie figur, które leżą w usuwanym wierzu
         for (int i = 0; i < gameFigures.size(); i++) {
+            boolean nextFigure = false;
             TetrisSingleGrid[][] grids = gameFigures.get(i).getGrid();
-            for (int k = 0; k < grids.length; k++) {
+            for (int k = 0; k < grids.length && !nextFigure; k++) {
                 for (int j = 0; j < grids[k].length; j++) {
                     if (row == grids[k][j].getY()) {
                         if (!gameFiguresDeleted.contains(gameFigures.get(i))) {
                             gameFiguresDeleted.add(gameFigures.get(i));
+                            nextFigure = true;
+                            break;
                         }
                     }
                 }
@@ -516,7 +524,7 @@ public class TetrisGrid {
         return gridRow;
     }
 
-    // czyszczenie rzędu
+    // czyszczenie rzędu w siatce gry
     private void clearGridRow(int deletedRow) {
         for (int i = 0; i < gameGrid.length; i++) {
             gameGrid[i][deletedRow] = null;

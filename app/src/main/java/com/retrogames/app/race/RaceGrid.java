@@ -97,6 +97,7 @@ public class RaceGrid {
                 }
             }
         }
+        refreshGrid();
     }
 
     private void removeCar(RaceCar car) {
@@ -144,6 +145,7 @@ public class RaceGrid {
                 carGrid[i][j].setX(newPosition.toInt() * 3 + j);
             }
         }
+
         if (!carCrashed(newPosition, car)) {
             car.setPosition(newPosition);
             refreshGrid();

@@ -105,7 +105,8 @@ public class TetrisThread extends Thread {
             public void run() {
                 goOneToDown();
             }
-        }, DOWN_SPPED, DOWN_SPPED);
+        }, TetrisGrid.DOWN_SPEED - TetrisGrid.LEVEL * TetrisGrid.DOWN_SPEED_CHANGE,
+                TetrisGrid.DOWN_SPEED - TetrisGrid.LEVEL * TetrisGrid.DOWN_SPEED_CHANGE);
     }
 
     // przesuwanie figury o jeden w dół
@@ -168,8 +169,7 @@ public class TetrisThread extends Thread {
                     if (ChooseGameActivity.BEST_SCORE_TETRIS < TetrisGrid.getPointsScore()) {
                         saveNewBestScore();
                     }
-                    handler.sendMessage(Message.obtain());
-                    run = false;
+                    endGame();
                 }
             }
         }
@@ -246,5 +246,18 @@ public class TetrisThread extends Thread {
             tetrisGrid.playSoundTurnFigure();
             tetrisGrid.refreshGrid();
         }
+    }
+
+    private static int EXIT_TIME = 500;
+    private void endGame() {
+        Timer endTimer = new Timer();
+        endTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.sendMessage(Message.obtain());
+                run = false;
+            }
+        }, EXIT_TIME);
+
     }
 }

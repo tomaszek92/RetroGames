@@ -174,7 +174,7 @@ public class RaceThread extends Thread {
     }
 
     private boolean canMoveCar = true;
-    public void moveCar(float x, float y) {
+    public void moveCar(float x) {
         RacePosition newPosition;
         if (x >= 0 && x < canvasWidth / 3) {
             newPosition = RacePosition.LEFT;
@@ -208,6 +208,7 @@ public class RaceThread extends Thread {
                 }
             }
         }, 200, 200);
+        //run = false;
     }
 
     public void checkAndSaveBestScore() {

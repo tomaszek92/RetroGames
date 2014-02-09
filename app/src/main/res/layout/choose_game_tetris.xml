@@ -22,4 +22,9 @@
         android:text="@string/best_score"
         style="@style/ButtonStyle"/>
 
+    <Button
+        style="@style/ButtonStyle"
+        android:id="@+id/choose_game_tetris_button_level"
+        android:text="@string/level"/>
+
 </LinearLayout>

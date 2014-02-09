@@ -35,6 +35,7 @@ public class RaceCar {
         setXs(RacePosition.CENTER.toInt());
         setYs(10);
         setRects();
+        this.position = RacePosition.CENTER;
     }
 
     public RaceCar(RacePosition position, int upY) {
@@ -43,6 +44,7 @@ public class RaceCar {
         setXs(position.toInt());
         setYs(upY);
         setRects();
+        this.position = position;
     }
 
     private void setRects() {
@@ -129,7 +131,6 @@ public class RaceCar {
                 }
             }
             catch (Exception e) {
-                e.printStackTrace();
                 return;
             }
         }

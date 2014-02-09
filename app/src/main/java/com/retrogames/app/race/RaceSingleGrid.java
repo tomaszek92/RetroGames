@@ -19,6 +19,7 @@ public class RaceSingleGrid {
         return this.occupied;
     }
 
+    // kwadrat opisujący położenie klocka
     private Rect rect;
     public Rect getRect() {
         return this.rect;

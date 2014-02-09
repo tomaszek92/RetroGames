@@ -22,9 +22,7 @@ public class RaceSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private SurfaceHolder surfaceHolder;
     private Handler handler;
     private float mX;
-    private float mY;
     private static final float TOUCH_TOLERANCE = 5;
-    private static final long DOUBLE_TAP_TIME = 200;
 
     public RaceSurfaceView(Context context) {
         super(context);
@@ -80,35 +78,31 @@ public class RaceSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         }
     }
     // kliknięto pierwszy raz
-    private void touchStart(float x, float y) {
+    private void touchStart(float x) {
         mX = x;
-        mY = y;
     }
 
     // przesuwanie palcem po ekranie
-    private void touchMove(float x, float y) {
+    private void touchMove(float x) {
         float dx = Math.abs(x - mX);
-        float dy = Math.abs(y - mY);
-        if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
+        if (dx >= TOUCH_TOLERANCE) {
             mX = x;
-            mY = y;
         }
-        thread.moveCar(mX, mY);
+        thread.moveCar(mX);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         float touchX = event.getX();
-        float touchY = event.getY();
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                touchStart(touchX, touchY);
+                touchStart(touchX);
                 break;
 
             case MotionEvent.ACTION_MOVE:
                 if (thread != null) {
-                    touchMove(touchX, touchY);
+                    touchMove(touchX);
                 }
                 break;
 
