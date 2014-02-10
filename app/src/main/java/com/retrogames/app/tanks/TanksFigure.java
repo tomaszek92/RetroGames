@@ -39,7 +39,7 @@ public class TanksFigure {
     public TanksFigure(TanksShapes shape, int angle) {
         this.shape = shape;
         this.angle = angle;
-        this.makeGrid();
+        this.makeGrid(angle);
     }
 
     public void drawFigure(Canvas canvas) {
@@ -56,7 +56,7 @@ public class TanksFigure {
             }
         }
     }
-    private void makeGrid() {
+    private void makeGrid(int angle) {
         if(shape== TanksShapes.YOU)
         {
             makeGridForYOU();
@@ -68,7 +68,7 @@ public class TanksFigure {
         }
         else if(shape == TanksShapes.BULLET)
         {
-             makeGridForBULLET();
+             makeGridForBULLET(angle);
         }
         else
         {
@@ -89,6 +89,7 @@ public class TanksFigure {
         grid[2][0] = new TanksSingleGrid(true, 9, 16);
         grid[2][1] = new TanksSingleGrid(true, 10, 16);
         grid[2][2] = new TanksSingleGrid(true, 11, 16);
+        angle = 180;
     }
     private void makeGridForENEMY(int pos)
     {
@@ -102,6 +103,7 @@ public class TanksFigure {
         grid[2][0] = new TanksSingleGrid(true, 0, 2);
         grid[2][1] = new TanksSingleGrid(true, 1, 2);
         grid[2][2] = new TanksSingleGrid(false, 2, 2);
+        angle = 270;
 
         if(pos == 0)
         {
@@ -110,49 +112,57 @@ public class TanksFigure {
         else if(pos == 1)
         {
             grid = MoveX(grid,9);
+            angle = 0;
 
         }
         else if(pos == 2)
         {
             grid = MoveX(grid,17);
            grid = RotateFigureRight(grid);
+            angle = 90;
 
         }
         else if(pos == 3)
         {
             grid = MoveY(grid,14);
             grid = RotateFigureLeft(grid);
+            angle = 270;
+
         }
         else if(pos == 4)
         {
             grid = MoveY(grid,27);
             grid = RotateFigureLeft(grid);
+            angle = 270;
         }
         else if(pos == 5)
         {
             grid = MoveXY(grid,17,14);
             grid = RotateFigureRight(grid);
+            angle = 90;
         }
         else if(pos == 6)
         {
             grid = MoveXY(grid,17,27);
-
             grid = RotateFigureRight(grid);
+            angle = 90;
         }
         else if(pos == 7)
         {
             grid = MoveXY(grid,9,27);
             grid = RotateFigureRight(grid);
             grid = RotateFigureRight(grid);
+            angle = 180;
         }
 
 
 
     }
-    private void makeGridForBULLET()
+    private void makeGridForBULLET(int direction)
     {
         grid = new TanksSingleGrid[1][1];
         grid[0][0] = new TanksSingleGrid(true,5,5);
+        angle = direction;
     }
 
     private TanksSingleGrid[][] RotateFigureLeft(TanksSingleGrid[][]matrix)

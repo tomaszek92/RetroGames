@@ -18,6 +18,7 @@ import android.os.Handler;
 import com.retrogames.app.ChooseGameActivity;
 import com.retrogames.app.R;
 import com.retrogames.app.tetris.TetrisThread;
+import  android.support.v4.view.MotionEventCompat;
 
 /**
  * Created by Piotr on 18.01.14.
@@ -66,6 +67,7 @@ public class TanksSurfaceView extends SurfaceView implements SurfaceHolder.Callb
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
+        thread.stopEndTimer();
         boolean retry = true;
         thread.setRunning(false);
         while (retry) {
@@ -93,11 +95,24 @@ public class TanksSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     }
     int clickCounts = 0;
     long startTime;
+    boolean isFirstMultiTouch = true;
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         float touchX = event.getX();
         float touchY = event.getY();
 
+        if(event.getPointerCount()>1) {
+            if (isFirstMultiTouch) {
+                //multitouch event
+                isFirstMultiTouch = false;
+                Log.i("DUPA", "multitouch");
+                thread.turnTankRight(thread.figure);
+                //thread.figure.setAngle(thread.figure.getAngle()+ 90 % 360);
+            }
+            else {
+                isFirstMultiTouch = true;
+            }
+        }
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 clickCounts++;
@@ -108,7 +123,7 @@ public class TanksSurfaceView extends SurfaceView implements SurfaceHolder.Callb
                     long duration = System.currentTimeMillis() - startTime;
                     if (duration < DOUBLE_TAP_TIME) {
                         clickCounts = 0;
-                        //thread.turnFigure();
+                        thread.shoot(thread.figure);
                         return true;
                     }
                     else  {
@@ -127,6 +142,9 @@ public class TanksSurfaceView extends SurfaceView implements SurfaceHolder.Callb
                 break;
 
             case MotionEvent.ACTION_UP:
+                break;
+            case MotionEvent.AXIS_HSCROLL:
+                thread.turnTankLeft(thread.figure);
                 break;
 
             default:

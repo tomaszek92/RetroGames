@@ -8,6 +8,7 @@ import com.retrogames.app.R;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Piotr on 18.01.14.
@@ -15,8 +16,8 @@ import java.util.List;
 public class TanksGrid {
 
 
-    private TanksSingleGrid[][] gameGrid;
-    private List<TanksFigure> gameFigures;
+    public TanksSingleGrid[][] gameGrid;
+    public List<TanksFigure> gameFigures;
     // marginesy do rysowania wyniku
     public static int MARGIN_SCORE_TOP = 50;
     public static int MARGIN_SCORE_LEFT = 50;
@@ -34,7 +35,7 @@ public class TanksGrid {
     public static final int BACKGROUND_COLOR = Color.rgb(32,32,32);
     // zmienne do wyniku
     private static int pointsScore = 0;
-    private static final int pointsForDestroyingTank = 100;
+    public static final int pointsForDestroyingTank = 100;
 
     // wymiar siatki w klockach
     public static int GRID_WIDTH = 20;
@@ -61,6 +62,7 @@ public class TanksGrid {
         this.mp_shoot = MediaPlayer.create(view.getContext(),R.raw.tanks_shoot);
     }
 
+
     public static int getPointsScore() {
         return pointsScore;
     }
@@ -81,14 +83,42 @@ public class TanksGrid {
         mp_shoot.start();
     }
     public void addFigure(TanksFigure newFigure) {
+        if(CheckIfAdd(newFigure))
+        {
         gameFigures.add(newFigure);
-       // playSoundDie(); // del
-        //moveFigureToStartPosition(newFigure);
         addFigureToGameGrid(newFigure);
+        }
+    }
+    public boolean CheckIfAdd(TanksFigure figure)
+    {
+        TanksSingleGrid[][] tetrisSingleGrids = figure.getGrid();
+        for(int i = 0; i<gameFigures.size();i++)
+        {
+            TanksFigure oldFigure = gameFigures.get(i);
+            TanksSingleGrid[][] oldFigureGrid = oldFigure.getGrid();
+            for(int a = 0; a<tetrisSingleGrids.length;a++)
+            {
+                for(int b = 0; b<tetrisSingleGrids[a].length;b++)
+                {
+                    for( int x = 0; x<oldFigureGrid.length; x++)
+                    {
+                        for( int y = 0; y<oldFigureGrid[x].length; y++)
+                        {
+                            if(tetrisSingleGrids[a][b].getX() == oldFigureGrid[x][y].getX() && tetrisSingleGrids[a][b].getY() == oldFigureGrid[x][y].getY() && tetrisSingleGrids[a][b].getOccupied() && oldFigureGrid[x][y].getOccupied() )
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return true;
     }
     private void addFigureToGameGrid(TanksFigure figure) {
         TanksSingleGrid[][] tetrisSingleGrids = figure.getGrid();
-      //  playSoundShoot();//del
+      //  gdybyśmy chcieli wstawić nową figurę na innej, wtedy przerywamy operację
+
         for (int i = 0; i < tetrisSingleGrids.length; i++) {
             for (int j = 0; j < tetrisSingleGrids[i].length; j++) {
                 if (tetrisSingleGrids[i][j].getOccupied()) {
@@ -96,6 +126,7 @@ public class TanksGrid {
                 }
             }
         }
+
     }
     // rysowanie wszystkich figur
     public void drawAllFigures(Canvas canvas) {
@@ -130,6 +161,10 @@ public class TanksGrid {
         return positionInGrid;
     }
 
+    public void setNotOccupied(int x, int y)
+    {
+        gameGrid[x][y] = null;
+    }
     public boolean isNotOccupied(int x, int y) {
         if (x >= GRID_WIDTH || y >= GRID_HEIGHT) {
             return true;
@@ -193,11 +228,14 @@ public class TanksGrid {
         for (int i = 0; i < gridsClone.length; i++) {
             for (int j = 0; j < gridsClone[i].length; j++) {
                 if (gridsClone[i][j].getY() == GRID_HEIGHT - 1) {
-                    return;
+                    count++;
                 }
             }
         }
-
+        if(count>=2)
+        {
+            return;
+        }
         // przesuwanie klocka na nową pozycję
         for (int i = 0; i < grids.length; i++) {
             for (int j = 0; j < grids[i].length; j++) {
@@ -216,6 +254,15 @@ public class TanksGrid {
         }
         for (TanksFigure figure : this.gameFigures) {
             addFigureToGameGrid(figure);
+        }
+    }
+    public void animateCrash(TanksFigure tank) {
+        TanksSingleGrid[][] carGrid = tank.getGrid();
+        Random rand = new Random();
+        for (int i = 0; i < carGrid.length; i++) {
+            for (int j = 0; j < carGrid[i].length; j++) {
+                carGrid[i][j].setOccupied(rand.nextBoolean());
+            }
         }
     }
 
