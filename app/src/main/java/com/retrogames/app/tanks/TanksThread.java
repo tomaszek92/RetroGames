@@ -54,9 +54,11 @@ public class TanksThread extends Thread {
         this.typeface = typeface;
         this.scoreString = scoreString;
         this.handler = handler;
+
+        timerCounter = 0;
         this.endTimer = null;
     }
-    private static int MOVE_SPPED = 500;
+    private static int MOVE_SPPED = 200;
     public void startTimer() {
         timer.schedule(new TimerTask() {
             @Override
@@ -67,92 +69,95 @@ public class TanksThread extends Thread {
         }
 
     public  int num = 0;
+    boolean chujZFlaga = true;
     private void EnemyTurn()
     {
-        num++;
-        num =num%4;
+        if (chujZFlaga) {
+            num++;
+            num =num%4;
 
-        boolean itsEnd = false;
-        TanksSingleGrid[][] grids = figure.getGrid();
+            boolean itsEnd = false;
+            TanksSingleGrid[][] grids = figure.getGrid();
 
-        int putNew = 5;
-        Random random = new Random();
-        if(random.nextInt(15) == putNew )
-        {
-            //dodajemy nowego tanka
-            TanksFigure newTank = new TanksFigure( TanksShapes.ENEMY, new Random().nextInt(4) * 90);
-            TanksSingleGrid[][] isReserved = newTank.getGrid();
-            boolean add = true;
-            for(int i = 0; i<isReserved.length; i++)
+            int putNew = 5;
+            Random random = new Random();
+            if(random.nextInt(15) == putNew )
             {
-                for(int j=0; j<isReserved[i].length; j++)
+                //dodajemy nowego tanka
+                TanksFigure newTank = new TanksFigure( TanksShapes.ENEMY, new Random().nextInt(4) * 90);
+                TanksSingleGrid[][] isReserved = newTank.getGrid();
+                boolean add = true;
+                for(int i = 0; i<isReserved.length; i++)
                 {
-                    if(!tanksGrid.isNotOccupied(isReserved[i][j].getX(),isReserved[i][j].getY()))
+                    for(int j=0; j<isReserved[i].length; j++)
                     {
-                        add = false;
+                        if(!tanksGrid.isNotOccupied(isReserved[i][j].getX(),isReserved[i][j].getY()))
+                        {
+                            add = false;
+                        }
                     }
                 }
-            }
-            if(add == true)
-            {
-                tanksGrid.addFigure(newTank);
-            }
-        }
-        for (int i=0; i<tanksGrid.gameFigures.size(); i++)
-        {
-            TanksFigure shape = tanksGrid.gameFigures.get(i);
-            if( shape.getShape() == TanksShapes.ENEMY)
-            {
-                int move = 1;
-                int turn = 2;
-                int shoot = 3;
-                Random random1 = new Random();
-                int rnd = random1.nextInt(4);
-                if(rnd == move)
+                if(add == true)
                 {
-                    //Poruszamy czołgiem, jeśli możliwe
-                    moveForward(shape);
+                    tanksGrid.addFigure(newTank);
+                }
+            }
+            for (int i=0; i<tanksGrid.gameFigures.size(); i++)
+            {
+                TanksFigure shape = tanksGrid.gameFigures.get(i);
+                if( shape.getShape() == TanksShapes.ENEMY)
+                {
+                    int move = 1;
+                    int turn = 2;
+                    int shoot = 3;
+                    Random random1 = new Random();
+                    int rnd = random1.nextInt(4);
+                    if(rnd == move)
+                    {
+                        //Poruszamy czołgiem, jeśli możliwe
+                        moveForward(shape);
+                        tanksGrid.refreshGrid();
+                    }
+                    else if(rnd==turn)
+                    {
+                        // obróć czołg
+                        if(random1.nextInt(2) == 1)
+                        {
+                            turnTankLeft(shape);
+                            int ang = shape.getAngle();
+                            ang = ang - 90;
+                            if(ang<0)
+                            {
+                                ang=270;
+                            }
+                            shape.setAngle(ang);
+                        }
+                        else
+                        {
+                            turnTankRight(shape);
+                            int ang = shape.getAngle();
+                            ang = ang + 90;
+                            if(ang>270)
+                            {
+                                ang=0;
+                            }
+                            shape.setAngle(ang);
+                        }
+                        tanksGrid.refreshGrid();
+                    }
+                    rnd = random.nextInt(10);
+                    if(rnd==shoot)
+                    {
+                       shoot(shape);
+                        tanksGrid.refreshGrid();
+                    }
+
+                }
+                if(shape.getShape() == TanksShapes.BULLET)
+                {
+                     moveBullet(shape); // zawsze poruszamy
                     tanksGrid.refreshGrid();
                 }
-                else if(rnd==turn)
-                {
-                    // obróć czołg
-                    if(random1.nextInt(2) == 1)
-                    {
-                        turnTankLeft(shape);
-                        int ang = shape.getAngle();
-                        ang = ang - 90;
-                        if(ang<0)
-                        {
-                            ang=270;
-                        }
-                        shape.setAngle(ang);
-                    }
-                    else
-                    {
-                        turnTankRight(shape);
-                        int ang = shape.getAngle();
-                        ang = ang + 90;
-                        if(ang>270)
-                        {
-                            ang=0;
-                        }
-                        shape.setAngle(ang);
-                    }
-                    tanksGrid.refreshGrid();
-                }
-                rnd = random.nextInt(10);
-                if(rnd==shoot)
-                {
-                   //shoot(shape);
-                   // tanksGrid.refreshGrid();
-                }
-
-            }
-            if(shape.getShape() == TanksShapes.BULLET)
-            {
-                 moveBullet(shape); // zawsze poruszamy
-                tanksGrid.refreshGrid();
             }
         }
     }
@@ -508,8 +513,11 @@ public class TanksThread extends Thread {
                             }
                             else if(tanksGrid.gameFigures.get(i).getShape() == TanksShapes.YOU)
                             {
+                                if(occ[j][h].getOccupied() && occ[j][h].getX() == grid[0][0].getX() && occ[j][h].getY() == grid[0][0].getY())
+                                {
                                 checkAndSaveBestScore();
-                                //endGame();
+                                endGame();
+                                }
 
                             }
                         }
@@ -529,6 +537,7 @@ public class TanksThread extends Thread {
     private Timer endTimer;
     public static int timerCounter = 0;
     private void endGame() {
+        this.chujZFlaga = false;
         tanksGrid.playSoundDie();
         endTimer = new Timer();
         endTimer.schedule(new TimerTask() {

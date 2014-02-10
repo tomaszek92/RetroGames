@@ -119,22 +119,22 @@ public class RaceThread extends Thread {
 
     private void goOneToDown() {
         if (canMoveCar) {
-        if (raceGrid.getMovesToNextCar() == 10) {
-            Random random = new Random();
-            if (random.nextBoolean()) {
-                raceGrid.addEnemyCar();
+            if (raceGrid.getMovesToNextCar() == 10) {
+                Random random = new Random();
+                if (random.nextBoolean()) {
+                    raceGrid.addEnemyCar();
+                }
+                else {
+                    raceGrid.addTwoEnemyCars();
+                }
+                raceGrid.setMovesToNextCar(0);
             }
             else {
-                raceGrid.addTwoEnemyCars();
+                raceGrid.setMovesToNextCar(raceGrid.getMovesToNextCar() + 1);
             }
-            raceGrid.setMovesToNextCar(0);
-        }
-        else {
-            raceGrid.setMovesToNextCar(raceGrid.getMovesToNextCar() + 1);
-        }
-        if (raceGrid.goOneDown(car)) {
-            endGame();
-        }
+            if (raceGrid.goOneDown(car)) {
+                endGame();
+            }
         }
     }
 

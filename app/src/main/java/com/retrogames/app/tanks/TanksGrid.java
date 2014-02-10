@@ -142,6 +142,7 @@ public class TanksGrid {
             x = MARGIN_RIGHT;
         }
 
+
         int positionInGrid = (int)((x - MARGIN_LEFT - STROKE_WIDTH) / TanksSingleGrid.SIZE);
 
         return positionInGrid;
@@ -189,20 +190,16 @@ public class TanksGrid {
             y = CANVAS_HEIGHT - MARGIN_BOTTOM - TanksSingleGrid.SIZE;
         }
 
+        int exilL = 0;
         TanksSingleGrid[][] grids = figure.getGrid();
         TanksSingleGrid[][] gridsClone = TanksSingleGrid.cloneArrayDim2(grids);
-
-        int exitL = 0;
-        // sprawdzanie czy jest puste pole
         for (int i = 0; i < gridsClone.length; i++) {
             for (int j = 0; j < gridsClone[i].length; j++) {
+
                 int xNew = xCoordinateToGrid(x + TanksSingleGrid.SIZE * j);
                 int yNew = yCoordinateToGrid(y + TanksSingleGrid.SIZE * i);
-                if (xNew >= GRID_WIDTH || yNew < 0 || yNew >= GRID_HEIGHT) {
+                if (xNew >= GRID_WIDTH || yNew < 0 || yNew >= GRID_HEIGHT || xNew < 0) {
                     return;
-                }
-                if (xNew < 0 && exitL > xNew) {
-                    exitL = xNew;
                 }
                 if (this.isNotOccupied(xNew, yNew)) {
                     gridsClone[i][j].setX(xNew);
@@ -214,28 +211,16 @@ public class TanksGrid {
             }
         }
 
-        if (exitL < 0) {
-            for (int i = 0; i < gridsClone.length; i++) {
-                for (int j = 0; j < gridsClone[i].length; j++) {
-                    gridsClone[i][j].setX(gridsClone[i][j].getX() - exitL);
+        // sprawdzanie czy klocki nie naszły na siebie
+        for (int i = 0; i < gridsClone.length - 1; i++) {
+            for (int j = 0; j < gridsClone[i].length; j++) {
+                if (gridsClone[i][j].getY() == gridsClone[gridsClone.length - 1][j].getY()) {
+                    return;
                 }
             }
         }
 
-        // sprawdzanie, czy żadne klocki na siebie nie naszły
-        // poza dolną krawędź ekranu
-        int count = 0;
-        for (int i = 0; i < gridsClone.length; i++) {
-            for (int j = 0; j < gridsClone[i].length; j++) {
-                if (gridsClone[i][j].getY() == GRID_HEIGHT - 1) {
-                    count++;
-                }
-            }
-        }
-        if(count>=2)
-        {
-            return;
-        }
+
         // przesuwanie klocka na nową pozycję
         for (int i = 0; i < grids.length; i++) {
             for (int j = 0; j < grids[i].length; j++) {
