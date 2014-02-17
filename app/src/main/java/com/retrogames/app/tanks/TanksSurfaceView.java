@@ -31,6 +31,7 @@ public class TanksSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     private float mX;
     private float mY;
     private static final float TOUCH_TOLERANCE = 5;
+    private static final float TOUCH_RANGE = 50;
     private static final long DOUBLE_TAP_TIME = 200;
     public TanksSurfaceView(Context context) {
         super(context);
@@ -91,6 +92,10 @@ public class TanksSurfaceView extends SurfaceView implements SurfaceHolder.Callb
             mX = x;
             mY = y;
         }
+        if(dx>=TOUCH_RANGE || dy>=TOUCH_RANGE )
+        {
+            return;
+        }
         thread.moveTank(mX, mY);
     }
     int clickCounts = 0;
@@ -105,7 +110,7 @@ public class TanksSurfaceView extends SurfaceView implements SurfaceHolder.Callb
             if (isFirstMultiTouch) {
                 //multitouch event
                 isFirstMultiTouch = false;
-                Log.i("DUPA", "multitouch");
+                //Log.i("DUPA", "multitouch");
                 thread.turnTankRight(thread.figure);
                 //thread.figure.setAngle(thread.figure.getAngle()+ 90 % 360);
             }
